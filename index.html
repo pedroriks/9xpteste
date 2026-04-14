@@ -1,0 +1,3711 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0f0f0f">
+<title>Calçado · Abril 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0f0f;
+  --surface: #1a1a1a;
+  --surface2: #222222;
+  --surface3: #2a2a2a;
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --text: #f0ede8;
+  --muted: #8a8580;
+  --faint: #555250;
+  /* ── BRAND ORANGE ── */
+  --accent: #fd7d00;
+  --accent-bg: rgba(253,125,0,0.12);
+  --accent-border: rgba(253,125,0,0.3);
+  --green: #10b981;
+  --green-bg: rgba(16,185,129,0.1);
+  --green-border: rgba(16,185,129,0.25);
+  --amber: #f59e0b;
+  --amber-bg: rgba(245,158,11,0.1);
+  --amber-border: rgba(245,158,11,0.25);
+  --red: #ef4444;
+  --swap-color: #a78bfa;
+  --swap-bg: rgba(167,139,250,0.12);
+  --swap-border: rgba(167,139,250,0.3);
+  --manual-color: #22d3ee;
+  --manual-bg: rgba(34,211,238,0.1);
+  --manual-border: rgba(34,211,238,0.28);
+  --r: 10px;
+  --r-lg: 14px;
+}
+
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  width: 100%;
+  min-height: 100%;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ── APP SHELL ─────────────────────────────────────── */
+.app { 
+  display: flex; 
+  flex-direction: column; 
+  width: 100%;
+  min-height: 100dvh;
+}
+
+/* desktop retém scroll interno controlado */
+@media (min-width: 700px) {
+  html, body { height: 100%; overflow: hidden; }
+  .app { height: 100dvh; overflow: hidden; display: flex; flex-direction: column; }
+  .content { flex: 1; min-height: 0; overflow: hidden; }
+  .left-col {
+    flex: 0 0 320px !important;
+    width: 320px !important;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 20px 18px !important;
+    border-right: 1px solid var(--border);
+  }
+  .right-col {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 24px !important;
+  }
+}
+
+/* mobile: right-col não tem altura fixa — scroll natural da página */
+@media (max-width: 699px) {
+  .right-col { padding-bottom: 32px; }
+}
+
+/* tab panels não devem ter altura mínima que cause espaço vazio */
+.rtab-panel { min-height: 0; }
+.rtab-panel.active { display: block; }
+
+/* ── LOGIN / PROFILE SELECT ────────────────────────── */
+#profile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#profile-overlay.hidden {
+  display: none;
+}
+
+.profile-header {
+  flex-shrink: 0;
+  background: var(--bg);
+  padding: calc(24px + env(safe-area-inset-top)) 20px 16px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.profile-header h2 { 
+  font-size: 24px; 
+  font-weight: 700; 
+  margin-bottom: 8px; 
+  color: var(--text);
+}
+
+.profile-header p { 
+  color: var(--muted); 
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.profile-grid-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+@media (min-width: 500px) { 
+  .profile-grid { 
+    grid-template-columns: repeat(3, 1fr); 
+  } 
+}
+
+.profile-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  -webkit-user-select: none;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-btn:active { 
+  transform: scale(0.95); 
+  background: var(--surface2); 
+}
+
+.profile-btn .av-lg {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--surface3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.profile-btn.is-manager .av-lg { 
+  background: var(--accent); 
+  color: #fff; 
+}
+
+.profile-btn .p-name { 
+  font-size: 12px; 
+  font-weight: 600; 
+  color: var(--text);
+  word-break: break-word;
+}
+
+/* ── HEADER ─────────────────────────────────────────── */
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: calc(14px + env(safe-area-inset-top)) 16px 12px;
+  padding: calc(14px + constant(safe-area-inset-top)) 16px 12px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 100;
+}
+
+.header-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand { 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+  cursor: pointer;
+  flex: 1;
+  min-width: 0;
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.brand-text h1 { 
+  font-size: 15px; 
+  font-weight: 700; 
+  letter-spacing: -.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.brand-text p { 
+  font-size: 11px; 
+  color: var(--muted); 
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 10px 4px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.user-av {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--surface3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  flex-shrink: 0;
+}
+
+.user-av.av-me {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ── MAIN CONTENT ───────────────────────────────────── */
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1;
+}
+
+@media (min-width: 700px) {
+  .content { flex-direction: row; padding: 0; }
+}
+
+.left-col {
+  flex: 0 0 auto;
+  width: 100%;
+  padding: 16px;
+}
+
+.right-col {
+  flex: 1;
+  padding: 16px;
+  width: 100%;
+}
+
+/* ── CALENDAR ───────────────────────────────────────── */
+.cal-section { 
+  margin-bottom: 16px; 
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.dow {
+  text-align: center;
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--faint);
+  padding: 4px 0;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.cal-day {
+  border-radius: 8px;
+  padding: 5px 3px 4px;
+  cursor: pointer;
+  background: var(--surface);
+  border: 1.5px solid transparent;
+  min-height: 64px;
+  text-align: center;
+  transition: border-color .12s, background .12s;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.cal-day:active { 
+  transform: scale(.95); 
+}
+
+.cal-day.selected { 
+  border-color: var(--accent); 
+  background: var(--accent-bg); 
+}
+
+.cal-day .d-num { 
+  font-size: 9px; 
+  font-weight: 600; 
+  color: var(--faint); 
+  margin-bottom: 2px; 
+}
+
+.cal-day .d-count { 
+  font-size: 17px; 
+  font-weight: 700; 
+  color: var(--text); 
+  line-height: 1.1; 
+}
+
+.cal-day .d-lbl { 
+  font-size: 7.5px; 
+  color: var(--faint); 
+  margin-bottom: 3px; 
+}
+
+.cal-day .d-badge {
+  display: inline-block;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-family: 'DM Mono', monospace;
+  font-size: 7.5px;
+  font-weight: 500;
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.cal-day .d-badge.off { 
+  background: var(--surface2); 
+  color: var(--faint); 
+}
+
+.cal-day .d-badge.vac { 
+  background: var(--green-bg); 
+  color: var(--green); 
+}
+
+/* ── STATS ─────────────────────────────────────── */
+.stats-row { 
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 8px; 
+  margin-bottom: 16px; 
+}
+
+.stats-row.hidden {
+  display: none;
+}
+
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 12px;
+}
+
+.stat .sv { 
+  font-size: 22px; 
+  font-weight: 700; 
+  color: var(--text); 
+}
+
+.stat .sl { 
+  font-size: 10px; 
+  color: var(--muted); 
+  margin-top: 2px; 
+  font-weight: 500; 
+}
+
+/* ── DAY DETAIL ─────────────────────────────────────── */
+.detail-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+.empty-state {
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--faint);
+  font-size: 14px;
+}
+
+.empty-state .ei { 
+  font-size: 36px; 
+  margin-bottom: 10px; 
+}
+
+/* Day header */
+.day-header {
+  padding: 16px 16px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.day-header h2 { 
+  font-size: 20px; 
+  font-weight: 700; 
+  letter-spacing: -.3px; 
+}
+
+.day-header .meta { 
+  font-size: 12px; 
+  color: var(--muted); 
+  margin-top: 3px; 
+}
+
+.day-num-badge {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 6px 12px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.day-num-badge .dbn { 
+  font-size: 22px; 
+  font-weight: 700; 
+}
+
+.day-num-badge .dbl { 
+  font-size: 9px; 
+  color: var(--muted); 
+  font-weight: 600; 
+  text-transform: uppercase; 
+  letter-spacing: .05em; 
+}
+
+/* Sections inside panel */
+.panel-section { 
+  padding: 14px 16px; 
+  border-bottom: 1px solid var(--border); 
+}
+
+.panel-section:last-child { 
+  border-bottom: none; 
+}
+
+.panel-section.hidden {
+  display: none;
+}
+
+.sec-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 10px;
+}
+
+/* Workers */
+.workers-grid { 
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 5px; 
+}
+
+@media (min-width: 500px) { 
+  .workers-grid { 
+    grid-template-columns: repeat(3, 1fr); 
+  } 
+}
+
+.wcard {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px;
+  border-radius: 8px;
+  background: var(--surface2);
+}
+
+.wcard.me-w { 
+  background: var(--accent-bg); 
+  border: 1px solid var(--accent-border); 
+}
+
+.wcard.off-w { 
+  opacity: .3; 
+}
+
+.wcard.vac-w { 
+  background: var(--green-bg); 
+  opacity: .6; 
+}
+
+.av {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  background: var(--surface3);
+  color: var(--muted);
+}
+
+.av.av-me { 
+  background: var(--accent); 
+  color: #fff; 
+}
+
+.w-name { 
+  font-size: 11px; 
+  font-weight: 600; 
+  color: var(--text); 
+  line-height: 1.2; 
+}
+
+.w-code { 
+  font-family: 'DM Mono', monospace; 
+  font-size: 9.5px; 
+  color: var(--muted); 
+}
+
+/* Chart */
+.store-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--green-bg);
+  border: 1px solid var(--green-border);
+  border-radius: 7px;
+  padding: 7px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--green);
+  margin-bottom: 12px;
+}
+
+.chart-legend { 
+  display: flex; 
+  gap: 10px; 
+  flex-wrap: wrap; 
+  margin-bottom: 10px; 
+}
+
+.leg { 
+  display: flex; 
+  align-items: center; 
+  gap: 4px; 
+  font-size: 10px; 
+  color: var(--muted); 
+}
+
+.leg-dot { 
+  width: 8px; 
+  height: 8px; 
+  border-radius: 2px; 
+  flex-shrink: 0; 
+}
+
+.h-row { 
+  display: flex; 
+  align-items: center; 
+  gap: 7px; 
+  margin-bottom: 3px; 
+}
+
+.h-lbl {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  width: 26px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.h-lbl.open { 
+  color: var(--text); 
+  font-weight: 500; 
+}
+
+.h-lbl.closed { 
+  color: var(--faint); 
+}
+
+.bar-wrap {
+  flex: 1;
+  border-radius: 4px;
+  height: 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+.bar-wrap.open-h { 
+  background: rgba(255,255,255,0.04); 
+}
+
+.bar-wrap.closed-h { 
+  background: var(--surface3); 
+  opacity: .45; 
+}
+
+.bar-fill { 
+  height: 100%; 
+  border-radius: 4px; 
+  transition: width .4s cubic-bezier(.4,0,.2,1); 
+}
+
+.bar-count {
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.bar-count.open { 
+  color: var(--text); 
+}
+
+.bar-count.closed { 
+  color: var(--faint); 
+}
+
+.bar-tag {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 5px 0;
+}
+
+.div-line { 
+  flex: 1; 
+  border-top: 1px dashed var(--border2); 
+}
+
+.div-lbl { 
+  font-size: 9px; 
+  font-weight: 600; 
+  color: var(--faint); 
+  white-space: nowrap; 
+}
+
+.hour-names {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 4px;
+  line-height: 1.3;
+}
+
+/* Manager / Break advice */
+.manager-card {
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--r);
+  padding: 14px;
+}
+
+.manager-card h3 { 
+  font-size: 13px; 
+  font-weight: 700; 
+  color: var(--accent); 
+  margin-bottom: 8px; 
+}
+
+.break-card {
+  background: var(--amber-bg);
+  border: 1px solid var(--amber-border);
+  border-radius: var(--r);
+  padding: 14px;
+}
+
+.break-card h3 { 
+  font-size: 13px; 
+  font-weight: 700; 
+  color: var(--amber); 
+  margin-bottom: 8px; 
+}
+
+.break-time {
+  font-family: 'DM Mono', monospace;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--amber);
+  letter-spacing: -1px;
+  margin: 6px 0;
+}
+
+.break-check { 
+  font-size: 12px; 
+  color: var(--amber); 
+  margin: 4px 0; 
+  display: flex; 
+  align-items: flex-start; 
+  gap: 5px; 
+  line-height: 1.4; 
+}
+
+.cov-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--amber-border);
+  font-size: 12px;
+  color: var(--amber);
+}
+
+.cov-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  background: var(--surface);
+  color: var(--amber);
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+
+.ok-card {
+  background: var(--green-bg);
+  border: 1px solid var(--green-border);
+  border-radius: var(--r);
+  padding: 14px;
+}
+
+.ok-card h3 { 
+  font-size: 13px; 
+  font-weight: 700; 
+  color: var(--green); 
+  margin-bottom: 5px; 
+}
+
+.ok-card p { 
+  font-size: 12px; 
+  color: var(--green); 
+  opacity: .8; 
+}
+
+.off-card {
+  background: var(--surface2);
+  border-radius: var(--r);
+  padding: 14px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.hidden { 
+  display: none !important; 
+}
+
+/* ── CHANGE HIGHLIGHT ──────────────────────────────── */
+.d-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+
+.change-dot {
+  font-size: 8px;
+  color: #f59e0b;
+  line-height: 1;
+}
+
+.task-dot {
+  font-size: 7px;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.changed-w {
+  border: 1px solid rgba(245,158,11,0.35) !important;
+  background: rgba(245,158,11,0.07) !important;
+}
+
+.change-badge {
+  display: inline-block;
+  font-size: 9px;
+  color: #f59e0b;
+  font-weight: 600;
+  background: rgba(245,158,11,0.12);
+  border-radius: 3px;
+  padding: 1px 4px;
+  margin-left: 2px;
+}
+
+/* ── CHECKLIST ──────────────────────────────────────── */
+#cl-text:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--surface3);
+}
+
+.cl-task {
+  transition: opacity 0.2s;
+}
+
+.cl-done {
+  opacity: 0.55;
+}
+
+/* ── PASSWORD MODAL ────────────────────────────────── */
+#password-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+#password-overlay.hidden {
+  display: none !important;
+}
+
+.password-modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 24px;
+  max-width: 300px;
+  width: 100%;
+  text-align: center;
+}
+
+.password-modal h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.password-modal p {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+#password-input {
+  width: 100%;
+  padding: 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  color: var(--text);
+  font-size: 16px;
+  font-family: 'DM Sans', sans-serif;
+  margin-bottom: 16px;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+#password-input::placeholder {
+  color: var(--faint);
+}
+
+#password-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--surface3);
+}
+
+.password-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.password-buttons button {
+  padding: 12px;
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.password-buttons button:active {
+  transform: scale(0.95);
+}
+
+#password-submit {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.password-error {
+  font-size: 12px;
+  color: var(--red);
+  margin-top: 8px;
+}
+
+/* ── DIAS PASSADOS ──────────────────────────────────── */
+.cal-day.past .d-num { color: var(--faint); }
+.cal-day.past .d-count { font-weight: 700; color: var(--muted); }
+.cal-day.past .d-badge { opacity: .5; }
+.cal-day.past { opacity: .6; }
+.cal-day.today-marker { border-color: var(--green) !important; }
+
+/* ── MONTH NAV ──────────────────────────────────────── */
+.month-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.month-nav-btn {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 7px; color: var(--text); font-size: 12px;
+  font-weight: 600; padding: 5px 10px; cursor: pointer;
+  -webkit-appearance: none;
+}
+.month-nav-btn:disabled { opacity: .3; cursor: default; }
+.month-nav-title { font-size: 12px; font-weight: 700; color: var(--text); }
+
+/* ── RIGHT-COL TABS (manager) ───────────────────────── */
+.rtab-bar {
+  display: flex; gap: 3px; background: var(--surface2);
+  border-radius: var(--r); padding: 3px; margin-bottom: 12px;
+}
+.rtab {
+  flex: 1; padding: 7px 4px; border-radius: 7px; border: none;
+  background: transparent; color: var(--muted);
+  font-size: 11px; font-weight: 600; cursor: pointer;
+  transition: all .12s; white-space: nowrap;
+  -webkit-appearance: none; font-family: 'DM Sans', sans-serif;
+}
+.rtab.active { background: var(--surface); color: var(--text); }
+.rtab-panel { display: none; }
+.rtab-panel.active { display: block; }
+
+/* ── REQUEST CARDS ──────────────────────────────────── */
+.req-card {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 12px; margin-bottom: 8px;
+}
+.req-card .req-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 6px;
+}
+.req-card .req-who { font-size: 13px; font-weight: 600; }
+.req-card .req-date { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; }
+.req-card .req-detail { font-size: 12px; color: var(--muted); }
+.req-badge {
+  display: inline-block; padding: 2px 8px; border-radius: 4px;
+  font-size: 10px; font-weight: 700;
+}
+.req-badge.pending { background: var(--amber-bg); color: var(--amber); }
+.req-badge.approved { background: var(--green-bg); color: var(--green); }
+.req-badge.rejected { background: rgba(239,68,68,.12); color: var(--red); }
+.req-actions { display: flex; gap: 6px; margin-top: 8px; }
+.req-btn {
+  flex: 1; padding: 6px; border-radius: 7px; border: none;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  -webkit-appearance: none; font-family: 'DM Sans', sans-serif;
+}
+.req-btn.approve { background: var(--green-bg); color: var(--green); }
+.req-btn.reject { background: rgba(239,68,68,.12); color: var(--red); }
+
+/* ── REQUEST MODAL ──────────────────────────────────── */
+#req-modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.7);
+  z-index: 3000; display: flex; align-items: center;
+  justify-content: center; padding: 20px;
+}
+#req-modal-overlay.hidden { display: none !important; }
+.req-modal {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 22px;
+  max-width: 340px; width: 100%;
+}
+.req-modal h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.req-modal p { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+.req-modal select, .req-modal input[type=date] {
+  width: 100%; padding: 10px 12px; margin-bottom: 10px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--r); color: var(--text);
+  font-size: 13px; font-family: 'DM Sans', sans-serif;
+  -webkit-appearance: none; appearance: none;
+}
+.req-modal select:focus, .req-modal input:focus {
+  outline: none; border-color: var(--accent);
+}
+.req-modal-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+.req-modal-btns button {
+  padding: 11px; border-radius: var(--r); border: none;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  -webkit-appearance: none; font-family: 'DM Sans', sans-serif;
+}
+.req-modal-btns .btn-primary { background: var(--accent); color: #fff; }
+.req-modal-btns .btn-cancel { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+.req-error { font-size: 12px; color: var(--red); margin-top: 6px; min-height: 18px; }
+
+/* ── REQUEST TRIGGER BUTTONS ────────────────────────── */
+.req-trigger-row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.req-trigger-btn {
+  flex: 1; min-width: 140px; padding: 10px 12px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--r); color: var(--text);
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  text-align: center; -webkit-appearance: none;
+  font-family: 'DM Sans', sans-serif;
+}
+.req-trigger-btn:active { opacity: .7; }
+
+/* ── SWAP / MANUAL OVERRIDE BADGES ─────────────────── */
+.wcard.swap-w  { border-color: var(--swap-border) !important; background: var(--swap-bg) !important; }
+.wcard.manual-w { border-color: var(--manual-border) !important; background: var(--manual-bg) !important; }
+.cal-day.has-swap   { box-shadow: inset 0 0 0 1.5px var(--swap-border); }
+.cal-day.has-manual { box-shadow: inset 0 0 0 1.5px var(--manual-border); }
+.ovr-badge {
+  display: inline-block; padding: 1px 5px; border-radius: 3px;
+  font-size: 9px; font-weight: 700; margin-left: 3px; vertical-align: middle;
+}
+.ovr-badge.swap   { background: var(--swap-bg);   color: var(--swap-color); }
+.ovr-badge.manual { background: var(--manual-bg);  color: var(--manual-color); }
+.swap-dot   { color: var(--swap-color);   font-size: 8px; line-height: 1; }
+.manual-dot { color: var(--manual-color); font-size: 8px; line-height: 1; }
+
+/* ── EDIT BUTTON IN WORKER CARD ─────────────────────── */
+.edit-shift-btn {
+  background: none; border: 1px solid var(--border2);
+  border-radius: 5px; color: var(--muted);
+  font-size: 10px; cursor: pointer; padding: 2px 6px;
+  flex-shrink: 0; -webkit-appearance: none;
+  font-family: 'DM Sans', sans-serif;
+  transition: color .12s, border-color .12s;
+}
+.edit-shift-btn:hover { color: var(--accent); border-color: var(--accent-border); }
+
+/* ── EDIT MODAL ─────────────────────────────────────── */
+#edit-modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.75);
+  z-index: 3500; display: flex; align-items: center;
+  justify-content: center; padding: 20px;
+}
+#edit-modal-overlay.hidden { display: none !important; }
+.edit-modal {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 22px;
+  max-width: 320px; width: 100%;
+}
+.edit-modal h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+.edit-modal p  { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+.edit-modal select {
+  width: 100%; padding: 10px 12px; margin-bottom: 14px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--r); color: var(--text);
+  font-size: 13px; font-family: 'DM Sans', sans-serif;
+  -webkit-appearance: none; appearance: none;
+}
+.edit-modal select:focus { outline: none; border-color: var(--accent); }
+.edit-modal-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.edit-modal-btns button {
+  padding: 10px; border-radius: var(--r); border: none;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  -webkit-appearance: none; font-family: 'DM Sans', sans-serif;
+}
+.edit-btn-save   { background: var(--accent); color: #fff; }
+.edit-btn-cancel { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+.edit-btn-clear  {
+  grid-column: 1 / -1; background: var(--surface2);
+  color: var(--red); border: 1px solid rgba(239,68,68,.25); margin-top: 4px;
+}
+
+/* ════════════════════════════════════════════════════
+   PAINEL DE GESTÃO
+   ════════════════════════════════════════════════════ */
+.pg-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.pg-section-title {
+  font-size: 13px; font-weight: 700; color: var(--text);
+  margin-bottom: 12px; display: flex; align-items: center; gap: 7px;
+}
+.pg-section-title span { font-size: 15px; }
+
+/* ── Performance por secção ── */
+.perf-bars { display: flex; flex-direction: column; gap: 8px; }
+.perf-row { display: flex; align-items: center; gap: 8px; }
+.perf-label { font-size: 12px; font-weight: 600; width: 80px; flex-shrink: 0; }
+.perf-input {
+  width: 54px; padding: 5px 7px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 7px; color: var(--text); font-size: 12px;
+  font-family: 'DM Sans', sans-serif; text-align: right;
+  -webkit-appearance: none;
+}
+.perf-input:focus { outline: none; border-color: var(--accent); }
+.perf-bar-wrap {
+  flex: 1; height: 14px; background: var(--surface2);
+  border-radius: 4px; overflow: hidden;
+}
+.perf-bar-fill { height: 100%; border-radius: 4px; transition: width .4s; }
+.perf-pct { font-size: 11px; color: var(--muted); width: 32px; text-align: right; }
+
+/* ── Ranking de eficiência ── */
+.eff-grid {
+  display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; margin-bottom: 8px;
+}
+.eff-day {
+  border-radius: 6px; padding: 6px 2px; text-align: center;
+  font-size: 10px; font-weight: 600; cursor: pointer;
+  border: 1.5px solid transparent; transition: all .12s;
+  -webkit-user-select: none;
+}
+.eff-day.hit  { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
+.eff-day.miss { background: rgba(239,68,68,.1); border-color: rgba(239,68,68,.25); color: var(--red); }
+.eff-day.none { background: var(--surface2); color: var(--faint); }
+.eff-streak { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+/* ── Destaques positivos ── */
+.highlight-rows { display: flex; flex-direction: column; gap: 6px; }
+.hl-row { display: flex; gap: 6px; align-items: flex-start; }
+.hl-name { font-size: 11px; font-weight: 600; width: 80px; flex-shrink: 0; padding-top: 7px; }
+.hl-input {
+  flex: 1; padding: 7px 10px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text); font-size: 12px;
+  font-family: 'DM Sans', sans-serif; resize: none;
+  -webkit-appearance: none;
+}
+.hl-input:focus { outline: none; border-color: var(--accent); }
+.hl-save-btn {
+  padding: 7px 12px; border-radius: 8px;
+  background: var(--accent); border: none; color: #fff;
+  font-size: 12px; font-weight: 700; cursor: pointer; flex-shrink: 0;
+  -webkit-appearance: none; font-family: 'DM Sans', sans-serif;
+}
+.hl-saved { font-size: 10px; color: var(--green); margin-top: 3px; }
+
+/* ── Energia da equipa ── */
+.energy-rows { display: flex; flex-direction: column; gap: 6px; }
+.energy-row { display: flex; align-items: center; gap: 8px; }
+.energy-name { font-size: 12px; font-weight: 600; width: 80px; flex-shrink: 0; }
+.energy-stars { display: flex; gap: 3px; }
+.energy-star {
+  font-size: 16px; cursor: pointer; opacity: .3;
+  transition: opacity .1s; -webkit-user-select: none; user-select: none;
+}
+.energy-star.active { opacity: 1; }
+.energy-avg-bar {
+  height: 10px; border-radius: 5px; margin-top: 10px; transition: width .4s;
+}
+.energy-avg-label { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.energy-alert {
+  margin-top: 8px; padding: 8px 12px;
+  background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.25);
+  border-radius: 8px; font-size: 12px; color: var(--red);
+}
+
+/* ── Banco de esforço ── */
+.effort-rows { display: flex; flex-direction: column; gap: 8px; }
+.effort-row { display: flex; align-items: center; gap: 8px; }
+.effort-name { font-size: 12px; font-weight: 600; width: 80px; flex-shrink: 0; }
+.battery-wrap {
+  flex: 1; height: 14px; background: var(--surface2);
+  border-radius: 4px; overflow: hidden; position: relative;
+}
+.battery-fill { height: 100%; border-radius: 4px; transition: width .5s; }
+.battery-pct { font-size: 11px; color: var(--muted); width: 36px; text-align: right; }
+
+/* ── Best of the Week ── */
+.botw-input {
+  width: 100%; padding: 8px 10px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text); font-size: 13px;
+  font-family: 'DM Sans', sans-serif; margin-bottom: 8px;
+  -webkit-appearance: none;
+}
+.botw-input:focus { outline: none; border-color: var(--accent); }
+.botw-save-btn {
+  padding: 8px 16px; border-radius: 8px;
+  background: var(--accent); border: none; color: #fff;
+  font-size: 13px; font-weight: 700; cursor: pointer;
+  -webkit-appearance: none; font-family: 'DM Sans', sans-serif;
+}
+.botw-log { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+.botw-entry {
+  padding: 10px 12px;
+  background: var(--surface2); border-radius: 8px;
+  border-left: 3px solid var(--accent);
+}
+.botw-entry-date { font-size: 10px; color: var(--muted); margin-bottom: 3px; }
+.botw-entry-text { font-size: 13px; }
+
+/* ── Trocas simplificadas ── */
+.swap-log { display: flex; flex-direction: column; gap: 6px; }
+.swap-entry {
+  padding: 10px 12px; background: var(--surface2);
+  border-radius: 8px; border-left: 3px solid var(--swap-color);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.swap-entry-info { font-size: 12px; }
+.swap-entry-date { font-size: 10px; color: var(--muted); }
+.swap-del-btn {
+  background: none; border: none; color: var(--faint);
+  cursor: pointer; font-size: 14px; padding: 0; flex-shrink: 0;
+}
+.swap-add-row { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.swap-add-row input, .swap-add-row select {
+  flex: 1; min-width: 100px; padding: 7px 10px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text); font-size: 12px;
+  font-family: 'DM Sans', sans-serif; -webkit-appearance: none;
+}
+.swap-add-row input:focus, .swap-add-row select:focus {
+  outline: none; border-color: var(--accent);
+}
+.swap-add-btn {
+  padding: 7px 14px; border-radius: 8px;
+  background: var(--accent); border: none; color: #fff;
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  -webkit-appearance: none; font-family: 'DM Sans', sans-serif; flex-shrink: 0;
+}
+
+/* ── Painel helpers ── */
+.pg-select, .pg-input {
+  width: 100%; padding: 8px 10px; margin-bottom: 8px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text); font-size: 12px;
+  font-family: 'DM Sans', sans-serif; -webkit-appearance: none; appearance: none;
+  display: block;
+}
+.pg-select:focus, .pg-input:focus { outline: none; border-color: var(--accent); }
+.pg-save-btn {
+  padding: 8px 16px; border-radius: var(--r);
+  background: var(--accent); border: none; color: #fff;
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  -webkit-appearance: none; font-family: 'DM Sans', sans-serif;
+}
+
+/* ── Sub-tabs dentro de secção ── */
+.pg-sub-tabs {
+  display: flex; gap: 3px; background: var(--surface2);
+  border-radius: 8px; padding: 3px; margin-bottom: 12px;
+}
+.pg-sub-tab {
+  flex: 1; padding: 5px 8px; border-radius: 6px; border: none;
+  background: transparent; color: var(--muted); font-size: 11px;
+  font-weight: 600; cursor: pointer; -webkit-appearance: none;
+  font-family: 'DM Sans', sans-serif; transition: all .12s;
+}
+.pg-sub-tab.active { background: var(--surface); color: var(--text); }
+
+/* ── Semana nav (performance) ── */
+.pg-week-btn {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 6px; color: var(--text); font-size: 12px;
+  font-weight: 700; padding: 2px 8px; cursor: pointer;
+  -webkit-appearance: none; font-family: 'DM Sans', sans-serif;
+}
+.pg-week-btn:disabled { opacity: .3; cursor: default; }
+
+/* ── Destaques histórico ── */
+.hl-history-entry {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 10px 12px; background: var(--surface2);
+  border-radius: 8px; border-left: 3px solid var(--accent);
+  margin-bottom: 6px;
+}
+
+/* ── Energia nome em alerta ── */
+.energy-name-alert {
+  color: var(--red) !important;
+  font-weight: 700;
+}
+
+/* ── BotW summary ── */
+.botw-summary-badge {
+  background: var(--accent-bg); border: 1px solid var(--accent-border);
+  border-radius: 7px; padding: 7px 10px; font-size: 11px;
+  font-weight: 600; color: var(--accent); margin-bottom: 10px;
+}
+.botw-summary-header {
+  font-size: 11px; font-weight: 700; color: var(--accent);
+  margin-bottom: 8px; padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+.botw-today { border-left-color: var(--green) !important; }
+/* ── MAY CALENDAR DAYS ──────────── */
+.may-cal-day {
+  border-radius: 8px;
+  padding: 5px 3px 4px;
+  cursor: pointer;
+  background: var(--surface);
+  border: 1.5px solid transparent;
+  min-height: 64px;
+  text-align: center;
+  transition: border-color .12s, background .12s;
+  -webkit-user-select: none;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.may-cal-day.selected { border-color: var(--accent); background: var(--accent-bg); }
+.may-cal-day.req-marked { border-color: var(--amber); background: var(--amber-bg); }
+.may-cal-day:active { transform: scale(.95); }
+.may-cal-day .d-num {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--faint);
+  margin-bottom: 2px;
+}
+.may-cal-day .d-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+.may-cal-day .d-lbl {
+  font-size: 7.5px;
+  color: var(--faint);
+}
+.may-cal-day.req-marked .d-num { color: var(--amber); }
+.may-cal-day.req-marked .d-lbl { color: var(--amber); }
+
+/* ── LOGOUT BUTTON ─────────────────────────────────── */
+.logout-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 8px;
+  cursor: pointer;
+  margin-left: 6px;
+  flex-shrink: 0;
+  -webkit-appearance: none;
+  font-family: 'DM Sans', sans-serif;
+  transition: color .12s, border-color .12s;
+}
+.logout-btn:active { opacity: .6; }
+
+/* ── PAST HOURS ─────────────────────────────────────── */
+.h-row.past-hour { opacity: 0.38; }
+.h-row.current-hour .h-lbl { color: var(--accent) !important; font-weight: 700; }
+.h-row.current-hour .bar-wrap { outline: 1.5px solid var(--accent); border-radius: 4px; }
+
+/* ── PAUSA DE ALMOÇO — trigger button ───────────────── */
+.lunch-trigger-row { margin-top: 8px; }
+.lunch-trigger-btn {
+  width: 100%; padding: 8px 12px;
+  background: var(--amber-bg); border: 1px solid var(--amber-border);
+  border-radius: var(--r); color: var(--amber);
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  text-align: left; -webkit-appearance: none;
+  font-family: 'DM Sans', sans-serif;
+  transition: background .12s;
+}
+.lunch-trigger-btn strong { color: var(--text); }
+.lunch-trigger-btn:active { opacity: .75; }
+
+/* ── MODAL DE PAUSA DE ALMOÇO ────────────────────────── */
+#lunch-modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.75);
+  z-index: 3500; display: flex; align-items: center;
+  justify-content: center; padding: 20px;
+}
+#lunch-modal-overlay.hidden { display: none !important; }
+.lunch-modal {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 22px;
+  max-width: 320px; width: 100%;
+}
+.lunch-modal h3 { font-size: 16px; font-weight: 700; margin-bottom: 5px; }
+.lunch-modal p  { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+.lunch-modal select {
+  width: 100%; padding: 10px 12px; margin-bottom: 14px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--r); color: var(--text);
+  font-size: 13px; font-family: 'DM Sans', sans-serif;
+  -webkit-appearance: none; appearance: none;
+}
+.lunch-modal select:focus { outline: none; border-color: var(--accent); }
+.lunch-modal-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.lunch-modal-btns button {
+  padding: 10px; border-radius: var(--r); border: none;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  -webkit-appearance: none; font-family: 'DM Sans', sans-serif;
+}
+.lunch-btn-save   { background: var(--accent); color: #fff; }
+.lunch-btn-cancel { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+.lunch-btn-clear  {
+  grid-column: 1 / -1; background: var(--surface2);
+  color: var(--amber); border: 1px solid var(--amber-border); margin-top: 4px;
+}
+</style>
+</head>
+<body>
+
+<div id="profile-overlay">
+  <div class="profile-header">
+    <h2>Quem és?</h2>
+    <p>Seleciona o teu perfil para veres o teu horário</p>
+  </div>
+  <div class="profile-grid-container">
+    <div class="profile-grid" id="profile-list"></div>
+  </div>
+</div>
+
+<div id="password-overlay" class="hidden">
+  <div class="password-modal">
+    <h2>Acesso Restrito</h2>
+    <p>Este perfil requer autenticação</p>
+    <input type="password" id="password-input" placeholder="Introduz a senha" autocomplete="off">
+    <div class="password-buttons">
+      <button id="password-submit" onclick="checkPassword()">Confirmar</button>
+      <button id="password-cancel" onclick="cancelPassword()">Cancelar</button>
+    </div>
+    <div id="password-error" class="password-error hidden">Senha incorreta</div>
+  </div>
+</div>
+
+<div class="app hidden" id="main-app">
+  <header>
+    <div class="header-inner">
+      <div class="brand" onclick="logout()">
+        <div class="brand-icon">👟</div>
+        <div class="brand-text">
+          <h1>Calçado · Abril 2026</h1>
+          <p>SPZ Leiria · SDSR Sports Division</p>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:0;flex-shrink:0">
+        <div class="user-pill" id="current-user-pill">
+          <div class="user-av" id="user-av"></div>
+          <span id="user-name"></span>
+        </div>
+        <button class="logout-btn" onclick="logout()" title="Sair">✕ Sair</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="left-col">
+      <div class="cal-section">
+        <div class="section-label">
+          <div class="month-nav" style="width:100%">
+            <button class="month-nav-btn" id="btn-prev-month" onclick="navMonth(-1)" disabled>‹</button>
+            <span class="month-nav-title" id="month-title">Abril 2026</span>
+            <button class="month-nav-btn" id="btn-next-month" onclick="navMonth(1)">›</button>
+          </div>
+        </div>
+        <div class="cal-grid" id="cal"></div>
+      </div>
+      <div class="stats-row" id="stats"></div>
+    </div>
+
+    <div class="right-col">
+      <!-- tab bar só para gestor -->
+      <div id="mgr-tab-bar" class="rtab-bar hidden">
+        <button class="rtab active" onclick="showTab('day')">📅 Dia</button>
+        <button class="rtab" onclick="showTab('swaps')">🔄 Trocas</button>
+        <button class="rtab" onclick="showTab('dayoffs')">🌙 Folgas</button>
+        <button class="rtab" onclick="showTab('painel')">📊 Painel</button>
+      </div>
+      <!-- painel dia -->
+      <div class="rtab-panel active" id="tab-day">
+        <div class="section-label" id="detail-label">Detalhe do dia</div>
+        <div class="detail-panel" id="detail">
+          <div class="empty-state">
+            <div class="ei">📅</div>
+            Toca num dia para ver detalhes
+          </div>
+        </div>
+      </div>
+      <!-- painel trocas -->
+      <div class="rtab-panel" id="tab-swaps">
+        <div class="section-label" style="margin-bottom:12px">🔄 Pedidos de Alteração</div>
+        <div id="swaps-content"></div>
+      </div>
+      <!-- painel folgas -->
+      <div class="rtab-panel" id="tab-dayoffs">
+        <div class="section-label" style="margin-bottom:12px">🌙 Pedidos de Folga</div>
+        <div id="dayoffs-content"></div>
+      </div>
+      <!-- painel gestão -->
+      <div class="rtab-panel" id="tab-painel"></div>
+    </div>
+  </div>
+</div>
+
+<!-- modal de pedidos (troca / folga) -->
+<div id="req-modal-overlay" class="hidden">
+  <div class="req-modal">
+    <h3 id="modal-title">Pedido</h3>
+    <p id="modal-sub"></p>
+    <div id="modal-body"></div>
+    <div class="req-error" id="modal-error"></div>
+    <div class="req-modal-btns">
+      <button class="btn-primary" onclick="submitRequest()">Enviar pedido</button>
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- modal de edição manual de horário (gestor) -->
+<div id="edit-modal-overlay" class="hidden">
+  <div class="edit-modal">
+    <h3 id="edit-modal-title">✏️ Editar horário</h3>
+    <p id="edit-modal-sub"></p>
+    <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:4px">Novo turno:</label>
+    <select id="edit-shift-select"></select>
+    <div class="edit-modal-btns">
+      <button class="edit-btn-save"   onclick="saveManualEdit()">Guardar</button>
+      <button class="edit-btn-cancel" onclick="closeEditModal()">Cancelar</button>
+      <button class="edit-btn-clear"  onclick="clearManualEdit()">↺ Repor original</button>
+    </div>
+  </div>
+</div>
+
+<!-- modal de pausa de almoço -->
+<div id="lunch-modal-overlay" class="hidden">
+  <div class="lunch-modal">
+    <h3 id="lunch-modal-title">🍽 Pausa de almoço</h3>
+    <p id="lunch-modal-sub"></p>
+    <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:4px">Horário da pausa:</label>
+    <select id="lunch-select"></select>
+    <div class="lunch-modal-btns">
+      <button class="lunch-btn-save"   onclick="saveLunchModal()">Guardar</button>
+      <button class="lunch-btn-cancel" onclick="closeLunchModal()">Cancelar</button>
+      <button class="lunch-btn-clear"  onclick="clearLunchModal()">↺ Remover pausa</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SH = {
+  '070':{s:7,e:11,bs:null,be:null},
+  '070NA':{s:7,e:16,bs:12,be:13},
+  '070MA':{s:7,e:16,bs:11,be:12},
+  '074ND':{s:7.75,e:16.75,bs:12.75,be:13.75},
+  '080':{s:8,e:12,bs:null,be:null},
+  '080NA':{s:8,e:17,bs:12,be:13},
+  '080MA':{s:8,e:17,bs:11,be:12},
+  '090':{s:9,e:13,bs:null,be:null},
+  '090PA':{s:9,e:18,bs:13,be:14},
+  '100':{s:10,e:14,bs:null,be:null},
+  '100PA':{s:10,e:19,bs:13,be:14},
+  '100QA':{s:10,e:19,bs:14,be:15},
+  '100QB':{s:10,e:19,bs:14.25,be:15.25},
+  '100PC':{s:10,e:19,bs:13.5,be:14.5},
+  '110':{s:11,e:15,bs:null,be:null},
+  '110QA':{s:11,e:20,bs:14,be:15},
+  '110RA':{s:11,e:20,bs:15,be:16},
+  '120':{s:12,e:16,bs:null,be:null},
+  '120SA':{s:12,e:21,bs:16,be:17},
+  '130':{s:13,e:17,bs:null,be:null},
+  '130TA':{s:13,e:22,bs:17,be:18},
+  '133':{s:13.5,e:17.5,bs:null,be:null},
+  '140':{s:14,e:18,bs:null,be:null},
+  '140UA':{s:14,e:23,bs:18,be:19},
+  '150':{s:15,e:19,bs:null,be:null},
+  '150VA':{s:15,e:24,bs:19,be:20},
+  '160':{s:16,e:20,bs:null,be:null},
+  '170':{s:17,e:21,bs:null,be:null},
+  '173':{s:17.5,e:21.5,bs:null,be:null},
+  '180':{s:18,e:22,bs:null,be:null},
+  '180YA':{s:18,e:27,bs:22,be:23},
+  '190':{s:19,e:23,bs:null,be:null},
+  '194':{s:19.75,e:23.75,bs:null,be:null},
+  '200':{s:20,e:24,bs:null,be:null},
+};
+
+const OFF = ['FC','FO','V','Fe','Bx','IT','AutDe'];
+const OFF_LABEL = {FC:'Folga Complementar',FO:'Folga Obrigatória',V:'Dia Off',Fe:'Férias',Bx:'Baixa Médica',IT:'Intermédio',AutDe:'Auto Declaração'};
+const DOW = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+const APR1_DOW = 3;
+const STORE_OPEN = 10, STORE_CLOSE = 23;
+
+// ── ALTERAÇÕES v12 → v13 (dias com mudanças por colaborador) ──
+// Formato: id → Set de índices de dias alterados (0=Mar31, 1=1Abr...)
+const CHANGES = {
+  '9457':  new Set([0,11]),           // Catarina: Mar31 080PA→090PA corrigido; dia 11 080NA adicionado
+  '11821': new Set([18,19]),          // Leandro: dias 19-20 corrigidos (170→200, 140 mantido)
+  '13778': new Set([15]),             // Tiago: dia 15 100→100QA
+  '13782': new Set([14]),             // Bernardo: dia 14 140→170
+  '13783': new Set([13,17,18]),       // Cláudia: dias 13,17,18 corrigidos
+  '13784': new Set([15,16]),          // Micael: dias 15,16 corrigidos
+};
+
+// ── CHECKLIST (Supabase via cache) ──
+function clKey(dateStr) { return 'checklist_' + dateStr; }
+function clLoad(dateStr) {
+  return pgGet(clKey(dateStr)) || [];
+}
+function clSave(dateStr, tasks) {
+  pgSet(clKey(dateStr), tasks);
+}
+const URGENCY_ORDER = { alta: 0, media: 1, baixa: 2 };
+const IMPORTANCE_ORDER = { alta: 0, media: 1, baixa: 2 };
+function sortTasks(tasks) {
+  return [...tasks].sort((a, b) => {
+    const ud = URGENCY_ORDER[a.urgency] - URGENCY_ORDER[b.urgency];
+    if (ud !== 0) return ud;
+    return IMPORTANCE_ORDER[a.importance] - IMPORTANCE_ORDER[b.importance];
+  });
+}
+
+const TEAM = [
+  // idx: 0=Mar31  1=1Abr  2=2  3=3  4=4  5=5  6=6  7=7  8=8  9=9  10=10 11=11 12=12 13=13 14=14 15=15 16=16 17=17 18=18 19=19 20=20 21=21 22=22 23=23 24=24 25=25 26=26 27=27 28=28 29=29 30=30
+  // PDF: 2595 JOAO CABETE
+  {id:'2595', name:'João Cabete', isManager:false,
+   sch:['100','V','V','150','FO','100QA','150','150','V','140','FC','FO','120SA','150','150','V','150','FC','FO','110RA','150','150','V','150','FC','FO','100QA','150','150','V','150']},
+  // PDF: 9457 CATARINA CARREIRA
+  {id:'9457', name:'Catarina Carreira', isManager:false,
+   sch:['080PA','090','FO','110RA','090PA','120SA','130TA','FC','FO','090PA','090PA','080NA','090PA','FC','090PA','090PA','090PA','090PA','090PA','FO','Fe','Fe','Fe','Fe','Fe','FC','FO','090','110','090','FC']},
+  // PDF: 9704 FRANCISCO BARRELA
+  {id:'9704', name:'Francisco Barrela', isManager:false,
+   sch:['V','200','FC','FO','150VA','120SA','V','V','130','FC','FO','150VA','130TA','V','130','V','FC','FO','150VA','120SA','V','130','V','FC','FO','150VA','120SA','V','V','130','FC']},
+  // PDF: 11449 MARIA MORAIS
+  {id:'11449',name:'Maria Morais', isManager:false,
+   sch:['FC','FO','090','090','200','200','FC','090','090','180','130','200','FO','130','160','180','160','140','FC','FO','090','090','090','FC','FO','200','170','190','FC','FO','090']},
+  // PDF: 11550 MARIA LOPES
+  {id:'11550',name:'Maria Lopes', isManager:false,
+   sch:['FC','FO','200','200','170','160','FC','200','150','140','170','200','FO','150VA','150VA','150VA','150VA','150VA','FC','FO','200','190','200','FC','FO','160','190','200','FC','FO','200']},
+  // PDF: 11821 LEANDRO GUEDES
+  {id:'11821',name:'Leandro Guedes', isManager:false,
+   sch:['FC','100','100','160','100','FO','200','190','200','200','200','FC','FO','200','200','200','FC','FO','200','140','200','FC','FO','180','170','200','130','FC','180','200','200']},
+  // PDF: 12238 DIOGO REBELO
+  {id:'12238',name:'Diogo Rebelo', isManager:false,
+   sch:['110RA','160','170','200','130','FO','110RA','130TA','100QA','110RA','100QA','FC','FO','090PA','100QA','100QA','FC','FO','130TA','150VA','120SA','FC','FO','090PA','090PA','090PA','090PA','FC','090PA','110RA','110RA']},
+  // PDF: 12339 PEDRO SILVA (manager)
+  {id:'12339',name:'Pedro Silva', isManager:true, passwordHash:'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3',
+   sch:['150VA','150VA','150VA','150VA','FC','FO','070MA','100QA','120SA','FC','FO','110RA','110RA','100QA','FC','120SA','FO','120SA','150VA','150VA','FC','100QA','100QA','100QA','100QA','100QA','FO','100QA','100QA','120SA','120SA']},
+  // PDF: 13777 JOSE PEREIRA
+  {id:'13777',name:'José Pereira', isManager:false,
+   sch:['V','FC','FO','170','150VA','150VA','V','V','FC','FO','200','130TA','150VA','V','V','180','FC','FO','100QA','100QA','FC','V','200','FO','200','120SA','150VA','V','V','FC','FO']},
+  // PDF: 13778 TIAGO BENTO
+  {id:'13778',name:'Tiago Bento', isManager:false,
+   sch:['200','FO','130','100','130','110','FC','100','200','160','160','160','FO','100','110','100QA','100','100','FC','FO','160','170','190','FC','200','160','FO','130','FC','FO','130']},
+  // PDF: 13779 TOMAS PACIFICO
+  {id:'13779',name:'Tomás Pacífico', isManager:false,
+   sch:['180','130','100','100','FC','FO','100','170','170','FC','FO','100','100','180','FC','FO','100','100','100','100','FC','200','160','190','170','190','FO','190','200','180','170']},
+  // PDF: 13782 BERNARDO ROCHA
+  {id:'13782',name:'Bernardo Rocha', isManager:false,
+   sch:['120','110','FC','FO','110','100','180','FC','FO','100','100','140','140','FC','170','200','140','180','140','FO','100','130','100','100','100','FC','FO','150','200','200','FC']},
+  // PDF: 13783 CLAUDIA MORCELA
+  {id:'13783',name:'Cláudia Morcela', isManager:false,
+   sch:['140','150','140','130','FC','FO','160','140','100','FC','FO','100','100','150VA','FC','130TA','150VA','150VA','FO','150VA','FC','100','140','140','130','100','FO','100','120','100','100']},
+  // PDF: 13784 MICAEL DOMINGUES
+  {id:'13784',name:'Micael Domingues', isManager:false,
+   sch:['FO','V','200','V','100QA','090PA','FC','FO','200','V','V','150VA','150VA','V','FC','120SA','190','FO','120SA','100QA','FC','FO','V','200','V','110RA','150VA','FC','FO','V','140']},
+  // PDF: 13808 DIOGO COSTA
+  {id:'13808',name:'Diogo Costa', isManager:false,
+   sch:['160','V','FC','FO','150VA','150VA','V','FC','V','FO','200','150VA','150VA','V','FC','V','FO','200','150VA','150VA','130','V','V','FC','FO','100QA','100QA','V','160','V','FC']},
+  // PDF: 13818 FRANCISCO SANTOS
+  {id:'13818',name:'Francisco Santos', isManager:false,
+   sch:['180','190','FC','200','170','FO','200','200','FC','200','FO','170','180','200','200','FC','200','FO','140','140','200','200','FC','200','FO','200','200','200','200','FC','200']},
+];
+
+let currentUser = null;
+let selectedDay = 1;
+let pendingUser = null;
+let initialized = false;
+let currentMonth = 0;
+let modalType = null;
+let modalDay = null;
+let modalMonth = 0;
+let editUserId = null;
+let editDayIdx = null;
+
+const isOff = c => OFF.includes(c);
+const getS = c => SH[c] || null;
+const ini = n => n.split(' ').filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+const countW = idx => TEAM.filter(m => !isOff(m.sch[idx])).length;
+
+// working(c, h, userId, day) — inclui pausa manual de almoço se existir
+// userId e day são opcionais; sem eles comporta-se como antes
+function working(c, h, userId, day) {
+  const s = getS(c);
+  if (!s) return false;
+  if (h < s.s || h >= s.e) return false;
+  // Pausa manual de almoço sobrepõe-se à pausa do turno
+  if (userId !== undefined && day !== undefined) {
+    const lbs = getLunch(userId, day);  // number | null — getLunch já devolve número
+    if (lbs !== null) {
+      const lbe = lbs + 1;
+      if (h >= lbs && h < lbe) return false;
+    } else if (s.bs !== null && h >= s.bs && h < s.be) {
+      return false;
+    }
+  } else {
+    if (s.bs !== null && h >= s.bs && h < s.be) return false;
+  }
+  return true;
+}
+
+function getUserDayInfo(user, idx) {
+  const c = getEffectiveCode(user.id, idx);
+  if (isOff(c)) return { code: c, off: true };
+  const s = getS(c);
+  if (!s) return { code: c, off: true };
+  return { code: c, off: false, s, hasBreak: s.bs !== null, bs: s.bs, be: s.be };
+}
+
+// ════════════════════════════════════════════════════════
+// OVERRIDE ENGINE — swap & manual
+// ════════════════════════════════════════════════════════
+function getSwapOverrides()   { return pgGet('shiftSwapOvr')   || {}; }
+function getManualOverrides() { return pgGet('shiftManualOvr') || {}; }
+function saveSwapOverrides(o)   { pgSet('shiftSwapOvr',   o); }
+function saveManualOverrides(o) { pgSet('shiftManualOvr', o); }
+
+function ovrKey(userId, idx) { return `${userId}_${idx}`; }
+
+function getEffectiveCode(userId, idx) {
+  const key = ovrKey(userId, idx);
+  const manual = getManualOverrides();
+  if (manual[key]) return manual[key];
+  const swaps = getSwapOverrides();
+  if (swaps[key]) return swaps[key];
+  const m = TEAM.find(x => x.id === userId);
+  return m ? m.sch[idx] : 'V';
+}
+
+function getOvrType(userId, idx) {
+  const key = ovrKey(userId, idx);
+  if (getManualOverrides()[key]) return 'manual';
+  if (getSwapOverrides()[key])   return 'swap';
+  return null;
+}
+
+// ════════════════════════════════════════════════════════
+// EDIT MODAL (gestor — edição manual)
+// ════════════════════════════════════════════════════════
+function openEditModal(userId, dayIdx) {
+  editUserId = userId;
+  editDayIdx = dayIdx;
+  const member = TEAM.find(m => m.id === userId);
+  const dow = DOW[(APR1_DOW + dayIdx - 1) % 7];
+  document.getElementById('edit-modal-title').textContent = `✏️ ${member?.name.split(' ')[0] || userId}`;
+  document.getElementById('edit-modal-sub').textContent = `${dow}, ${dayIdx} de Abril 2026`;
+  const current = getEffectiveCode(userId, dayIdx);
+  const allCodes = Object.keys(SH).concat(Object.keys(OFF_LABEL));
+  const sel = document.getElementById('edit-shift-select');
+  sel.innerHTML = allCodes.map(c => `<option value="${c}"${c===current?' selected':''}>${c}${SH[c]?` — ${SH[c].s}:00→${SH[c].e===24?'00:00':SH[c].e+':00'}`:' — Folga/Off'}</option>`).join('');
+  document.getElementById('edit-modal-overlay').classList.remove('hidden');
+}
+
+function closeEditModal() {
+  document.getElementById('edit-modal-overlay').classList.add('hidden');
+  editUserId = null; editDayIdx = null;
+}
+
+function saveManualEdit() {
+  const sel = document.getElementById('edit-shift-select');
+  if (!sel || !editUserId || !editDayIdx) return;
+  const day = editDayIdx; // guardar antes de closeEditModal() anular a variável
+  const ovr = getManualOverrides();
+  ovr[ovrKey(editUserId, day)] = sel.value;
+  saveManualOverrides(ovr);
+  closeEditModal();
+  renderCal();
+  pick(day);
+}
+
+function clearManualEdit() {
+  if (!editUserId || !editDayIdx) return;
+  const day = editDayIdx; // guardar antes de closeEditModal() anular a variável
+  const key = ovrKey(editUserId, day);
+  const ovr = getManualOverrides();
+  delete ovr[key];
+  saveManualOverrides(ovr);
+  closeEditModal();
+  renderCal();
+  pick(day);
+}
+
+
+// ════════════════════════════════════════════════════════
+// PAUSA DE ALMOÇO — Supabase (via cache)
+// ════════════════════════════════════════════════════════
+function getLunch(userId, day) {
+  const obj = pgGet('lunch') || {};
+  const v = obj[`${userId}_${day}`];
+  return v !== undefined ? v : null;
+}
+function setLunch(userId, day, val) {
+  const obj = pgGet('lunch') || {};
+  const k = `${userId}_${day}`;
+  if (val === null || val === '') delete obj[k];
+  else obj[k] = val;
+  pgSet('lunch', obj);
+}
+
+// Formata "13.5" → "13:30–14:30"
+function lunchLabel(t) {
+  if (t === null) return null;
+  const h = Math.floor(t), m = t % 1 === 0.5 ? '30' : '00';
+  const t2 = t + 1, h2 = Math.floor(t2), m2 = t2 % 1 === 0.5 ? '30' : '00';
+  return `${h}:${m} – ${h2}:${m2}`;
+}
+
+// Mostra botão de edição de pausa (abre modal) — UX idêntica ao edit de horário
+function buildLunchSelector(userId, day, shiftCode) {
+  const s = getS(shiftCode);
+  if (!s || (s.e - s.s) < 7) return '';   // só turnos >= 7h
+  const saved = getLunch(userId, day);
+  const label = saved !== null ? lunchLabel(saved) : null;
+  return `<div class="lunch-trigger-row">
+    <button class="lunch-trigger-btn" onclick="openLunchModal('${userId}',${day},'${shiftCode}')">
+      🍽 ${label ? `Pausa: <strong>${label}</strong>` : 'Definir pausa de almoço'}
+    </button>
+  </div>`;
+}
+
+// ════════════════════════════════════════════════════════
+// MODAL DE PAUSA DE ALMOÇO
+// ════════════════════════════════════════════════════════
+let lunchUserId = null, lunchDayIdx = null, lunchShiftCode = null;
+
+function openLunchModal(userId, day, shiftCode) {
+  lunchUserId = userId;
+  lunchDayIdx = day;
+  lunchShiftCode = shiftCode;
+  const s = getS(shiftCode);
+  const member = TEAM.find(m => m.id === userId);
+  const dow = DOW[(APR1_DOW + day - 1) % 7];
+  document.getElementById('lunch-modal-title').textContent =
+    `🍽 Pausa — ${member?.name.split(' ')[0] || userId}`;
+  document.getElementById('lunch-modal-sub').textContent =
+    `${dow}, ${day} de Abril 2026 · Turno ${shiftCode}`;
+  const saved = getLunch(userId, day);
+  // Gerar opções: slots de 30min dentro do turno, excluindo 1ª e última hora
+  const opts = ['<option value="">— Sem pausa registada —</option>'];
+  for (let t = s.s + 1; t < s.e - 1; t += 0.5) {
+    opts.push(`<option value="${t}"${saved===t?' selected':''}>${lunchLabel(t)}</option>`);
+  }
+  document.getElementById('lunch-select').innerHTML = opts.join('');
+  document.getElementById('lunch-modal-overlay').classList.remove('hidden');
+  document.getElementById('lunch-select').focus();
+}
+
+function closeLunchModal() {
+  document.getElementById('lunch-modal-overlay').classList.add('hidden');
+  lunchUserId = null; lunchDayIdx = null; lunchShiftCode = null;
+}
+
+function saveLunchModal() {
+  if (!lunchUserId || !lunchDayIdx) return;
+  const val = document.getElementById('lunch-select').value;
+  setLunch(lunchUserId, lunchDayIdx, val === '' ? null : parseFloat(val));
+  const savedDay = lunchDayIdx;
+  closeLunchModal();
+  renderCal();
+  pick(savedDay);
+}
+
+function clearLunchModal() {
+  if (!lunchUserId || !lunchDayIdx) return;
+  setLunch(lunchUserId, lunchDayIdx, null);
+  const savedDay = lunchDayIdx;
+  closeLunchModal();
+  renderCal();
+  pick(savedDay);
+}
+
+async function init() {
+  if (initialized) return;
+  initialized = true;
+
+  // ── Mostrar overlay de carregamento ──
+  const loadOv = document.getElementById('loading-overlay');
+  if (loadOv) loadOv.classList.remove('hidden');
+
+  await _supaLoad();
+
+  if (loadOv) loadOv.classList.add('hidden');
+
+  const list = document.getElementById('profile-list');
+  if (!list) return;
+  
+  list.innerHTML = '';
+  
+  TEAM.slice().sort((a, b) => {
+    if (a.isManager && !b.isManager) return -1;
+    if (!a.isManager && b.isManager) return 1;
+    return a.name.localeCompare(b.name);
+  }).forEach(u => {
+    const btn = document.createElement('div');
+    btn.className = `profile-btn ${u.isManager ? 'is-manager' : ''}`;
+    const displayName = TEAM.filter(x => x.name.split(' ')[0] === u.name.split(' ')[0]).length > 1 
+      ? u.name 
+      : u.name.split(' ')[0];
+    btn.innerHTML = `<div class="av-lg">${ini(u.name)}</div><div class="p-name">${displayName}</div>`;
+    btn.onclick = () => selectProfile(u);
+    list.appendChild(btn);
+  });
+}
+
+function selectProfile(user) {
+  if (user.isManager) {
+    pendingUser = user;
+    document.getElementById('password-overlay').classList.remove('hidden');
+    document.getElementById('password-input').value = '';
+    document.getElementById('password-error').classList.add('hidden');
+    document.getElementById('password-input').focus();
+    return;
+  }
+  
+  authenticateUser(user);
+}
+
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+async function checkPassword() {
+  const password = document.getElementById('password-input').value;
+  if (!pendingUser) return;
+  const hash = await sha256(password);
+  if (hash === pendingUser.passwordHash) {
+    document.getElementById('password-overlay').classList.add('hidden');
+    authenticateUser(pendingUser);
+  } else {
+    document.getElementById('password-error').classList.remove('hidden');
+    document.getElementById('password-input').value = '';
+    document.getElementById('password-input').focus();
+  }
+}
+
+function cancelPassword() {
+  document.getElementById('password-overlay').classList.add('hidden');
+  pendingUser = null;
+}
+
+function authenticateUser(user) {
+  currentUser = user;
+  currentMonth = 0;
+  document.getElementById('profile-overlay').classList.add('hidden');
+  document.getElementById('main-app').classList.remove('hidden');
+  const displayName = TEAM.filter(x => x.name.split(' ')[0] === user.name.split(' ')[0]).length > 1 
+    ? user.name 
+    : user.name.split(' ')[0];
+  document.getElementById('user-name').textContent = displayName;
+  document.getElementById('user-av').textContent = ini(user.name);
+  if (user.isManager) document.getElementById('user-av').classList.add('av-me');
+
+  // show/hide tab bar for manager
+  const tabBar = document.getElementById('mgr-tab-bar');
+  if (tabBar) tabBar.classList.toggle('hidden', !user.isManager);
+  activeTab = 'day';
+  showTab('day');
+
+  // reset month nav
+  document.getElementById('month-title').textContent = MONTH_LABELS[0];
+  document.getElementById('btn-prev-month').disabled = true;
+  document.getElementById('btn-next-month').disabled = false;
+
+  renderCal();
+  const now = new Date();
+  const todayDay = (now.getFullYear() === 2026 && now.getMonth() === 3) ? now.getDate() : 1;
+  pick(Math.min(Math.max(todayDay, 1), 30));
+}
+
+function logout() {
+  currentUser = null;
+  pendingUser = null;
+  selectedDay = 1;
+  currentMonth = 0;
+  document.getElementById('user-av').classList.remove('av-me');
+  document.getElementById('profile-overlay').classList.remove('hidden');
+  document.getElementById('main-app').classList.add('hidden');
+  document.getElementById('password-overlay').classList.add('hidden');
+}
+
+// ════════════════════════════════════════════════════════
+// MONTH NAVIGATION
+// ════════════════════════════════════════════════════════
+const MONTH_LABELS = ['Abril 2026', 'Maio 2026'];
+const MAY1_DOW = 5; // May 1 2026 = Friday
+const MAY_DAYS = 31;
+
+function navMonth(dir) {
+  currentMonth = Math.max(0, Math.min(1, currentMonth + dir));
+  document.getElementById('month-title').textContent = MONTH_LABELS[currentMonth];
+  document.getElementById('btn-prev-month').disabled = currentMonth === 0;
+  document.getElementById('btn-next-month').disabled = currentMonth === 1;
+  if (currentMonth === 0) {
+    renderCal();
+    pick(selectedDay);
+  } else {
+    renderMayCal();
+  }
+}
+
+function renderMayCal() {
+  // May has no shift data — show a day-off request calendar
+  const saved = getDayOffRequests().filter(r => r.month === 1);
+  const reqDays = new Set(saved.map(r => r.day));
+  let h = '';
+  DOW.forEach(d => { h += `<div class="dow">${d}</div>`; });
+  for (let i = 0; i < MAY1_DOW; i++) h += '<div></div>';
+  for (let d = 1; d <= MAY_DAYS; d++) {
+    const hasReq = reqDays.has(d);
+    const dowLabel = DOW[(MAY1_DOW + d - 1) % 7];
+    h += `<div class="may-cal-day${hasReq ? ' req-marked' : ''}" onclick="mayDayClick(${d})" title="${hasReq ? 'Pedido enviado' : 'Clica para pedir folga'}">
+      <div class="d-num">${d}</div>
+      <div class="d-icon">${hasReq ? '🌙' : '+'}</div>
+      <div class="d-lbl">${hasReq ? 'pedido' : dowLabel}</div>
+    </div>`;
+  }
+  document.getElementById('cal').innerHTML = h;
+  document.getElementById('detail-label').textContent = 'Maio 2026 — Pedidos de folga';
+  document.getElementById('detail').innerHTML = `
+    <div style="padding:20px;text-align:center;color:var(--muted);font-size:13px;">
+      Seleciona um dia de Maio para pedir folga.<br>
+      <span style="font-size:11px;color:var(--faint)">Dias com 🌙 já têm pedido enviado.</span>
+    </div>`;
+}
+
+function mayDayClick(d) {
+  if (!currentUser) return;
+  // Managers can view requests but not submit; workers submit
+  const saved = getDayOffRequests().filter(r => r.month === 1);
+  const reqDays = new Set(saved.map(r => r.day));
+  const hasReq = reqDays.has(d);
+  const dowLabel = DOW[(MAY1_DOW + d - 1) % 7];
+
+  // Visual feedback: mark selected
+  document.querySelectorAll('.may-cal-day').forEach(el => el.classList.remove('selected'));
+  const cells = document.querySelectorAll('.may-cal-day');
+  // find the right cell (index = d - 1 + offset, easier via data)
+  cells.forEach(el => {
+    if (el.getAttribute('onclick') === `mayDayClick(${d})`) el.classList.add('selected');
+  });
+
+  if (currentUser.isManager) {
+    // Manager: show who requested this day off
+    const reqs = saved.filter(r => r.day === d);
+    const detail = document.getElementById('detail');
+    if (reqs.length === 0) {
+      detail.innerHTML = `<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px;">${dowLabel}, ${d} de Maio<br><span style="color:var(--faint);font-size:11px">Sem pedidos de folga para este dia.</span></div>`;
+    } else {
+      detail.innerHTML = `<div style="padding:16px"><div style="font-size:13px;font-weight:700;margin-bottom:10px;color:var(--text)">${dowLabel}, ${d} de Maio — Pedidos</div>${reqs.map(r=>`<div style="padding:10px;background:var(--surface2);border-radius:var(--r);margin-bottom:6px;border-left:3px solid var(--amber)"><div style="font-size:12px;font-weight:600">${r.from}</div><div style="font-size:11px;color:var(--muted)">${r.reason||'Sem motivo'}</div><div style="font-size:10px;color:var(--amber);margin-top:4px">🌙 Pedido de folga</div></div>`).join('')}</div>`;
+    }
+    document.getElementById('detail-label').textContent = `${dowLabel}, ${d} Maio 2026`;
+    return;
+  }
+
+  // Worker: open modal
+  openModal('dayoff', d, 1);
+}
+
+// ════════════════════════════════════════════════════════
+// MANAGER TABS
+// ════════════════════════════════════════════════════════
+let activeTab = 'day';
+function showTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.rtab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.rtab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  const idx = ['day','swaps','dayoffs','painel'].indexOf(tab);
+  document.querySelectorAll('.rtab')[idx]?.classList.add('active');
+  if (tab === 'swaps') renderSwapsPanel();
+  if (tab === 'dayoffs') renderDayoffsPanel();
+  if (tab === 'painel') renderPainel();
+}
+
+// ════════════════════════════════════════════════════════
+// SWAP REQUESTS — localStorage
+// ════════════════════════════════════════════════════════
+function getSwapRequests() {
+  try { return JSON.parse(localStorage.getItem('swapRequests') || '[]'); } catch { return []; }
+}
+function saveSwapRequests(arr) {
+  localStorage.setItem('swapRequests', JSON.stringify(arr));
+}
+
+// ════════════════════════════════════════════════════════
+// DAY-OFF REQUESTS — localStorage
+// ════════════════════════════════════════════════════════
+function getDayOffRequests() {
+  try { return JSON.parse(localStorage.getItem('dayOffRequests') || '[]'); } catch { return []; }
+}
+function saveDayOffRequests(arr) {
+  localStorage.setItem('dayOffRequests', JSON.stringify(arr));
+}
+
+// ════════════════════════════════════════════════════════
+// 12H REST VALIDATION
+// ════════════════════════════════════════════════════════
+function validate12hRest(userId, day, month) {
+  // Check end time of previous day shift against start time of this day's shift
+  if (month === 1) {
+    // May — no schedule data, skip validation
+    return { ok: true };
+  }
+  // For April swap: check the day before (using current schedule of the target user)
+  const user = TEAM.find(m => m.id === userId);
+  if (!user) return { ok: true };
+  const prevIdx = day - 1; // idx 0 = Mar31, idx 1 = Apr1...
+  if (prevIdx < 0) return { ok: true };
+  const prevCode = user.sch[prevIdx];
+  const prevShift = getS(prevCode);
+  if (!prevShift) return { ok: true };
+  const prevEnd = prevShift.e; // e.g. 24 = midnight
+  const targetCode = user.sch[day];
+  const targetShift = getS(targetCode);
+  if (!targetShift) return { ok: true };
+  const targetStart = targetShift.s;
+  // Hours between prevEnd of previous day and targetStart of this day
+  const gap = (24 - prevEnd) + targetStart;
+  if (gap < 12) {
+    return {
+      ok: false,
+      msg: `Descanso insuficiente: ${prevCode} termina às ${prevEnd === 24 ? '00:00' : prevEnd + ':00'}, novo turno inicia às ${targetStart}:00 — apenas ${gap.toFixed(1)}h de descanso (mínimo: 12h).`
+    };
+  }
+  return { ok: true };
+}
+
+// ════════════════════════════════════════════════════════
+// MODAL
+// ════════════════════════════════════════════════════════
+function openModal(type, day, month) {
+  modalType = type;
+  modalDay = day;
+  modalMonth = month;
+  document.getElementById('modal-error').textContent = '';
+  const overlay = document.getElementById('req-modal-overlay');
+  overlay.classList.remove('hidden');
+
+  const dow = month === 0 ? DOW[(APR1_DOW + day - 1) % 7] : DOW[(MAY1_DOW + day - 1) % 7];
+  const monthLabel = month === 0 ? 'Abril' : 'Maio';
+
+  if (type === 'swap') {
+    document.getElementById('modal-title').textContent = '🔄 Pedir troca de horário';
+    document.getElementById('modal-sub').textContent = `${dow}, ${day} de ${monthLabel} 2026`;
+    const colleagues = TEAM.filter(m => m.id !== currentUser.id && !m.isManager && !isOff(m.sch[day]));
+    const opts = colleagues.length === 0
+      ? '<option value="">Nenhum colega disponível</option>'
+      : colleagues.map(m => `<option value="${m.id}">${m.name.split(' ')[0]} (${m.sch[day]})</option>`).join('');
+    document.getElementById('modal-body').innerHTML = `
+      <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:4px">Trocar com:</label>
+      <select id="modal-select">${opts}</select>`;
+  } else {
+    document.getElementById('modal-title').textContent = '🌙 Pedir folga';
+    document.getElementById('modal-sub').textContent = `${dow}, ${day} de ${monthLabel} 2026`;
+    document.getElementById('modal-body').innerHTML = `
+      <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:4px">Motivo (opcional):</label>
+      <input type="text" id="modal-reason" placeholder="Ex: consulta médica, compromisso pessoal…"
+        style="width:100%;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;">`;
+  }
+}
+
+function closeModal() {
+  document.getElementById('req-modal-overlay').classList.add('hidden');
+  modalType = null;
+}
+
+function submitRequest() {
+  document.getElementById('modal-error').textContent = '';
+  if (modalType === 'swap') {
+    const sel = document.getElementById('modal-select');
+    if (!sel || !sel.value) {
+      document.getElementById('modal-error').textContent = 'Seleciona um colega.';
+      return;
+    }
+    const targetId = sel.value;
+    // Validate 12h rest for both parties if swapping April days
+    if (modalMonth === 0) {
+      const checkFrom = validate12hRest(currentUser.id, modalDay, modalMonth);
+      if (!checkFrom.ok) {
+        document.getElementById('modal-error').textContent = checkFrom.msg;
+        return;
+      }
+      const checkTo = validate12hRest(targetId, modalDay, modalMonth);
+      if (!checkTo.ok) {
+        document.getElementById('modal-error').textContent = `Colega: ${checkTo.msg}`;
+        return;
+      }
+    }
+    const reqs = getSwapRequests();
+    reqs.push({
+      id: Date.now(),
+      from: currentUser.name,
+      fromId: currentUser.id,
+      to: TEAM.find(m => m.id === targetId)?.name || targetId,
+      toId: targetId,
+      day: modalDay,
+      month: modalMonth,
+      date: `2026-0${4 + modalMonth}-${String(modalDay).padStart(2,'0')}`,
+      status: 'pending',
+      ts: Date.now()
+    });
+    saveSwapRequests(reqs);
+  } else {
+    const reason = document.getElementById('modal-reason')?.value.trim() || '';
+    const reqs = getDayOffRequests();
+    // Avoid duplicate
+    if (reqs.some(r => r.fromId === currentUser.id && r.day === modalDay && r.month === modalMonth)) {
+      document.getElementById('modal-error').textContent = 'Já enviaste um pedido para este dia.';
+      return;
+    }
+    reqs.push({
+      id: Date.now(),
+      from: currentUser.name,
+      fromId: currentUser.id,
+      day: modalDay,
+      month: modalMonth,
+      date: `2026-0${4 + modalMonth}-${String(modalDay).padStart(2,'0')}`,
+      reason,
+      status: 'pending',
+      ts: Date.now()
+    });
+    saveDayOffRequests(reqs);
+    if (currentMonth === 1) renderMayCal(); // refresh May calendar dots
+  }
+  closeModal();
+  // refresh tabs if manager is viewing
+  if (currentUser.isManager && activeTab === 'swaps') renderSwapsPanel();
+  if (currentUser.isManager && activeTab === 'dayoffs') renderDayoffsPanel();
+}
+
+// ════════════════════════════════════════════════════════
+// MANAGER REQUEST PANELS
+// ════════════════════════════════════════════════════════
+function statusBadge(s) {
+  const label = s === 'pending' ? 'Pendente' : s === 'approved' ? 'Aprovado' : 'Rejeitado';
+  return `<span class="req-badge ${s}">${label}</span>`;
+}
+
+function updateSwapStatus(id, status) {
+  const reqs = getSwapRequests();
+  const r = reqs.find(r => r.id === id);
+  if (!r) return;
+  r.status = status;
+  saveSwapRequests(reqs);
+
+  // When approved: swap the effective shifts of both parties for that day
+  if (status === 'approved' && r.month === 0) {
+    const idx = r.day; // April idx 1–30
+    const codeFrom = getEffectiveCode(r.fromId, idx);
+    const codeTo   = getEffectiveCode(r.toId,   idx);
+    const swaps = getSwapOverrides();
+    swaps[ovrKey(r.fromId, idx)] = codeTo;
+    swaps[ovrKey(r.toId,   idx)] = codeFrom;
+    saveSwapOverrides(swaps);
+    // Refresh current view
+    if (currentUser?.isManager) { renderCal(); if (selectedDay === idx) pick(idx); }
+  }
+  renderSwapsPanel();
+}
+
+function updateDayOffStatus(id, status) {
+  const reqs = getDayOffRequests();
+  const r = reqs.find(r => r.id === id);
+  if (r) r.status = status;
+  saveDayOffRequests(reqs);
+  renderDayoffsPanel();
+}
+
+function renderSwapsPanel() {
+  const c = document.getElementById('swaps-content');
+  if (!c) return;
+  const reqs = getSwapRequests().sort((a,b) => b.ts - a.ts);
+  if (reqs.length === 0) {
+    c.innerHTML = `<div style="padding:30px 0;text-align:center;color:var(--faint);font-size:13px;">Sem pedidos de troca</div>`;
+    return;
+  }
+  const dow0 = d => DOW[(APR1_DOW + d - 1) % 7];
+  const dow1 = d => DOW[(MAY1_DOW + d - 1) % 7];
+  c.innerHTML = reqs.map(r => {
+    const dow = r.month === 0 ? dow0(r.day) : dow1(r.day);
+    const monthL = r.month === 0 ? 'Abril' : 'Maio';
+    const actions = r.status === 'pending' ? `
+      <div class="req-actions">
+        <button class="req-btn approve" onclick="updateSwapStatus(${r.id},'approved')">✓ Aprovar</button>
+        <button class="req-btn reject" onclick="updateSwapStatus(${r.id},'rejected')">✕ Rejeitar</button>
+      </div>` : '';
+    return `<div class="req-card">
+      <div class="req-top">
+        <span class="req-who">${r.from} → ${r.to}</span>
+        ${statusBadge(r.status)}
+      </div>
+      <div class="req-date">${dow}, ${r.day} ${monthL}</div>
+      ${actions}
+    </div>`;
+  }).join('');
+}
+
+function renderDayoffsPanel() {
+  const c = document.getElementById('dayoffs-content');
+  if (!c) return;
+  const reqs = getDayOffRequests().sort((a,b) => b.ts - a.ts);
+  if (reqs.length === 0) {
+    c.innerHTML = `<div style="padding:30px 0;text-align:center;color:var(--faint);font-size:13px;">Sem pedidos de folga</div>`;
+    return;
+  }
+  const dow0 = d => DOW[(APR1_DOW + d - 1) % 7];
+  const dow1 = d => DOW[(MAY1_DOW + d - 1) % 7];
+  c.innerHTML = reqs.map(r => {
+    const dow = r.month === 0 ? dow0(r.day) : dow1(r.day);
+    const monthL = r.month === 0 ? 'Abril' : 'Maio';
+    const actions = r.status === 'pending' ? `
+      <div class="req-actions">
+        <button class="req-btn approve" onclick="updateDayOffStatus(${r.id},'approved')">✓ Aprovar</button>
+        <button class="req-btn reject" onclick="updateDayOffStatus(${r.id},'rejected')">✕ Rejeitar</button>
+      </div>` : '';
+    return `<div class="req-card">
+      <div class="req-top">
+        <span class="req-who">${r.from}</span>
+        ${statusBadge(r.status)}
+      </div>
+      <div class="req-date">${dow}, ${r.day} ${monthL}${r.reason ? ' — ' + r.reason : ''}</div>
+      ${actions}
+    </div>`;
+  }).join('');
+}
+
+function renderCal() {
+  const now = new Date();
+  const todayApr = (now.getFullYear() === 2026 && now.getMonth() === 3) ? now.getDate() : null;
+
+  let h = '';
+  DOW.forEach(d => { h += `<div class="dow">${d}</div>`; });
+  for (let i = 0; i < APR1_DOW; i++) h += '<div></div>';
+  for (let d = 1; d <= 30; d++) {
+    const c = getEffectiveCode(currentUser.id, d);  // use effective (swap/manual) code
+    const off = isOff(c), vac = c === 'Fe';
+    const cnt = TEAM.filter(m => !isOff(getEffectiveCode(m.id, d))).length;
+    let bc = off ? (vac ? 'vac' : 'off') : '';
+
+    // past / today markers
+    const isPast = todayApr !== null && d < todayApr;
+    const isToday = todayApr !== null && d === todayApr;
+
+    // change and task badges (unchanged logic)
+    const dayHasChange = Object.values(CHANGES).some(s => s.has(d));
+    const myChange = CHANGES[currentUser.id] && CHANGES[currentUser.id].has(d);
+    const changeBadge = (currentUser.isManager && dayHasChange)
+      ? `<div class="change-dot" title="Alteração neste dia">⚡</div>`
+      : myChange ? `<div class="change-dot" title="Alteração neste dia">⚡</div>` : '';
+
+    const dateStr = `2026-04-${String(d).padStart(2,'0')}`;
+    const tasks = clLoad(dateStr);
+    const taskBadge = tasks.length > 0
+      ? `<div class="task-dot">${tasks.filter(t=>!t.done).length > 0 ? '●' : '✓'}</div>` : '';
+
+    // override dots
+    const myOvrType = getOvrType(currentUser.id, d);
+    const dayHasOvr = currentUser.isManager && TEAM.some(m => getOvrType(m.id, d));
+    const ovrDot = myOvrType === 'swap'   ? `<div class="swap-dot"   title="Troca aprovada">⇄</div>`
+                 : myOvrType === 'manual' ? `<div class="manual-dot" title="Alterado manualmente">✏</div>`
+                 : dayHasOvr             ? `<div class="swap-dot"   title="Existem alterações neste dia">⇄</div>`
+                 : '';
+
+    const cellInner = currentUser.isManager
+      ? `<div class="d-count">${cnt}</div>
+         <div class="d-lbl">eq</div>
+         <span class="d-badge ${bc}">${c}</span>`
+      : `<div class="d-count" style="font-size:13px;margin-top:4px">${off ? '—' : c}</div>
+         <div class="d-lbl">${off ? (OFF_LABEL[c] || c).split(' ')[0] : 'turno'}</div>`;
+
+    const hasSwapDay   = currentUser.isManager && TEAM.some(m => getOvrType(m.id, d) === 'swap');
+    const hasManualDay = currentUser.isManager && TEAM.some(m => getOvrType(m.id, d) === 'manual');
+    const extraClass = isPast ? ' past' : isToday ? ' today-marker' : '';
+    const ovrClass = hasSwapDay ? ' has-swap' : hasManualDay ? ' has-manual' : '';
+
+    h += `<div class="cal-day${selectedDay===d?' selected':''}${extraClass}${ovrClass}" onclick="pick(${d})">
+      <div class="d-num">${d}${changeBadge}${taskBadge}${ovrDot}</div>
+      ${cellInner}
+    </div>`;
+  }
+  document.getElementById('cal').innerHTML = h;
+
+  const statsRow = document.getElementById('stats');
+  if (currentUser.isManager) {
+    statsRow.classList.add('hidden');
+  } else {
+    statsRow.classList.remove('hidden');
+    let wd = 0;
+    for (let d = 1; d <= 30; d++) { if (!getUserDayInfo(currentUser, d).off) wd++; }
+    statsRow.innerHTML = `
+      <div class="stat"><div class="sv">${wd}</div><div class="sl">Dias de trabalho</div></div>
+      <div class="stat"><div class="sv">${wd * 8}h</div><div class="sl">Total de horas</div></div>`;
+  }
+}
+
+function pick(day) {
+  selectedDay = day;
+  renderCal();
+
+  const p = getUserDayInfo(currentUser, day);
+  const dow = DOW[(APR1_DOW + day - 1) % 7];
+  const cnt = countW(day);
+  const firstName = currentUser.name.split(' ')[0];
+
+  // ── cobertura (sempre calculada, usada pelo manager e pela lógica de pausa) ──
+  const HOURS = [];
+  for (let h = 9; h <= 23; h++) HOURS.push(h);
+  const cov = {};
+  HOURS.forEach(h => { cov[h] = { t: 0, me: false, workers: [] }; });
+  TEAM.forEach(m => {
+    const c = getEffectiveCode(m.id, day);  // use effective shift
+    HOURS.forEach(h => {
+      if (working(c, h, m.id, day)) {  // passa userId+day para incluir pausa manual
+        cov[h].t++;
+        if (m.id === currentUser.id) cov[h].me = true;
+        const dn = TEAM.filter(x => x.name.split(' ')[0] === m.name.split(' ')[0]).length > 1
+          ? m.name.split(' ')[0] + ' ' + m.name.split(' ')[1][0] + '.'
+          : m.name.split(' ')[0];
+        cov[h].workers.push(dn);
+      }
+    });
+  });
+
+  // ════════════════════════════════════════════════════
+  // COLABORADOR — vista simplificada (só o próprio turno)
+  // ════════════════════════════════════════════════════
+  if (!currentUser.isManager) {
+    let shiftHTML = '';
+    if (p.off) {
+      shiftHTML = `<div class="off-card" style="margin:0">${firstName} não trabalha hoje — ${OFF_LABEL[p.code] || p.code}</div>`;
+    } else {
+      const s = p.s;
+      const breakLine = p.hasBreak
+        ? `<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:12px;color:var(--muted)">
+             Pausa: <span style="font-family:'DM Mono',monospace;color:var(--text)">${s.bs}:00 – ${s.be}:00</span>
+           </div>`
+        : `<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:12px;color:var(--muted)">Sem pausa obrigatória</div>`;
+      shiftHTML = `<div style="background:var(--surface2);border-radius:var(--r);padding:14px">
+        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:6px">${p.code}</div>
+        <div style="font-size:22px;font-weight:700;letter-spacing:-0.5px">${s.s}:00 → ${s.e === 24 ? '00:00' : s.e + ':00'}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">${s.e - s.s - (p.hasBreak ? 1 : 0)}h de trabalho efetivo</div>
+        ${breakLine}
+        ${buildLunchSelector(currentUser.id, day, p.code)}
+      </div>`;
+    }
+
+    document.getElementById('detail-label').textContent = `${dow}, ${day} de Abril 2026`;
+    document.getElementById('detail').innerHTML = `
+      <div class="day-header">
+        <div>
+          <h2>${dow}, ${day} de Abril</h2>
+          <div class="meta">O teu turno</div>
+        </div>
+      </div>
+      <div class="panel-section">
+        ${shiftHTML}
+        ${!p.off ? `<div class="req-trigger-row">
+          <button class="req-trigger-btn" onclick="openModal('swap',${day},0)">🔄 Pedir troca de horário</button>
+          <button class="req-trigger-btn" onclick="openModal('dayoff',${day},0)">🌙 Pedir folga</button>
+        </div>` : ''}
+      </div>`;
+    return;
+  }
+
+  // ════════════════════════════════════════════════════
+  // MANAGER — vista completa
+  // ════════════════════════════════════════════════════
+  const sorted = [...TEAM].sort((a, b) => {
+    if (a.id === currentUser.id) return -1; if (b.id === currentUser.id) return 1;
+    const ao = isOff(getEffectiveCode(a.id, day)), bo = isOff(getEffectiveCode(b.id, day));
+    return ao === bo ? 0 : ao ? 1 : -1;
+  });
+  const workers = sorted.map(m => {
+    const c = getEffectiveCode(m.id, day);  // effective shift
+    const ovrType = getOvrType(m.id, day);
+    const off = isOff(c), vac = c === 'Fe';
+    let cl = off ? (vac ? 'vac-w' : 'off-w') : '';
+    const isMe = m.id === currentUser.id;
+    if (isMe) cl = 'me-w';
+    else if (ovrType === 'swap')   cl += ' swap-w';
+    else if (ovrType === 'manual') cl += ' manual-w';
+    const hasChange = CHANGES[m.id] && CHANGES[m.id].has(day);
+    const dn = TEAM.filter(x => x.name.split(' ')[0] === m.name.split(' ')[0]).length > 1
+      ? m.name.split(' ')[0] + ' ' + m.name.split(' ')[1]
+      : m.name.split(' ')[0];
+    const ovrBadge = ovrType === 'swap'   ? `<span class="ovr-badge swap">⇄ troca</span>`
+                   : ovrType === 'manual' ? `<span class="ovr-badge manual">✏ manual</span>`
+                   : '';
+    const editBtn = `<button class="edit-shift-btn" onclick="openEditModal('${m.id}',${day})" title="Editar horário">✏</button>`;
+    const lunchSel = !off ? buildLunchSelector(m.id, day, c) : '';
+    return `<div class="wcard ${cl}${hasChange?' changed-w':''}">
+      <div class="av ${isMe ? 'av-me' : ''}">${ini(m.name)}</div>
+      <div style="flex:1;min-width:0">
+        <div class="w-name">${isMe ? '★ ' : ''}${dn}${hasChange ? ' <span class="change-badge">⚡ alt.</span>' : ''}${ovrBadge}</div>
+        <div class="w-code">${c}</div>
+        ${lunchSel}
+      </div>
+      ${editBtn}
+    </div>`;
+  }).join('');
+
+  const openHours = HOURS.filter(h => h >= STORE_OPEN && h < STORE_CLOSE);
+  const maxC = Math.max(...openHours.map(h => cov[h].t), 1);
+  // Calcular hora atual UMA VEZ, fora do loop
+  const _nowH = new Date();
+  const _isToday = _nowH.getFullYear() === 2026 && _nowH.getMonth() === 3 && _nowH.getDate() === day;
+  const _currentHour = _isToday ? _nowH.getHours() : -1;
+
+  let chartRows = '';
+  HOURS.forEach(h => {
+    const isOpen = h >= STORE_OPEN && h < STORE_CLOSE;
+    const v = cov[h];
+    if (h === STORE_OPEN) {
+      chartRows += `<div class="divider"><div class="div-line"></div><div class="div-lbl">Loja abre 10h</div><div class="div-line"></div></div>`;
+    }
+    const pct = isOpen ? Math.round(v.t / maxC * 100) : Math.round(v.t / maxC * 55);
+    let col = 'rgba(255,255,255,0.08)', tag = '';
+    if (isOpen) {
+      if (v.me) { col = '#3b82f6'; tag = `<span class="bar-tag" style="color:#3b82f6">TU</span>`; }
+      else { col = '#10b981'; }
+    }
+    const namesHtml = v.workers.length > 0
+      ? `<div class="hour-names">${v.workers.join(', ')}</div>` : '';
+    const isPastH = _isToday && h < _currentHour;
+    const isCurrentH = _isToday && h === _currentHour;
+    chartRows += `<div class="h-row${isPastH ? ' past-hour' : isCurrentH ? ' current-hour' : ''}">
+      <div class="h-lbl ${isOpen ? 'open' : 'closed'}">${h}h</div>
+      <div class="bar-wrap ${isOpen ? 'open-h' : 'closed-h'}">
+        <div class="bar-fill" style="width:${pct}%;background:${col}"></div>
+        <span class="bar-count ${isOpen ? 'open' : 'closed'}">${v.t}</span>
+        ${tag}
+      </div>
+      ${namesHtml}
+    </div>`;
+    if (h === STORE_CLOSE - 1) {
+      chartRows += `<div class="divider"><div class="div-line"></div><div class="div-lbl">Loja fecha 23h</div><div class="div-line"></div></div>`;
+    }
+  });
+
+  const workingNow = TEAM.filter(m => !isOff(getEffectiveCode(m.id, day))).length;
+  const offNow = TEAM.length - workingNow;
+  const dateStr = `2026-04-${String(day).padStart(2,'0')}`;
+
+  document.getElementById('detail-label').textContent = `${dow}, ${day} de Abril 2026`;
+  document.getElementById('detail').innerHTML = `
+    <div class="day-header">
+      <div>
+        <h2>${dow}, ${day} de Abril</h2>
+        <div class="meta">${cnt} elemento${cnt !== 1 ? 's' : ''} da equipa de calçado a trabalhar</div>
+      </div>
+      <div class="day-num-badge">
+        <div class="dbn">${cnt}</div>
+        <div class="dbl">calçado</div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <div class="sec-title">Painel de Gestor</div>
+      <div class="manager-card">
+        <h3>Resumo da Equipa</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">
+          <div style="background:rgba(255,255,255,0.05);padding:10px;border-radius:8px;">
+            <div style="font-size:18px;font-weight:700;">${workingNow}</div>
+            <div style="font-size:10px;color:var(--muted);">A trabalhar</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.05);padding:10px;border-radius:8px;">
+            <div style="font-size:18px;font-weight:700;">${offNow}</div>
+            <div style="font-size:10px;color:var(--muted);">De folga/férias</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <div class="sec-title">Equipa de Calçado</div>
+      <div class="workers-grid">${workers}</div>
+    </div>
+    <div class="panel-section">
+      <div class="sec-title">Cobertura por hora</div>
+      <div class="store-banner">Loja aberta das 10h às 23h</div>
+      <div class="chart-legend">
+        <div class="leg"><div class="leg-dot" style="background:#3b82f6"></div>Tu</div>
+        <div class="leg"><div class="leg-dot" style="background:#10b981"></div>Equipa (loja aberta)</div>
+        <div class="leg"><div class="leg-dot" style="background:rgba(255,255,255,0.08)"></div>Fora de loja</div>
+      </div>
+      ${chartRows}
+    </div>
+    <div class="panel-section" id="checklist-section">
+      <div class="sec-title" style="display:flex;justify-content:space-between;align-items:center;">
+        <span>📋 Tarefas do dia</span>
+        <span id="cl-count" style="font-size:10px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0"></span>
+      </div>
+      <div id="cl-add" style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;">
+        <input id="cl-text" type="text" placeholder="Nova tarefa…" style="flex:1;min-width:120px;padding:8px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;">
+        <select id="cl-urg" style="padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-size:12px;font-family:'DM Sans',sans-serif;">
+          <option value="alta">🔴 Alta urgência</option>
+          <option value="media" selected>🟡 Média urgência</option>
+          <option value="baixa">🟢 Baixa urgência</option>
+        </select>
+        <select id="cl-imp" style="padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-size:12px;font-family:'DM Sans',sans-serif;">
+          <option value="alta">★★★ Alta imp.</option>
+          <option value="media" selected>★★☆ Média imp.</option>
+          <option value="baixa">★☆☆ Baixa imp.</option>
+        </select>
+        <button onclick="clAdd('${dateStr}')" style="padding:8px 14px;background:var(--accent);border:none;border-radius:var(--r);color:#fff;font-size:13px;font-weight:600;cursor:pointer;">+ Adicionar</button>
+      </div>
+      <div id="cl-list"></div>
+    </div>`;
+
+  renderChecklist(dateStr);
+
+  if (window.innerWidth < 700) {
+    document.getElementById('detail').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+// ── CHECKLIST FUNCTIONS ───────────────────────────────
+function renderChecklist(dateStr) {
+  const tasks = sortTasks(clLoad(dateStr));
+  const list = document.getElementById('cl-list');
+  if (!list) return;
+  const countEl = document.getElementById('cl-count');
+  const done = tasks.filter(t=>t.done).length;
+  if (countEl) countEl.textContent = `${done}/${tasks.length} concluída${tasks.length!==1?'s':''}`;
+  if (tasks.length === 0) {
+    list.innerHTML = `<div style="text-align:center;padding:20px 0;color:var(--faint);font-size:13px;">Sem tarefas para este dia</div>`;
+    return;
+  }
+  const urgColor = { alta:'var(--red)', media:'var(--amber)', baixa:'var(--green)' };
+  const urgIcon  = { alta:'🔴', media:'🟡', baixa:'🟢' };
+  const impStars = { alta:'★★★', media:'★★☆', baixa:'★☆☆' };
+  list.innerHTML = tasks.map((t, i) => `
+    <div class="cl-task${t.done?' cl-done':''}" style="display:flex;align-items:flex-start;gap:8px;padding:10px;background:var(--surface2);border-radius:var(--r);margin-bottom:5px;border-left:3px solid ${urgColor[t.urgency]};">
+      <input type="checkbox" ${t.done?'checked':''} onchange="clToggle('${dateStr}',${i})" style="margin-top:2px;accent-color:var(--accent);cursor:pointer;flex-shrink:0;">
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;${t.done?'text-decoration:line-through;color:var(--muted)':''}">${t.text}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:3px;display:flex;gap:8px;">
+          <span>${urgIcon[t.urgency]} ${t.urgency}</span>
+          <span style="color:var(--faint)">${impStars[t.importance]}</span>
+        </div>
+      </div>
+      <button onclick="clDelete('${dateStr}',${i})" style="background:none;border:none;color:var(--faint);cursor:pointer;font-size:14px;padding:0;flex-shrink:0;" title="Eliminar">✕</button>
+    </div>`).join('');
+}
+
+function clAdd(dateStr) {
+  const textEl = document.getElementById('cl-text');
+  const text = textEl ? textEl.value.trim() : '';
+  if (!text) return;
+  const urgency = document.getElementById('cl-urg').value;
+  const importance = document.getElementById('cl-imp').value;
+  const tasks = clLoad(dateStr);
+  tasks.push({ text, done: false, urgency, importance });
+  clSave(dateStr, tasks);
+  textEl.value = '';
+  renderChecklist(dateStr);
+  renderCal(); // refresh task badge in calendar
+}
+
+function clToggle(dateStr, rawIdx) {
+  // rawIdx is pre-sort index — find by position in sorted list
+  const sorted = sortTasks(clLoad(dateStr));
+  const task = sorted[rawIdx];
+  if (!task) return;
+  const all = clLoad(dateStr);
+  const match = all.find(t => t.text === task.text && t.urgency === task.urgency && t.importance === task.importance && t.done === task.done);
+  if (match) match.done = !match.done;
+  clSave(dateStr, all);
+  renderChecklist(dateStr);
+  renderCal();
+}
+
+function clDelete(dateStr, rawIdx) {
+  const sorted = sortTasks(clLoad(dateStr));
+  const task = sorted[rawIdx];
+  if (!task) return;
+  const all = clLoad(dateStr);
+  const idx = all.findIndex(t => t.text === task.text && t.urgency === task.urgency && t.importance === task.importance);
+  if (idx !== -1) all.splice(idx, 1);
+  clSave(dateStr, all);
+  renderChecklist(dateStr);
+  renderCal();
+}
+
+// enter key in checklist input
+document.addEventListener('keypress', function(e) {
+  if (e.key === 'Enter' && document.activeElement && document.activeElement.id === 'cl-text') {
+    const dateStr = `2026-04-${String(selectedDay).padStart(2,'0')}`;
+    clAdd(dateStr);
+  }
+});
+
+// ════════════════════════════════════════════════════════
+// PAINEL DE GESTÃO — módulo completo
+// ════════════════════════════════════════════════════════
+
+// ── helpers de data ──
+function todayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+// ── Époque do calendário de loja: Semana 1 = 26 Jan 2026 (Segunda) ──
+const SCHED_EPOCH = new Date('2026-01-26T00:00:00');
+
+function _weekMonday(offset = 0) {
+  const now = new Date();
+  now.setDate(now.getDate() + offset * 7);
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+  monday.setHours(0, 0, 0, 0);
+  return monday;
+}
+
+function customWeekNum(offset = 0) {
+  const monday = _weekMonday(offset);
+  return Math.round((monday - SCHED_EPOCH) / (7 * 24 * 60 * 60 * 1000)) + 1;
+}
+
+function weekKey(offset = 0) {
+  const wk = customWeekNum(offset);
+  return `semana_${String(wk).padStart(2, '0')}`;
+}
+
+function weekLabel(offset = 0) {
+  const wk = customWeekNum(offset);
+  const monday = _weekMonday(offset);
+  const sunday = new Date(monday); sunday.setDate(monday.getDate() + 6);
+  const fmt = x => `${String(x.getDate()).padStart(2,'0')}/${String(x.getMonth()+1).padStart(2,'0')}`;
+  return `Semana ${wk} · ${fmt(monday)}–${fmt(sunday)}`;
+}
+function monthKey() {
+  const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+}
+// ════════════════════════════════════════════════════════
+// SUPABASE — config + cache + helpers
+// ════════════════════════════════════════════════════════
+const SUPA_URL = 'https://ppmctkilbcpkpgwhlopf.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwbWN0a2lsYmNwa3Bnd2hsb3BmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzc5NDUsImV4cCI6MjA5MTc1Mzk0NX0.ZzpcWn1gdt17oQ9zHDCqlU2JFigShSGwTiam5lnEKi8';
+const SUPA_H = {
+  'apikey': SUPA_KEY,
+  'Authorization': 'Bearer ' + SUPA_KEY,
+  'Content-Type': 'application/json'
+};
+
+// In-memory cache — UI reads here (sync), Supabase is the backing store (async)
+const DB = {};
+let _supaReady = false;
+
+function pgGet(k) { return (DB[k] !== undefined) ? DB[k] : null; }
+
+function pgSet(k, v) {
+  DB[k] = v;
+  _supaWrite(k, v);
+}
+
+function pgMerge(k, partial) {
+  const cur = pgGet(k) || {};
+  pgSet(k, Object.assign(cur, partial));
+}
+
+async function _supaWrite(key, value) {
+  if (!_supaReady) return;
+  try {
+    await fetch(`${SUPA_URL}/rest/v1/kv_store`, {
+      method: 'POST',
+      headers: { ...SUPA_H, 'Prefer': 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify({ key, value })
+    });
+  } catch(e) { console.warn('Supabase write error', e); }
+}
+
+async function _supaLoad() {
+  try {
+    const res = await fetch(`${SUPA_URL}/rest/v1/kv_store?select=key,value`, { headers: SUPA_H });
+    if (res.status === 404 || res.status === 401) {
+      console.warn('Supabase: tabela kv_store não encontrada. Cria-a no dashboard.');
+      return;
+    }
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const rows = await res.json();
+    if (Array.isArray(rows)) rows.forEach(r => { DB[r.key] = r.value; });
+    _supaReady = true;
+  } catch(e) {
+    console.warn('Supabase load error:', e);
+    _supaReady = true; // permite uso offline
+  }
+}
+
+// ── nomes COMPLETOS da equipa (excluindo gestor) ──
+function memberNames() {
+  return TEAM.filter(m => !m.isManager).map(m => ({ id: m.id, name: m.name }));
+}
+
+// ── membros a trabalhar num dia específico ──
+function workingMembersOnDay(day) {
+  return TEAM.filter(m => !m.isManager && !isOff(getEffectiveCode(m.id, day)));
+}
+
+// ── RENDER PAINEL ──
+let perfWeekOffset = 0; // semana atual = 0, semana anterior = -1
+
+function renderPainel() {
+  const c = document.getElementById('tab-painel');
+  if (!c) return;
+
+  // Saturday = day 6 → mostrar resumo automático da semana
+  const isSaturday = new Date().getDay() === 6;
+
+  c.innerHTML = `
+    <div style="padding:4px 0 12px;font-size:11px;font-weight:700;color:var(--muted);
+      text-transform:uppercase;letter-spacing:.08em">📊 Painel de Gestão</div>
+
+    <!-- 1. Performance por secção -->
+    <div class="pg-section" id="pg-perf">
+      <div class="pg-section-title"><span>📈</span> Performance por Secção
+        <div class="pg-week-nav" style="margin-left:auto;display:flex;gap:6px;align-items:center">
+          <button onclick="navPerfWeek(-1)" class="pg-week-btn">‹</button>
+          <span id="perf-week-lbl" style="font-size:10px;font-weight:600;color:var(--muted);white-space:nowrap"></span>
+          <button onclick="navPerfWeek(1)" class="pg-week-btn" id="perf-week-next">›</button>
+        </div>
+      </div>
+      <div class="perf-bars" id="perf-bars"></div>
+      <div id="perf-chart" style="margin-top:12px"></div>
+      <button onclick="savePerf()" id="perf-save-btn" style="margin-top:10px;padding:8px 16px;
+        background:var(--accent);border:none;border-radius:var(--r);color:#fff;
+        font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">
+        Guardar semana atual
+      </button>
+    </div>
+
+    <!-- 2. Ranking de Eficiência -->
+    <div class="pg-section" id="pg-eff">
+      <div class="pg-section-title"><span>🎯</span> Ranking de Eficiência</div>
+      <div class="eff-grid" id="eff-grid"></div>
+      <div class="eff-streak" id="eff-streak"></div>
+      <div style="margin-top:10px;display:flex;gap:8px">
+        <button onclick="markEff(1)" style="flex:1;padding:8px;background:var(--green-bg);
+          border:1px solid var(--green-border);border-radius:var(--r);color:var(--green);
+          font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">✓ Objetivo atingido</button>
+        <button onclick="markEff(0)" style="flex:1;padding:8px;background:rgba(239,68,68,.1);
+          border:1px solid rgba(239,68,68,.25);border-radius:var(--r);color:var(--red);
+          font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">✗ Não atingido</button>
+      </div>
+    </div>
+
+    <!-- 3. Destaques Positivos -->
+    <div class="pg-section" id="pg-hl">
+      <div class="pg-section-title"><span>⭐</span> Destaques Positivos</div>
+      <div class="pg-sub-tabs" id="hl-tabs">
+        <button class="pg-sub-tab active" onclick="hlShowTab('form')">Registar</button>
+        <button class="pg-sub-tab" onclick="hlShowTab('history')">Histórico</button>
+      </div>
+      <div id="hl-form-panel">
+        <select class="pg-select" id="hl-member">
+          <option value="">— Seleciona colaborador —</option>
+          ${memberNames().map(m=>`<option value="${m.id}">${m.name}</option>`).join('')}
+        </select>
+        <input class="hl-input" id="hl-text" placeholder="Destaque positivo do dia…" style="width:100%;margin-bottom:8px">
+        <button onclick="saveHl()" class="pg-save-btn">⭐ Guardar destaque</button>
+        <div id="hl-feedback" style="font-size:11px;color:var(--green);margin-top:6px;min-height:16px"></div>
+      </div>
+      <div id="hl-history-panel" style="display:none">
+        <div id="hl-history-list"></div>
+      </div>
+    </div>
+
+    <!-- 4. Energia da Equipa -->
+    <div class="pg-section" id="pg-energy">
+      <div class="pg-section-title"><span>⚡</span> Energia da Equipa
+        <span style="margin-left:6px;font-size:10px;font-weight:400;color:var(--muted)">
+          (${DOW[(APR1_DOW + selectedDay - 1) % 7]}, ${selectedDay} Abr)
+        </span>
+      </div>
+      <div class="pg-sub-tabs">
+        <button class="pg-sub-tab active" onclick="energyShowTab('today')">Hoje</button>
+        <button class="pg-sub-tab" onclick="energyShowTab('week')">Média semanal</button>
+      </div>
+      <div id="energy-today-panel">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:8px">
+          A trabalhar hoje: <strong id="energy-working-count"></strong> colaboradores
+        </div>
+        <div class="energy-rows" id="energy-rows"></div>
+        <div id="energy-avg" style="margin-top:12px"></div>
+        <div id="energy-alerts"></div>
+        <button onclick="saveEnergy()" style="margin-top:10px;padding:8px 16px;background:var(--accent);
+          border:none;border-radius:var(--r);color:#fff;font-size:12px;font-weight:700;
+          cursor:pointer;font-family:'DM Sans',sans-serif">Guardar avaliações</button>
+      </div>
+      <div id="energy-week-panel" style="display:none">
+        <div id="energy-week-table"></div>
+      </div>
+    </div>
+
+    <!-- 5. Best of the Week -->
+    <div class="pg-section" id="pg-botw">
+      <div class="pg-section-title"><span>🏆</span> Best of the Week</div>
+      ${isSaturday ? '<div class="botw-summary-badge">📅 Sábado — Resumo automático da semana</div>' : ''}
+      <input class="botw-input" id="botw-input" placeholder="O que correu bem hoje? (1 registo por dia)">
+      <button class="botw-save-btn" onclick="saveBotw()">Guardar</button>
+      <div class="botw-log" id="botw-log"></div>
+    </div>
+
+    <!-- 6. Registo de Trocas -->
+    <div class="pg-section" id="pg-swaps-simple">
+      <div class="pg-section-title"><span>🔄</span> Registo de Trocas</div>
+      <div class="swap-add-row" style="flex-direction:column;gap:8px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div>
+            <div style="font-size:10px;color:var(--muted);margin-bottom:4px">De:</div>
+            <select class="pg-select" id="swap-from" onchange="onSwapFromChange()">
+              <option value="">— Colaborador —</option>
+              ${memberNames().map(m=>`<option value="${m.id}">${m.name}</option>`).join('')}
+            </select>
+          </div>
+          <div>
+            <div style="font-size:10px;color:var(--muted);margin-bottom:4px">Para: <span style="color:var(--faint);font-size:9px">(opcional)</span></div>
+            <select class="pg-select" id="swap-to">
+              <option value="">— Sem troca —</option>
+              ${memberNames().map(m=>`<option value="${m.id}">${m.name}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div>
+            <div style="font-size:10px;color:var(--muted);margin-bottom:4px">Data:</div>
+            <input id="swap-date" type="date" class="pg-input" onchange="onSwapDateChange()">
+          </div>
+          <div>
+            <div style="font-size:10px;color:var(--muted);margin-bottom:4px">Turno:</div>
+            <select class="pg-select" id="swap-shift">
+              <option value="">— Seleciona colaborador e data —</option>
+            </select>
+          </div>
+        </div>
+        <!-- fallback: seleção manual de hora quando não há turno reconhecido -->
+        <div id="swap-manual-row" style="display:none">
+          <div style="font-size:10px;color:var(--amber);margin-bottom:4px">⚠ Turno não identificado — seleciona manualmente:</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <select class="pg-select" id="swap-manual-start">
+              <option value="">Início</option>
+              ${Array.from({length:24},(_,i)=>`<option value="${i}">${String(i).padStart(2,'0')}:00</option>`).join('')}
+            </select>
+            <select class="pg-select" id="swap-manual-end">
+              <option value="">Fim</option>
+              ${Array.from({length:24},(_,i)=>`<option value="${i}">${String(i).padStart(2,'0')}:00</option>`).join('')}
+            </select>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:10px;color:var(--muted);margin-bottom:4px">Nota (opcional):</div>
+          <input id="swap-note" class="pg-input" placeholder="Contexto da troca…">
+        </div>
+        <button class="swap-add-btn" onclick="addSwapLog()">+ Registar</button>
+      </div>
+      <div class="swap-log" id="swap-log" style="margin-top:14px"></div>
+    </div>`;
+
+  // init swap-date listener for shift population
+  const swapDate = document.getElementById('swap-date');
+  if (swapDate) {
+    swapDate.value = todayKey(); // default to today
+  }
+  // trigger initial population if from is already set
+  onSwapDateChange();
+
+  // render all sub-modules
+  renderPerfBars();
+  renderEffGrid();
+  renderHlHistory();
+  renderEnergyRows();
+  renderBotwLog();
+  renderSwapLog();
+}
+
+// ── sub-tab helpers ──
+function hlShowTab(tab) {
+  document.getElementById('hl-form-panel').style.display = tab === 'form' ? '' : 'none';
+  document.getElementById('hl-history-panel').style.display = tab === 'history' ? '' : 'none';
+  document.querySelectorAll('#pg-hl .pg-sub-tab').forEach((b,i) => b.classList.toggle('active', (i===0 && tab==='form')||(i===1 && tab==='history')));
+  if (tab === 'history') renderHlHistory();
+}
+
+function energyShowTab(tab) {
+  document.getElementById('energy-today-panel').style.display = tab === 'today' ? '' : 'none';
+  document.getElementById('energy-week-panel').style.display = tab === 'week' ? '' : 'none';
+  document.querySelectorAll('#pg-energy .pg-sub-tab').forEach((b,i) => b.classList.toggle('active', (i===0 && tab==='today')||(i===1 && tab==='week')));
+  if (tab === 'week') renderEnergyWeekTable();
+}
+
+// ════════════════════════════════════════════════════════
+// 1. PERFORMANCE POR SECÇÃO — por semana com navegação
+// ════════════════════════════════════════════════════════
+const PERF_SECTIONS = [
+  { id:'calcado',    label:'Calçado',    color:'#fd7d00' },
+  { id:'textil',     label:'Têxtil',     color:'#3b82f6' },
+  { id:'acessorios', label:'Acessórios', color:'#10b981' },
+  { id:'outros',     label:'Outros',     color:'#8b5cf6' },
+];
+
+function loadPerf(offset = 0) {
+  return pgGet('perf_' + weekKey(offset)) || { calcado:0, textil:0, acessorios:0, outros:0 };
+}
+
+function navPerfWeek(dir) {
+  perfWeekOffset = Math.min(0, perfWeekOffset + dir); // não permitir semanas futuras
+  renderPerfBars();
+}
+
+function savePerf() {
+  const obj = {};
+  PERF_SECTIONS.forEach(s => {
+    const el = document.getElementById('perf-inp-' + s.id);
+    obj[s.id] = el ? Math.min(100, Math.max(0, parseInt(el.value) || 0)) : 0;
+  });
+  pgSet('perf_' + weekKey(perfWeekOffset), obj);
+  renderPerfBars();
+  // feedback visual
+  const btn = document.getElementById('perf-save-btn');
+  if (btn) { btn.textContent = '✓ Guardado!'; setTimeout(() => { btn.textContent = 'Guardar'; }, 1800); }
+}
+
+function renderPerfBars() {
+  const bars = document.getElementById('perf-bars');
+  const chart = document.getElementById('perf-chart');
+  const lbl = document.getElementById('perf-week-lbl');
+  const nextBtn = document.getElementById('perf-week-next');
+  const saveBtn = document.getElementById('perf-save-btn');
+  if (!bars) return;
+
+  if (lbl) lbl.textContent = weekLabel(perfWeekOffset);
+  if (nextBtn) nextBtn.disabled = perfWeekOffset >= 0;
+  const isCurrentWeek = perfWeekOffset === 0;
+  if (saveBtn) {
+    saveBtn.style.display = '';
+    saveBtn.textContent = isCurrentWeek ? 'Guardar semana atual' : 'Guardar alterações';
+  }
+
+  const data = loadPerf(perfWeekOffset);
+  bars.innerHTML = PERF_SECTIONS.map(s => `
+    <div class="perf-row">
+      <div class="perf-label">${s.label}</div>
+      <div class="perf-bar-wrap">
+        <div class="perf-bar-fill" style="width:${data[s.id]||0}%;background:${s.color}"></div>
+      </div>
+      <input class="perf-input" id="perf-inp-${s.id}" type="number" min="0" max="100"
+          value="${data[s.id]||0}" oninput="updatePerfBar('${s.id}','${s.color}')">
+      <div class="perf-pct">${data[s.id]||0}%</div>
+    </div>`).join('');
+
+  if (chart) {
+    const total = PERF_SECTIONS.reduce((a, s) => a + (data[s.id]||0), 0) || 1;
+    let offset = 0;
+    const r = 40, cx = 50, cy = 50, sw = 18;
+    const circ = 2 * Math.PI * r;
+    const arcs = PERF_SECTIONS.map(s => {
+      const pct = (data[s.id]||0) / total;
+      const dash = `${(pct * circ).toFixed(2)} ${circ}`;
+      const arc = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none"
+        stroke="${s.color}" stroke-width="${sw}"
+        stroke-dasharray="${dash}" stroke-dashoffset="${-offset * circ}"
+        transform="rotate(-90 ${cx} ${cy})"/>`;
+      offset += pct;
+      return arc;
+    }).join('');
+    chart.innerHTML = `<svg viewBox="0 0 100 100" width="100" height="100" style="display:block;margin:0 auto">
+      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--surface2)" stroke-width="${sw}"/>
+      ${arcs}
+    </svg>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px">
+      ${PERF_SECTIONS.map(s=>`<div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted)">
+        <div style="width:8px;height:8px;border-radius:2px;background:${s.color}"></div>${s.label}
+      </div>`).join('')}
+    </div>`;
+  }
+}
+
+function updatePerfBar(id, color) {
+  const inp = document.getElementById('perf-inp-' + id);
+  const row = inp?.closest('.perf-row');
+  if (!row) return;
+  const val = Math.min(100, Math.max(0, parseInt(inp.value)||0));
+  row.querySelector('.perf-bar-fill').style.width = val + '%';
+  row.querySelector('.perf-pct').textContent = val + '%';
+}
+
+// ════════════════════════════════════════════════════════
+// 2. RANKING DE EFICIÊNCIA
+// ════════════════════════════════════════════════════════
+function _effKey(dateKey) { return 'eff_' + dateKey.slice(0, 7); }
+function loadEff() {
+  return pgGet('eff_' + monthKey()) || {};
+}
+function _getEffVal(dateKey) {
+  const obj = pgGet(_effKey(dateKey)) || {};
+  return obj[dateKey];
+}
+
+function markEff(val) {
+  const today = todayKey();
+  const storKey = _effKey(today);
+  const obj = pgGet(storKey) || {};
+  obj[today] = val;
+  pgSet(storKey, obj);
+  renderEffGrid();
+}
+
+// Clica num dia para ciclar entre: atingido → não atingido → sem registo
+function toggleEffDay(dateKey) {
+  const storKey = _effKey(dateKey);
+  const obj = pgGet(storKey) || {};
+  const cur = obj[dateKey];
+  if (cur === undefined || cur === null) obj[dateKey] = 1;
+  else if (cur === 1) obj[dateKey] = 0;
+  else delete obj[dateKey];
+  pgSet(storKey, obj);
+  renderEffGrid();
+}
+
+function renderEffGrid() {
+  const grid = document.getElementById('eff-grid');
+  const streak = document.getElementById('eff-streak');
+  if (!grid) return;
+  // show last 28 days
+  const days = [];
+  for (let i = 27; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const k = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    days.push({ k, label: d.getDate(), v: _getEffVal(k) });
+  }
+  grid.innerHTML = days.map(d =>
+    `<div class="eff-day ${d.v === 1 ? 'hit' : d.v === 0 ? 'miss' : 'none'}"
+      title="${d.k} · clica para alterar" onclick="toggleEffDay('${d.k}')" style="cursor:pointer">
+      ${d.label}<br>${d.v === 1 ? '✓' : d.v === 0 ? '✗' : '-'}
+    </div>`).join('');
+  // streak count
+  let s = 0;
+  for (let i = days.length - 1; i >= 0; i--) {
+    if (days[i].v === 1) s++; else break;
+  }
+  if (streak) streak.textContent = s > 0
+    ? `🔥 Sequência atual: ${s} dia${s !== 1 ? 's' : ''} consecutivos`
+    : 'Clica num dia para registar se o orçamento foi atingido.';
+}
+
+// ════════════════════════════════════════════════════════
+// 3. DESTAQUES POSITIVOS — 1 registo por vez, histórico global
+// ════════════════════════════════════════════════════════
+function loadHlHistory() { return pgGet('hl_history') || []; }
+
+function saveHl() {
+  const userId = document.getElementById('hl-member')?.value;
+  const text = document.getElementById('hl-text')?.value.trim();
+  if (!userId || !text) {
+    const fb = document.getElementById('hl-feedback');
+    if (fb) { fb.style.color = 'var(--red)'; fb.textContent = 'Seleciona colaborador e escreve o destaque.'; }
+    return;
+  }
+  const member = TEAM.find(m => m.id === userId);
+  const history = loadHlHistory();
+  history.unshift({ date: todayKey(), userId, name: member?.name || userId, text, ts: Date.now() });
+  pgSet('hl_history', history.slice(0, 300));
+  document.getElementById('hl-text').value = '';
+  document.getElementById('hl-member').value = '';
+  const fb = document.getElementById('hl-feedback');
+  if (fb) { fb.style.color = 'var(--green)'; fb.textContent = '✓ Destaque guardado!'; setTimeout(() => { fb.textContent = ''; }, 2000); }
+  renderHlHistory();
+}
+
+function deleteHl(idx) {
+  const history = loadHlHistory();
+  history.splice(idx, 1);
+  pgSet('hl_history', history);
+  renderHlHistory();
+}
+
+function renderHlHistory() {
+  const list = document.getElementById('hl-history-list');
+  if (!list) return;
+  const history = loadHlHistory();
+  if (history.length === 0) {
+    list.innerHTML = `<div style="text-align:center;padding:20px 0;color:var(--faint);font-size:12px">Sem destaques registados</div>`;
+    return;
+  }
+  list.innerHTML = history.map((e, i) => `
+    <div class="hl-history-entry">
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+          <span style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace">${e.date}</span>
+          <span style="font-size:11px;font-weight:700;color:var(--accent)">${e.name}</span>
+        </div>
+        <div style="font-size:13px;color:var(--text)">${e.text}</div>
+      </div>
+      <button onclick="deleteHl(${i})" style="background:none;border:none;color:var(--faint);
+        cursor:pointer;font-size:14px;padding:0;flex-shrink:0;margin-left:8px">✕</button>
+    </div>`).join('');
+}
+
+// keep old function names as aliases (called nowhere now, but safe)
+function renderHlRows() { renderHlHistory(); }
+function saveHlRow() {}
+
+// ════════════════════════════════════════════════════════
+// 4. ENERGIA DA EQUIPA — só colaboradores a trabalhar, alerta ≥2 dias ≤2
+// ════════════════════════════════════════════════════════
+function loadEnergy(dateStr) { return pgGet('energy_' + dateStr) || {}; }
+
+function setStars(userId, val) {
+  for (let i = 1; i <= 5; i++) {
+    const s = document.getElementById('star-' + userId + '-' + i);
+    if (s) s.classList.toggle('active', i <= val);
+  }
+  const row = document.getElementById('energy-row-' + userId);
+  if (row) row.dataset.pending = val;
+}
+
+function saveEnergy() {
+  const dateStr = todayKey();
+  const obj = loadEnergy(dateStr);
+  // only save rows that exist in the DOM (working members today)
+  workingMembersOnDay(selectedDay).forEach(m => {
+    const row = document.getElementById('energy-row-' + m.id);
+    if (row && row.dataset.pending) obj[m.id] = parseInt(row.dataset.pending);
+  });
+  pgSet('energy_' + dateStr, obj);
+  checkEnergyAlerts();
+  renderEnergyAvg(dateStr);
+  const btn = document.querySelector('#pg-energy button[onclick="saveEnergy()"]');
+  if (btn) { btn.textContent = '✓ Guardado!'; setTimeout(() => { btn.textContent = 'Guardar avaliações'; }, 1800); }
+}
+
+function renderEnergyRows() {
+  const rows = document.getElementById('energy-rows');
+  const countEl = document.getElementById('energy-working-count');
+  if (!rows) return;
+  const dateStr = todayKey();
+  const saved = loadEnergy(dateStr);
+
+  // only show members working on selectedDay
+  const working = workingMembersOnDay(selectedDay);
+  if (countEl) countEl.textContent = working.length;
+
+  if (working.length === 0) {
+    rows.innerHTML = `<div style="color:var(--muted);font-size:12px;padding:8px 0">
+      Nenhum colaborador a trabalhar neste dia.</div>`;
+    renderEnergyAvg(dateStr);
+    checkEnergyAlerts();
+    return;
+  }
+
+  // check who has alert (2+ days ≤2 in last 7 days)
+  const alertIds = getEnergyAlertIds();
+
+  rows.innerHTML = working.map(m => {
+    const cur = saved[m.id] || 0;
+    const hasAlert = alertIds.has(m.id);
+    const stars = [1,2,3,4,5].map(i =>
+      `<span class="energy-star${i <= cur ? ' active' : ''}" id="star-${m.id}-${i}"
+        onclick="setStars('${m.id}',${i})">★</span>`).join('');
+    return `<div class="energy-row" id="energy-row-${m.id}" data-pending="${cur}">
+      <div class="energy-name${hasAlert ? ' energy-name-alert' : ''}">${m.name}${hasAlert ? ' ⚠' : ''}</div>
+      <div class="energy-stars">${stars}</div>
+    </div>`;
+  }).join('');
+
+  renderEnergyAvg(dateStr);
+  checkEnergyAlerts();
+}
+
+function renderEnergyAvg(dateStr) {
+  const avg = document.getElementById('energy-avg');
+  if (!avg) return;
+  const obj = loadEnergy(dateStr);
+  const vals = Object.values(obj).filter(v => v > 0);
+  if (vals.length === 0) { avg.innerHTML = ''; return; }
+  const mean = vals.reduce((a,b)=>a+b,0) / vals.length;
+  const pct = (mean / 5) * 100;
+  const col = mean >= 3.5 ? 'var(--green)' : mean >= 2.5 ? 'var(--amber)' : 'var(--red)';
+  avg.innerHTML = `
+    <div style="background:var(--surface2);border-radius:5px;overflow:hidden;height:10px">
+      <div class="energy-avg-bar" style="width:${pct}%;background:${col}"></div>
+    </div>
+    <div class="energy-avg-label">Média da equipa: ${mean.toFixed(1)}/5</div>`;
+}
+
+function getEnergyAlertIds() {
+  // Alert: colaborador com 2+ avaliações ≤2 nos últimos 7 dias
+  const alertSet = new Set();
+  memberNames().forEach(m => {
+    let lowCount = 0;
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(); d.setDate(d.getDate() - i);
+      const k = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+      const obj = loadEnergy(k);
+      if (obj[m.id] !== undefined && obj[m.id] <= 2) lowCount++;
+    }
+    if (lowCount >= 2) alertSet.add(m.id);
+  });
+  return alertSet;
+}
+
+function checkEnergyAlerts() {
+  const box = document.getElementById('energy-alerts');
+  if (!box) return;
+  const alertIds = getEnergyAlertIds();
+  const alertNames = memberNames().filter(m => alertIds.has(m.id)).map(m => m.name.split(' ')[0]);
+  box.innerHTML = alertNames.length
+    ? `<div class="energy-alert">⚠ Atenção: ${alertNames.join(', ')} com energia baixa (2+ dias com ≤ 2/5)</div>`
+    : '';
+}
+
+// ── Vista de média semanal por colaborador ──
+function renderEnergyWeekTable() {
+  const panel = document.getElementById('energy-week-table');
+  if (!panel) return;
+
+  // Last 7 days
+  const days = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const k = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    days.push({ k, label: DOW[d.getDay()].slice(0,3), date: d.getDate() });
+  }
+
+  const alertIds = getEnergyAlertIds();
+  const members = memberNames();
+  const rows = members.map(m => {
+    const scores = days.map(d => {
+      const obj = loadEnergy(d.k);
+      return obj[m.id] ?? null;
+    });
+    const validScores = scores.filter(v => v !== null);
+    const avg = validScores.length > 0 ? (validScores.reduce((a,b)=>a+b,0)/validScores.length) : null;
+    const hasAlert = alertIds.has(m.id);
+    const firstName = m.name.split(' ')[0];
+    const avgCol = avg === null ? 'var(--faint)' : avg >= 3.5 ? 'var(--green)' : avg >= 2.5 ? 'var(--amber)' : 'var(--red)';
+    const cells = scores.map(v => {
+      if (v === null) return `<td style="text-align:center;font-size:11px;color:var(--faint)">—</td>`;
+      const c = v >= 4 ? 'var(--green)' : v >= 3 ? 'var(--amber)' : 'var(--red)';
+      return `<td style="text-align:center;font-size:11px;color:${c};font-weight:700">${v}</td>`;
+    }).join('');
+    return `<tr>
+      <td style="font-size:11px;font-weight:600;padding:4px 6px 4px 0;color:${hasAlert?'var(--red)':'var(--text)'};white-space:nowrap">
+        ${hasAlert ? '⚠ ' : ''}${firstName}
+      </td>
+      ${cells}
+      <td style="text-align:center;font-size:11px;font-weight:700;color:${avgCol};padding-left:6px">
+        ${avg !== null ? avg.toFixed(1) : '—'}
+      </td>
+    </tr>`;
+  }).join('');
+
+  panel.innerHTML = `
+    <div style="overflow-x:auto;margin-top:8px">
+      <table style="width:100%;border-collapse:collapse">
+        <thead>
+          <tr>
+            <th style="font-size:10px;color:var(--muted);text-align:left;padding-bottom:6px;font-weight:600">Nome</th>
+            ${days.map(d=>`<th style="font-size:9px;color:var(--muted);text-align:center;padding-bottom:6px">${d.label}<br>${d.date}</th>`).join('')}
+            <th style="font-size:10px;color:var(--muted);text-align:center;padding-bottom:6px;padding-left:6px">Média</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+// ════════════════════════════════════════════════════════
+// 5. BANCO DE ESFORÇO — removido por pedido do gestor
+// ════════════════════════════════════════════════════════
+
+// ════════════════════════════════════════════════════════
+// 6. BEST OF THE WEEK — 1 registo por dia, resumo ao sábado
+// ════════════════════════════════════════════════════════
+// Estrutura: { "2026-04-10": "texto", ... } por semana
+function loadBotwWeek(offset = 0) { return pgGet('botw_' + weekKey(offset)) || {}; }
+
+function saveBotw() {
+  const inp = document.getElementById('botw-input');
+  if (!inp) return;
+  const text = inp.value.trim();
+  if (!text) return;
+  const obj = loadBotwWeek(0);
+  obj[todayKey()] = text;  // 1 entrada por dia — substitui se já existir
+  pgSet('botw_' + weekKey(0), obj);
+  inp.value = '';
+  renderBotwLog();
+}
+
+function deleteBotw(dateStr) {
+  const obj = loadBotwWeek(0);
+  delete obj[dateStr];
+  pgSet('botw_' + weekKey(0), obj);
+  renderBotwLog();
+}
+
+function renderBotwLog() {
+  const log = document.getElementById('botw-log');
+  if (!log) return;
+  const obj = loadBotwWeek(0);
+  const entries = Object.entries(obj).sort((a, b) => a[0].localeCompare(b[0])); // asc por data
+  const isSaturday = new Date().getDay() === 6;
+
+  if (entries.length === 0) {
+    log.innerHTML = `<div style="text-align:center;padding:16px 0;color:var(--faint);font-size:12px">
+      Sem entradas esta semana</div>`;
+    return;
+  }
+
+  // Sábado → mostrar resumo em destaque
+  const summaryHeader = isSaturday
+    ? `<div class="botw-summary-header">📋 Resumo semanal — ${entries.length} dia${entries.length!==1?'s':''} registados</div>`
+    : '';
+
+  log.innerHTML = summaryHeader + entries.map(([dateStr, text]) => {
+    const d = new Date(dateStr + 'T12:00:00');
+    const dayLabel = DOW[d.getDay()];
+    const dayNum = d.getDate();
+    const isToday = dateStr === todayKey();
+    return `<div class="botw-entry${isToday ? ' botw-today' : ''}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div class="botw-entry-date">${dayLabel}, ${dayNum} Abr${isToday ? ' · Hoje' : ''}</div>
+          <div class="botw-entry-text">${text}</div>
+        </div>
+        <button onclick="deleteBotw('${dateStr}')" style="background:none;border:none;
+          color:var(--faint);cursor:pointer;font-size:14px;padding:0;flex-shrink:0">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ════════════════════════════════════════════════════════
+// 7. REGISTO DE TROCAS — auto-detecção de turno + sem "Para" + fallback manual
+// ════════════════════════════════════════════════════════
+function loadSwapLog() { return pgGet('swaplog') || []; }
+
+// Chamado quando muda "De" ou "Data" — tenta detetar o turno automaticamente
+function onSwapFromChange() { populateSwapShifts(); }
+function onSwapDateChange() { populateSwapShifts(); }
+
+function _getDateParts() {
+  const dateInput = document.getElementById('swap-date');
+  if (!dateInput || !dateInput.value) return null;
+  const parts = dateInput.value.split('-');
+  const isApril = parseInt(parts[0]) === 2026 && parseInt(parts[1]) === 4;
+  return isApril ? parseInt(parts[2]) : null;
+}
+
+function populateSwapShifts() {
+  const shiftSel    = document.getElementById('swap-shift');
+  const manualRow   = document.getElementById('swap-manual-row');
+  const fromId      = document.getElementById('swap-from')?.value;
+  if (!shiftSel) return;
+
+  const dayIdx = _getDateParts();
+
+  // ── Caso 1: Abril 2026 + colaborador selecionado → auto-detecção ──
+  if (dayIdx && fromId) {
+    const code = typeof getEffectiveCode === 'function'
+      ? getEffectiveCode(fromId, dayIdx)
+      : (TEAM.find(m => m.id === fromId)?.sch[dayIdx] || 'V');
+
+    if (!isOff(code) && SH[code]) {
+      // Turno identificado → pré-selecionar e esconder fallback
+      const s = SH[code];
+      const endFmt = s.e === 24 ? '00:00' : s.e + ':00';
+      shiftSel.innerHTML = `<option value="${code}" selected>${code} · ${s.s}:00 → ${endFmt}</option>`;
+      // Adicionar opção para escolher outro
+      shiftSel.innerHTML += `<optgroup label="Outros turnos do dia">`;
+      const others = TEAM.filter(m => !m.isManager && m.id !== fromId).map(m => {
+        const c = typeof getEffectiveCode === 'function'
+          ? getEffectiveCode(m.id, dayIdx) : m.sch[dayIdx];
+        return c;
+      }).filter(c => !isOff(c) && SH[c] && c !== code);
+      [...new Set(others)].forEach(c => {
+        const ss = SH[c];
+        const ef = ss.e === 24 ? '00:00' : ss.e + ':00';
+        shiftSel.innerHTML += `<option value="${c}">${c} · ${ss.s}:00 → ${ef}</option>`;
+      });
+      shiftSel.innerHTML += `</optgroup>`;
+      if (manualRow) manualRow.style.display = 'none';
+      return;
+    }
+
+    // Turno é folga ou desconhecido → mostrar fallback manual
+    shiftSel.innerHTML = `<option value="">— Turno não identificado —</option>`;
+    if (manualRow) manualRow.style.display = '';
+    return;
+  }
+
+  // ── Caso 2: data não é Abril OU colaborador não selecionado → lista completa de turnos ──
+  shiftSel.innerHTML = ['<option value="">— Seleciona turno —</option>']
+    .concat(Object.keys(SH).map(code => {
+      const s = SH[code];
+      const ef = s.e === 24 ? '00:00' : s.e + ':00';
+      return `<option value="${code}">${code} · ${s.s}:00 → ${ef}</option>`;
+    })).join('');
+  if (manualRow) manualRow.style.display = 'none';
+}
+
+function addSwapLog() {
+  const fromId = document.getElementById('swap-from')?.value;
+  const toId   = document.getElementById('swap-to')?.value;   // pode estar vazio
+  const date   = document.getElementById('swap-date')?.value;
+  const note   = document.getElementById('swap-note')?.value.trim() || '';
+
+  if (!fromId) { alert('Seleciona o colaborador "De".'); return; }
+  if (toId && toId === fromId) { alert('Os colaboradores têm de ser diferentes.'); return; }
+
+  // Obter turno: do select auto-detetado OU dos campos manuais
+  let shift = document.getElementById('swap-shift')?.value || '';
+  const manualRow = document.getElementById('swap-manual-row');
+  if (manualRow && manualRow.style.display !== 'none' && !shift) {
+    const mStart = document.getElementById('swap-manual-start')?.value;
+    const mEnd   = document.getElementById('swap-manual-end')?.value;
+    if (mStart !== '' && mEnd !== '') {
+      shift = `${String(mStart).padStart(2,'0')}:00–${String(mEnd).padStart(2,'0')}:00`;
+    }
+  }
+
+  const fromName = TEAM.find(m => m.id === fromId)?.name || fromId;
+  const toName   = toId ? (TEAM.find(m => m.id === toId)?.name || toId) : null;
+
+  const entries = loadSwapLog();
+  entries.unshift({
+    from: fromName, fromId,
+    to: toName,     toId: toId || null,   // null = sem troca
+    date: date || todayKey(),
+    shift,
+    note,
+    ts: Date.now()
+  });
+  pgSet('swaplog', entries.slice(0, 100));
+
+  // reset form
+  document.getElementById('swap-from').value = '';
+  document.getElementById('swap-to').value = '';
+  document.getElementById('swap-shift').innerHTML = '<option value="">— Seleciona colaborador e data —</option>';
+  document.getElementById('swap-note').value = '';
+  if (document.getElementById('swap-manual-start')) document.getElementById('swap-manual-start').value = '';
+  if (document.getElementById('swap-manual-end'))   document.getElementById('swap-manual-end').value = '';
+  if (manualRow) manualRow.style.display = 'none';
+  renderSwapLog();
+}
+
+function deleteSwapLog(idx) {
+  const entries = loadSwapLog();
+  entries.splice(idx, 1);
+  pgSet('swaplog', entries);
+  renderSwapLog();
+}
+
+function renderSwapLog() {
+  const log = document.getElementById('swap-log');
+  if (!log) return;
+  const entries = loadSwapLog();
+  if (entries.length === 0) {
+    log.innerHTML = `<div style="text-align:center;padding:16px 0;color:var(--faint);font-size:12px">
+      Sem trocas registadas</div>`;
+    return;
+  }
+  log.innerHTML = entries.map((e, i) => {
+    const toLabel = e.to
+      ? `<strong>${e.to}</strong>`
+      : `<span style="color:var(--muted);font-style:italic">Sem troca</span>`;
+    const shiftBadge = e.shift
+      ? `<span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent);
+          background:var(--accent-bg);border-radius:4px;padding:1px 5px;margin-left:4px">${e.shift}</span>`
+      : '';
+    return `<div class="swap-entry">
+      <div style="flex:1;min-width:0">
+        <div class="swap-entry-info">
+          <strong>${e.from}</strong> → ${toLabel}${shiftBadge}
+        </div>
+        <div class="swap-entry-date">${e.date}${e.note ? ' · ' + e.note : ''}</div>
+      </div>
+      <button class="swap-del-btn" onclick="deleteSwapLog(${i})">✕</button>
+    </div>`;
+  }).join('');
+}
+// ════════════════════════════════════════════════════════
+// FIM DO MÓDULO PAINEL DE GESTÃO
+// ════════════════════════════════════════════════════════
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() {
+    init();
+    const passwordInput = document.getElementById('password-input');
+    if (passwordInput) {
+      passwordInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') checkPassword();
+      });
+    }
+  });
+} else {
+  init();
+  const passwordInput = document.getElementById('password-input');
+  if (passwordInput) {
+    passwordInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') checkPassword();
+    });
+  }
+}
+</script>
+</body>
+</html>
