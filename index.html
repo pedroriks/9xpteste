@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+html_content = r"""<!DOCTYPE html>
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0f0f0f">
-<title>Calçado · Abril 2026</title>
+<title>Calçado · Abril 2026 · v29</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -1566,14 +1566,12 @@ header {
     </div>
 
     <div class="right-col">
-      <!-- tab bar só para gestor -->
       <div id="mgr-tab-bar" class="rtab-bar hidden">
         <button class="rtab active" onclick="showTab('day')">📅 Dia</button>
         <button class="rtab" onclick="showTab('swaps')">🔄 Trocas</button>
         <button class="rtab" onclick="showTab('dayoffs')">🌙 Folgas</button>
         <button class="rtab" onclick="showTab('painel')">📊 Painel</button>
       </div>
-      <!-- painel dia -->
       <div class="rtab-panel active" id="tab-day">
         <div class="section-label" id="detail-label">Detalhe do dia</div>
         <div class="detail-panel" id="detail">
@@ -1583,23 +1581,19 @@ header {
           </div>
         </div>
       </div>
-      <!-- painel trocas -->
       <div class="rtab-panel" id="tab-swaps">
         <div class="section-label" style="margin-bottom:12px">🔄 Pedidos de Alteração</div>
         <div id="swaps-content"></div>
       </div>
-      <!-- painel folgas -->
       <div class="rtab-panel" id="tab-dayoffs">
         <div class="section-label" style="margin-bottom:12px">🌙 Pedidos de Folga</div>
         <div id="dayoffs-content"></div>
       </div>
-      <!-- painel gestão -->
       <div class="rtab-panel" id="tab-painel"></div>
     </div>
   </div>
 </div>
 
-<!-- modal de pedidos (troca / folga) -->
 <div id="req-modal-overlay" class="hidden">
   <div class="req-modal">
     <h3 id="modal-title">Pedido</h3>
@@ -1613,7 +1607,6 @@ header {
   </div>
 </div>
 
-<!-- modal de edição manual de horário (gestor) -->
 <div id="edit-modal-overlay" class="hidden">
   <div class="edit-modal">
     <h3 id="edit-modal-title">✏️ Editar horário</h3>
@@ -1628,7 +1621,6 @@ header {
   </div>
 </div>
 
-<!-- modal de pausa de almoço -->
 <div id="lunch-modal-overlay" class="hidden">
   <div class="lunch-modal">
     <h3 id="lunch-modal-title">🍽 Pausa de almoço</h3>
@@ -1687,15 +1679,18 @@ const DOW = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
 const APR1_DOW = 3;
 const STORE_OPEN = 10, STORE_CLOSE = 23;
 
-// ── ALTERAÇÕES v12 → v13 (dias com mudanças por colaborador) ──
+// ── ALTERAÇÕES v27 → v28 (dias com mudanças por colaborador) ──
 // Formato: id → Set de índices de dias alterados (0=Mar31, 1=1Abr...)
 const CHANGES = {
-  '9457':  new Set([0,11]),           // Catarina: Mar31 080PA→090PA corrigido; dia 11 080NA adicionado
-  '11821': new Set([18,19]),          // Leandro: dias 19-20 corrigidos (170→200, 140 mantido)
-  '13778': new Set([15]),             // Tiago: dia 15 100→100QA
-  '13782': new Set([14]),             // Bernardo: dia 14 140→170
-  '13783': new Set([13,17,18]),       // Cláudia: dias 13,17,18 corrigidos
-  '13784': new Set([15,16]),          // Micael: dias 15,16 corrigidos
+  '9457':  new Set([0,11,17]),        // Catarina: dia 17 090PA→070MA
+  '11821': new Set([18,19]),          // Leandro: dias 19-20 corrigidos (versões anteriores)
+  '13778': new Set([15]),             // Tiago: dia 15 100→100QA (versões anteriores)
+  '13777': new Set([23,24,25]),       // José: dia 23 FO→200; dia 24 200→FO; dia 25 120SA→V
+  '13779': new Set([29]),             // Tomás: dia 29 180→190
+  '13782': new Set([14]),             // Bernardo: dia 14 140→170 (versões anteriores)
+  '13783': new Set([13,17,18]),       // Cláudia: dias 13,17,18 corrigidos (versões anteriores)
+  '13784': new Set([15,16,23,24,25]), // Micael: dias 23 200→V; dia 24 V→200; dia 25 110RA→120SA
+  '13818': new Set([19]),             // Francisco Santos: dia 19 140→110
 };
 
 // ── CHECKLIST (Supabase via cache) ──
@@ -1723,7 +1718,7 @@ const TEAM = [
    sch:['100','V','V','150','FO','100QA','150','150','V','140','FC','FO','120SA','150','150','V','150','FC','FO','110RA','150','150','V','150','FC','FO','100QA','150','150','V','150']},
   // PDF: 9457 CATARINA CARREIRA
   {id:'9457', name:'Catarina Carreira', isManager:false,
-   sch:['080PA','090','FO','110RA','090PA','120SA','130TA','FC','FO','090PA','090PA','080NA','090PA','FC','090PA','090PA','090PA','090PA','090PA','FO','Fe','Fe','Fe','Fe','Fe','FC','FO','090','110','090','FC']},
+   sch:['080PA','090','FO','110RA','090PA','120SA','130TA','FC','FO','090PA','090PA','080NA','090PA','FC','090PA','090PA','090PA','070MA','090PA','FO','Fe','Fe','Fe','Fe','Fe','FC','FO','090','110','090','FC']},
   // PDF: 9704 FRANCISCO BARRELA
   {id:'9704', name:'Francisco Barrela', isManager:false,
    sch:['V','200','FC','FO','150VA','120SA','V','V','130','FC','FO','150VA','130TA','V','130','V','FC','FO','150VA','120SA','V','130','V','FC','FO','150VA','120SA','V','V','130','FC']},
@@ -1744,13 +1739,13 @@ const TEAM = [
    sch:['150VA','150VA','150VA','150VA','FC','FO','070MA','100QA','120SA','FC','FO','110RA','110RA','100QA','FC','120SA','FO','120SA','150VA','150VA','FC','100QA','100QA','100QA','100QA','100QA','FO','100QA','100QA','120SA','120SA']},
   // PDF: 13777 JOSE PEREIRA
   {id:'13777',name:'José Pereira', isManager:false,
-   sch:['V','FC','FO','170','150VA','150VA','V','V','FC','FO','200','130TA','150VA','V','V','180','FC','FO','100QA','100QA','FC','V','200','FO','200','120SA','150VA','V','V','FC','FO']},
+   sch:['V','FC','FO','170','150VA','150VA','V','V','FC','FO','200','130TA','150VA','V','V','180','FC','FO','100QA','100QA','FC','V','200','200','FO','V','150VA','V','V','FC','FO']},
   // PDF: 13778 TIAGO BENTO
   {id:'13778',name:'Tiago Bento', isManager:false,
    sch:['200','FO','130','100','130','110','FC','100','200','160','160','160','FO','100','110','100QA','100','100','FC','FO','160','170','190','FC','200','160','FO','130','FC','FO','130']},
   // PDF: 13779 TOMAS PACIFICO
   {id:'13779',name:'Tomás Pacífico', isManager:false,
-   sch:['180','130','100','100','FC','FO','100','170','170','FC','FO','100','100','180','FC','FO','100','100','100','100','FC','200','160','190','170','190','FO','190','200','180','170']},
+   sch:['180','130','100','100','FC','FO','100','170','170','FC','FO','100','100','180','FC','FO','100','100','100','100','FC','200','160','190','170','190','FO','190','200','190','170']},
   // PDF: 13782 BERNARDO ROCHA
   {id:'13782',name:'Bernardo Rocha', isManager:false,
    sch:['120','110','FC','FO','110','100','180','FC','FO','100','100','140','140','FC','170','200','140','180','140','FO','100','130','100','100','100','FC','FO','150','200','200','FC']},
@@ -1759,13 +1754,22 @@ const TEAM = [
    sch:['140','150','140','130','FC','FO','160','140','100','FC','FO','100','100','150VA','FC','130TA','150VA','150VA','FO','150VA','FC','100','140','140','130','100','FO','100','120','100','100']},
   // PDF: 13784 MICAEL DOMINGUES
   {id:'13784',name:'Micael Domingues', isManager:false,
-   sch:['FO','V','200','V','100QA','090PA','FC','FO','200','V','V','150VA','150VA','V','FC','120SA','190','FO','120SA','100QA','FC','FO','V','200','V','110RA','150VA','FC','FO','V','140']},
+   sch:['FO','V','200','V','100QA','090PA','FC','FO','200','V','V','150VA','150VA','V','FC','120SA','190','FO','120SA','100QA','FC','FO','V','V','200','120SA','150VA','FC','FO','V','140']},
   // PDF: 13808 DIOGO COSTA
   {id:'13808',name:'Diogo Costa', isManager:false,
    sch:['160','V','FC','FO','150VA','150VA','V','FC','V','FO','200','150VA','150VA','V','FC','V','FO','200','150VA','150VA','130','V','V','FC','FO','100QA','100QA','V','160','V','FC']},
   // PDF: 13818 FRANCISCO SANTOS
   {id:'13818',name:'Francisco Santos', isManager:false,
-   sch:['180','190','FC','200','170','FO','200','200','FC','200','FO','170','180','200','200','FC','200','FO','140','140','200','200','FC','200','FO','200','200','200','200','FC','200']},
+   sch:['180','190','FC','200','170','FO','200','200','FC','200','FO','170','180','200','200','FC','200','FO','140','110','200','200','FC','200','FO','200','200','200','200','FC','200']},
+  // PDF: 14058 FILIPA MENDES (nova)
+  {id:'14058',name:'Filipa Mendes', isManager:false,
+   sch:['200','160','100','FO','110','160','160','160','140','FC','FO','150','200','200','FC','160','160','160','140','FC','FO','150','200','200','100','FC','FO','110','160','160','160']},
+  // PDF: 900017031 BIANCA XAVIER (nova)
+  {id:'900017031',name:'Bianca Xavier', isManager:false,
+   sch:['200','FO','180','180','160','FC','FO','200','160','140','140','FC','160','170','100','FC','FO','180','180','160','FC','FO','200','160','140','140','FC','160','170','100','FC']},
+  // PDF: 14045 MARIA BUGALHO (nova)
+  {id:'14045',name:'Maria Bugalho', isManager:false,
+   sch:['200','FO','120SA','120SA','V','V','FC','FO','200','120SA','120SA','V','V','FC','FO','200','120SA','120SA','V','V','FC','FO','200','120SA','120SA','V','V','FC','FO','200','120SA']},
 ];
 
 let currentUser = null;
@@ -2915,7 +2919,6 @@ function renderPainel() {
     <div style="padding:4px 0 12px;font-size:11px;font-weight:700;color:var(--muted);
       text-transform:uppercase;letter-spacing:.08em">📊 Painel de Gestão</div>
 
-    <!-- 1. Performance por secção -->
     <div class="pg-section" id="pg-perf">
       <div class="pg-section-title"><span>📈</span> Performance por Secção
         <div class="pg-week-nav" style="margin-left:auto;display:flex;gap:6px;align-items:center">
@@ -2933,7 +2936,6 @@ function renderPainel() {
       </button>
     </div>
 
-    <!-- 2. Ranking de Eficiência -->
     <div class="pg-section" id="pg-eff">
       <div class="pg-section-title"><span>🎯</span> Ranking de Eficiência</div>
       <div class="eff-grid" id="eff-grid"></div>
@@ -2948,7 +2950,6 @@ function renderPainel() {
       </div>
     </div>
 
-    <!-- 3. Destaques Positivos -->
     <div class="pg-section" id="pg-hl">
       <div class="pg-section-title"><span>⭐</span> Destaques Positivos</div>
       <div class="pg-sub-tabs" id="hl-tabs">
@@ -2969,7 +2970,6 @@ function renderPainel() {
       </div>
     </div>
 
-    <!-- 4. Energia da Equipa -->
     <div class="pg-section" id="pg-energy">
       <div class="pg-section-title"><span>⚡</span> Energia da Equipa
         <span style="margin-left:6px;font-size:10px;font-weight:400;color:var(--muted)">
@@ -2996,7 +2996,6 @@ function renderPainel() {
       </div>
     </div>
 
-    <!-- 5. Best of the Week -->
     <div class="pg-section" id="pg-botw">
       <div class="pg-section-title"><span>🏆</span> Best of the Week</div>
       ${isSaturday ? '<div class="botw-summary-badge">📅 Sábado — Resumo automático da semana</div>' : ''}
@@ -3005,7 +3004,6 @@ function renderPainel() {
       <div class="botw-log" id="botw-log"></div>
     </div>
 
-    <!-- 6. Registo de Trocas -->
     <div class="pg-section" id="pg-swaps-simple">
       <div class="pg-section-title"><span>🔄</span> Registo de Trocas</div>
       <div class="swap-add-row" style="flex-direction:column;gap:8px">
@@ -3037,7 +3035,6 @@ function renderPainel() {
             </select>
           </div>
         </div>
-        <!-- fallback: seleção manual de hora quando não há turno reconhecido -->
         <div id="swap-manual-row" style="display:none">
           <div style="font-size:10px;color:var(--amber);margin-bottom:4px">⚠ Turno não identificado — seleciona manualmente:</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
@@ -3709,3 +3706,24 @@ if (document.readyState === 'loading') {
 </script>
 </body>
 </html>
+"""
+
+html_content = html_content.replace(
+    "'200','160','100','FO','110','160','160','160','140','FC','FO','150','200','200','FC','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'",
+    "'200','160','100','FO','110','160','160','160','140','FC','FO','150','200','200','FC','160','160','160','140','FC','FO','150','200','200','100','FC','FO','110','160','160','160'"
+)
+
+html_content = html_content.replace(
+    "'200','FO','180','180','160','FC','FO','200','160','140','140','FC','160','170','100','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'",
+    "'200','FO','180','180','160','FC','FO','200','160','140','140','FC','160','170','100','FC','FO','180','180','160','FC','FO','200','160','140','140','FC','160','170','100','FC'"
+)
+
+html_content = html_content.replace(
+    "'200','FO','120SA','120SA','V','V','FC','FO','200','120SA','120SA','V','V','FC','FO','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'",
+    "'200','FO','120SA','120SA','V','V','FC','FO','200','120SA','120SA','V','V','FC','FO','200','120SA','120SA','V','V','FC','FO','200','120SA','120SA','V','V','FC','FO','200','120SA'"
+)
+
+with open('calcado_v29.html', 'w', encoding='utf-8') as f:
+    f.write(html_content)
+
+print("File generated")
