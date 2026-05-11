@@ -1,4 +1,4 @@
-html_content = r"""<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
@@ -6,7 +6,7 @@ html_content = r"""<!DOCTYPE html>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0f0f0f">
-<title>Calçado · Abril 2026 · v29</title>
+<title>Calçado · Maio 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -97,7 +97,82 @@ body {
 
 /* mobile: right-col não tem altura fixa — scroll natural da página */
 @media (max-width: 699px) {
-  .right-col { padding-bottom: 32px; }
+  .right-col { padding-bottom: 100px; }
+  
+  /* ── MOBILE TOP TAB BAR ─────────────────────── */
+  /* Barra de navegação no topo: alterna entre Calendário e Gestão */
+  .mobile-top-nav {
+    display: flex;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 6px;
+    gap: 4px;
+  }
+  .mobile-top-nav button {
+    flex: 1;
+    padding: 10px 8px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s;
+    -webkit-appearance: none;
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .mobile-top-nav button.active {
+    background: var(--surface);
+    color: var(--accent);
+  }
+  .mobile-top-nav button .nav-icon {
+    font-size: 16px;
+  }
+  
+  /* Por defeito, só o calendário visível no mobile */
+  .left-col {
+    padding: 16px 16px 8px !important;
+  }
+  
+  /* Quando estamos na vista "gestão" no mobile, esconder calendário */
+  body.mobile-view-mgmt .left-col {
+    display: none;
+  }
+  body.mobile-view-cal .right-col {
+    display: none;
+  }
+  
+  /* Sticky tab bar de gestor dentro da right-col em mobile */
+  .right-col .rtab-bar {
+    position: sticky;
+    top: 56px; /* abaixo da mobile-top-nav */
+    z-index: 50;
+    background: var(--bg);
+    margin-top: 0;
+    padding: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  
+  /* Divisor visual claro entre secções */
+  .left-col {
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 0;
+  }
+}
+
+/* desktop: esconder a navegação mobile */
+@media (min-width: 700px) {
+  .mobile-top-nav {
+    display: none !important;
+  }
 }
 
 /* tab panels não devem ter altura mínima que cause espaço vazio */
@@ -143,6 +218,70 @@ body {
   color: var(--muted); 
   font-size: 13px;
   line-height: 1.4;
+}
+
+.back-btn {
+  position: absolute;
+  left: 20px;
+  top: calc(24px + env(safe-area-inset-top));
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+  -webkit-appearance: none;
+  font-family: 'DM Sans', sans-serif;
+}
+.back-btn:hover {
+  background: var(--surface3);
+}
+
+.section-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+}
+@media (min-width: 600px) {
+  .section-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.section-btn {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+  -webkit-appearance: none;
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.section-btn:hover {
+  background: var(--surface2);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+.section-icon {
+  font-size: 40px;
+  line-height: 1;
+}
+.section-btn-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
 }
 
 .profile-grid-container {
@@ -625,6 +764,88 @@ header {
   margin-bottom: 12px;
 }
 
+/* ── COVERAGE FILTER (botões horizontais scrolláveis, mobile-first) ── */
+.cov-filter-wrap {
+  margin-bottom: 14px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 10px 8px 8px;
+}
+.cov-filter-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+  padding: 0 4px;
+}
+.cov-filter-scroll {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 2px 4px 6px;
+  scrollbar-width: thin;
+  /* Esconder scrollbar mas manter funcional */
+  scrollbar-color: var(--border) transparent;
+}
+.cov-filter-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+.cov-filter-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.cov-filter-scroll::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}
+
+.cov-filter-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+  -webkit-appearance: none;
+  font-family: 'DM Sans', sans-serif;
+  /* Tamanho mínimo de toque para mobile */
+  min-height: 36px;
+}
+.cov-filter-btn:active {
+  transform: scale(.96);
+}
+.cov-filter-btn.active {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.cov-filter-btn .cov-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+.cov-filter-summary {
+  margin-top: 4px;
+  padding: 6px 8px 0;
+  font-size: 11px;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+}
+.cov-filter-summary strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
 .chart-legend { 
   display: flex; 
   gap: 10px; 
@@ -745,6 +966,23 @@ header {
   color: var(--muted);
   margin-top: 4px;
   line-height: 1.3;
+}
+.hour-names-compact {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 6px; padding: 6px 8px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 6px; cursor: pointer;
+  transition: all .15s;
+}
+.hour-names-compact:hover {
+  background: var(--surface3); border-color: var(--border2);
+}
+.hour-count-label {
+  font-size: 10px; font-weight: 600; color: var(--text);
+}
+.hour-details-btn {
+  font-size: 9px; font-weight: 600; color: var(--accent);
+  text-transform: uppercase; letter-spacing: 0.3px;
 }
 
 /* Manager / Break advice */
@@ -1024,6 +1262,48 @@ header {
 }
 .month-nav-btn:disabled { opacity: .3; cursor: default; }
 .month-nav-title { font-size: 12px; font-weight: 700; color: var(--text); }
+
+/* ── TEAM FILTERS ADVANCED ──────────────────────────────── */
+.team-filters-advanced {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 12px; margin-bottom: 12px;
+}
+.filter-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.filter-title {
+  font-size: 11px; font-weight: 700; color: var(--text);
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.filter-clear-btn {
+  background: transparent; border: 1px solid var(--border);
+  border-radius: 5px; color: var(--muted); font-size: 10px;
+  font-weight: 600; padding: 3px 8px; cursor: pointer;
+  transition: all .15s; -webkit-appearance: none;
+  font-family: 'DM Sans', sans-serif;
+}
+.filter-clear-btn:hover { background: var(--surface3); color: var(--text); }
+.filter-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 8px;
+}
+.filter-checkbox {
+  display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 7px; cursor: pointer; transition: all .15s;
+  user-select: none; -webkit-user-select: none;
+}
+.filter-checkbox:hover { background: var(--surface3); }
+.filter-checkbox input[type="checkbox"] {
+  width: 16px; height: 16px; cursor: pointer; margin: 0;
+  accent-color: var(--accent);
+}
+.filter-checkbox span {
+  font-size: 11px; font-weight: 600; color: var(--text);
+  white-space: nowrap;
+}
+.filter-checkbox input:checked + span { color: var(--accent); }
 
 /* ── RIGHT-COL TABS (manager) ───────────────────────── */
 .rtab-bar {
@@ -1503,17 +1783,129 @@ header {
   grid-column: 1 / -1; background: var(--surface2);
   color: var(--amber); border: 1px solid var(--amber-border); margin-top: 4px;
 }
+/* ── HOUR DETAILS MODAL ─────────────────────────────────── */
+.hour-modal {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.85); z-index: 10000;
+  display: flex; align-items: flex-end; justify-content: center;
+  padding: 0; transition: opacity .2s;
+}
+@media (min-width: 768px) {
+  .hour-modal { align-items: center; padding: 20px; }
+}
+.hour-modal.hidden { display: none; }
+.hour-modal-content {
+  background: var(--surface); border-radius: var(--r-lg) var(--r-lg) 0 0;
+  width: 100%; max-width: 100%; max-height: 85vh;
+  display: flex; flex-direction: column;
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.4);
+  animation: slideUp .25s ease-out;
+}
+@media (min-width: 768px) {
+  .hour-modal-content {
+    border-radius: var(--r-lg); max-width: 500px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+.hour-modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.hour-modal-header h3 {
+  font-size: 16px; font-weight: 700; color: var(--text); margin: 0;
+}
+.hour-modal-close {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 6px; color: var(--muted); font-size: 16px;
+  width: 32px; height: 32px; cursor: pointer; display: flex;
+  align-items: center; justify-content: center;
+  transition: all .15s; -webkit-appearance: none;
+}
+.hour-modal-close:hover { background: var(--surface3); color: var(--text); }
+.hour-modal-body {
+  padding: 16px 20px; overflow-y: auto; flex: 1;
+  -webkit-overflow-scrolling: touch;
+}
+.hour-worker-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; background: var(--surface2);
+  border: 1px solid var(--border); border-radius: 8px;
+  margin-bottom: 8px;
+}
+.hour-worker-item:last-child { margin-bottom: 0; }
+.hour-worker-av {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--surface3); color: var(--text);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; flex-shrink: 0;
+}
+.hour-worker-info { flex: 1; min-width: 0; }
+.hour-worker-name {
+  font-size: 13px; font-weight: 600; color: var(--text);
+  margin-bottom: 2px;
+}
+.hour-worker-team {
+  font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace;
+}
+
 </style>
 </head>
 <body>
 
 <div id="profile-overlay">
-  <div class="profile-header">
-    <h2>Quem és?</h2>
-    <p>Seleciona o teu perfil para veres o teu horário</p>
+  <!-- STEP 1: Section Selection -->
+  <div id="section-selector" class="section-selector">
+    <div class="profile-header">
+      <h2>Gestão de Horários SPZ Leiria</h2>
+      <p>Seleciona a tua secção</p>
+    </div>
+    <div class="section-grid">
+      <button class="section-btn" onclick="selectSection('management')">
+        <div class="section-icon">👔</div>
+        <div class="section-btn-label">Direção</div>
+      </button>
+      <button class="section-btn" onclick="selectSection('calcado')">
+        <div class="section-icon">👟</div>
+        <div class="section-btn-label">Calçado</div>
+      </button>
+      <button class="section-btn" onclick="selectSection('caixa')">
+        <div class="section-icon">💳</div>
+        <div class="section-btn-label">Caixa</div>
+      </button>
+      <button class="section-btn" onclick="selectSection('textil')">
+        <div class="section-icon">👕</div>
+        <div class="section-btn-label">Têxtil</div>
+      </button>
+      <button class="section-btn" onclick="selectSection('tecnico')">
+        <div class="section-icon">⚽</div>
+        <div class="section-btn-label">Técnico</div>
+      </button>
+      <button class="section-btn" onclick="selectSection('logistica')">
+        <div class="section-icon">📦</div>
+        <div class="section-btn-label">Logística</div>
+      </button>
+      <button class="section-btn" onclick="selectSection('all')">
+        <div class="section-icon">🏪</div>
+        <div class="section-btn-label">Toda a Loja</div>
+      </button>
+    </div>
   </div>
-  <div class="profile-grid-container">
-    <div class="profile-grid" id="profile-list"></div>
+  
+  <!-- STEP 2: Profile Selection (hidden initially) -->
+  <div id="profile-selector" class="profile-selector hidden">
+    <div class="profile-header">
+      <button class="back-btn" onclick="backToSections()">← Voltar</button>
+      <h2 id="section-title">Seleciona o teu perfil</h2>
+      <p id="section-subtitle"></p>
+    </div>
+    <div class="profile-grid-container">
+      <div class="profile-grid" id="profile-list"></div>
+    </div>
   </div>
 </div>
 
@@ -1536,7 +1928,7 @@ header {
       <div class="brand" onclick="logout()">
         <div class="brand-icon">👟</div>
         <div class="brand-text">
-          <h1>Calçado · Abril 2026</h1>
+          <h1>Gestão de Horários · Maio 2026</h1>
           <p>SPZ Leiria · SDSR Sports Division</p>
         </div>
       </div>
@@ -1550,14 +1942,63 @@ header {
     </div>
   </header>
 
+  <!-- ════════════════════════════════════════════════
+       MOBILE NAVIGATION (visible only < 700px)
+       Alterna entre Calendário e Gestão
+       ════════════════════════════════════════════════ -->
+  <nav class="mobile-top-nav" id="mobile-nav">
+    <button id="mobile-nav-cal" class="active" onclick="switchMobileView('cal')">
+      <span class="nav-icon">📅</span><span>Calendário</span>
+    </button>
+    <button id="mobile-nav-mgmt" onclick="switchMobileView('mgmt')">
+      <span class="nav-icon">⚙️</span><span>Gestão</span>
+    </button>
+  </nav>
+
   <div class="content">
     <div class="left-col">
       <div class="cal-section">
         <div class="section-label">
           <div class="month-nav" style="width:100%">
-            <button class="month-nav-btn" id="btn-prev-month" onclick="navMonth(-1)" disabled>‹</button>
-            <span class="month-nav-title" id="month-title">Abril 2026</span>
-            <button class="month-nav-btn" id="btn-next-month" onclick="navMonth(1)">›</button>
+            <button class="month-nav-btn" id="btn-prev-month" onclick="navMonth(-1)">‹</button>
+            <span class="month-nav-title" id="month-title">Maio 2026</span>
+            <button class="month-nav-btn" id="btn-next-month" onclick="navMonth(1)" disabled>›</button>
+          </div>
+        </div>
+        <div id="team-filters" class="team-filters-advanced hidden">
+          <div class="filter-header">
+            <span class="filter-title">Filtrar cobertura</span>
+            <button class="filter-clear-btn" onclick="clearAllFilters()">Limpar</button>
+          </div>
+          <div class="filter-grid">
+            <label class="filter-checkbox">
+              <input type="checkbox" value="calcado" onchange="updateTeamFilter()" checked>
+              <span>Calçado</span>
+            </label>
+            <label class="filter-checkbox">
+              <input type="checkbox" value="management" onchange="updateTeamFilter()">
+              <span>Direção</span>
+            </label>
+            <label class="filter-checkbox">
+              <input type="checkbox" value="supervisor" onchange="updateTeamFilter()">
+              <span>Supervisores</span>
+            </label>
+            <label class="filter-checkbox">
+              <input type="checkbox" value="caixa" onchange="updateTeamFilter()">
+              <span>Caixa</span>
+            </label>
+            <label class="filter-checkbox">
+              <input type="checkbox" value="textil" onchange="updateTeamFilter()">
+              <span>Têxtil</span>
+            </label>
+            <label class="filter-checkbox">
+              <input type="checkbox" value="tecnico" onchange="updateTeamFilter()">
+              <span>Técnico</span>
+            </label>
+            <label class="filter-checkbox">
+              <input type="checkbox" value="logistica" onchange="updateTeamFilter()">
+              <span>Logística</span>
+            </label>
           </div>
         </div>
         <div class="cal-grid" id="cal"></div>
@@ -1566,12 +2007,14 @@ header {
     </div>
 
     <div class="right-col">
+      <!-- tab bar só para gestor -->
       <div id="mgr-tab-bar" class="rtab-bar hidden">
         <button class="rtab active" onclick="showTab('day')">📅 Dia</button>
         <button class="rtab" onclick="showTab('swaps')">🔄 Trocas</button>
         <button class="rtab" onclick="showTab('dayoffs')">🌙 Folgas</button>
         <button class="rtab" onclick="showTab('painel')">📊 Painel</button>
       </div>
+      <!-- painel dia -->
       <div class="rtab-panel active" id="tab-day">
         <div class="section-label" id="detail-label">Detalhe do dia</div>
         <div class="detail-panel" id="detail">
@@ -1581,19 +2024,23 @@ header {
           </div>
         </div>
       </div>
+      <!-- painel trocas -->
       <div class="rtab-panel" id="tab-swaps">
         <div class="section-label" style="margin-bottom:12px">🔄 Pedidos de Alteração</div>
         <div id="swaps-content"></div>
       </div>
+      <!-- painel folgas -->
       <div class="rtab-panel" id="tab-dayoffs">
         <div class="section-label" style="margin-bottom:12px">🌙 Pedidos de Folga</div>
         <div id="dayoffs-content"></div>
       </div>
+      <!-- painel gestão -->
       <div class="rtab-panel" id="tab-painel"></div>
     </div>
   </div>
 </div>
 
+<!-- modal de pedidos (troca / folga) -->
 <div id="req-modal-overlay" class="hidden">
   <div class="req-modal">
     <h3 id="modal-title">Pedido</h3>
@@ -1607,6 +2054,7 @@ header {
   </div>
 </div>
 
+<!-- modal de edição manual de horário (gestor) -->
 <div id="edit-modal-overlay" class="hidden">
   <div class="edit-modal">
     <h3 id="edit-modal-title">✏️ Editar horário</h3>
@@ -1621,6 +2069,7 @@ header {
   </div>
 </div>
 
+<!-- modal de pausa de almoço -->
 <div id="lunch-modal-overlay" class="hidden">
   <div class="lunch-modal">
     <h3 id="lunch-modal-title">🍽 Pausa de almoço</h3>
@@ -1651,19 +2100,28 @@ const SH = {
   '100QA':{s:10,e:19,bs:14,be:15},
   '100QB':{s:10,e:19,bs:14.25,be:15.25},
   '100PC':{s:10,e:19,bs:13.5,be:14.5},
+  '100RA':{s:10,e:19,bs:15,be:16},
   '110':{s:11,e:15,bs:null,be:null},
   '110QA':{s:11,e:20,bs:14,be:15},
   '110RA':{s:11,e:20,bs:15,be:16},
+  '113RC':{s:11,e:21,bs:15,be:16},
   '120':{s:12,e:16,bs:null,be:null},
+  '120RA':{s:12,e:20,bs:15,be:16},
   '120SA':{s:12,e:21,bs:16,be:17},
+  '123':{s:12,e:17,bs:null,be:null},
+  '123SC':{s:12,e:22,bs:16,be:17},
   '130':{s:13,e:17,bs:null,be:null},
   '130TA':{s:13,e:22,bs:17,be:18},
   '133':{s:13.5,e:17.5,bs:null,be:null},
   '140':{s:14,e:18,bs:null,be:null},
   '140UA':{s:14,e:23,bs:18,be:19},
+  '144':{s:14,e:19,bs:null,be:null},
   '150':{s:15,e:19,bs:null,be:null},
   '150VA':{s:15,e:24,bs:19,be:20},
+  '150VB':{s:15,e:24,bs:19,be:20},
+  '150WA':{s:15,e:24,bs:20,be:21},
   '160':{s:16,e:20,bs:null,be:null},
+  '163':{s:16,e:21,bs:null,be:null},
   '170':{s:17,e:21,bs:null,be:null},
   '173':{s:17.5,e:21.5,bs:null,be:null},
   '180':{s:18,e:22,bs:null,be:null},
@@ -1673,24 +2131,22 @@ const SH = {
   '200':{s:20,e:24,bs:null,be:null},
 };
 
-const OFF = ['FC','FO','V','Fe','Bx','IT','AutDe'];
-const OFF_LABEL = {FC:'Folga Complementar',FO:'Folga Obrigatória',V:'Dia Off',Fe:'Férias',Bx:'Baixa Médica',IT:'Intermédio',AutDe:'Auto Declaração'};
+const OFF = ['FC','FO','V','Fe','Bx','IT','AutDe','BH-'];
+const OFF_LABEL = {FC:'Folga Complementar',FO:'Folga Obrigatória',V:'Dia Off',Fe:'Férias',Bx:'Baixa Médica',IT:'Intermédio',AutDe:'Auto Declaração','BH-':'Banco de Horas'};
 const DOW = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
 const APR1_DOW = 3;
 const STORE_OPEN = 10, STORE_CLOSE = 23;
 
-// ── ALTERAÇÕES v27 → v28 (dias com mudanças por colaborador) ──
-// Formato: id → Set de índices de dias alterados (0=Mar31, 1=1Abr...)
+// ── Alterações V7 (vs V6 anterior) ──
 const CHANGES = {
-  '9457':  new Set([0,11,17]),        // Catarina: dia 17 090PA→070MA
-  '11821': new Set([18,19]),          // Leandro: dias 19-20 corrigidos (versões anteriores)
-  '13778': new Set([15]),             // Tiago: dia 15 100→100QA (versões anteriores)
-  '13777': new Set([23,24,25]),       // José: dia 23 FO→200; dia 24 200→FO; dia 25 120SA→V
+  '9457':  new Set([17]),             // Catarina: dia 17 090PA→070MA
+  '13777': new Set([23,24,25]),       // José: dias 23/24 trocados (FO↔200), dia 25 120SA→V
   '13779': new Set([29]),             // Tomás: dia 29 180→190
-  '13782': new Set([14]),             // Bernardo: dia 14 140→170 (versões anteriores)
-  '13783': new Set([13,17,18]),       // Cláudia: dias 13,17,18 corrigidos (versões anteriores)
-  '13784': new Set([15,16,23,24,25]), // Micael: dias 23 200→V; dia 24 V→200; dia 25 110RA→120SA
+  '13784': new Set([23,24,25]),       // Micael: dias 23/24 trocados (200↔V), dia 25 110RA→120SA
   '13818': new Set([19]),             // Francisco Santos: dia 19 140→110
+  '14058': new Set([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]), // Filipa Mendes: nova
+  '900017031': new Set([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]), // Bianca Xavier: nova
+  '14045': new Set([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]), // Maria Bugalho: nova
 };
 
 // ── CHECKLIST (Supabase via cache) ──
@@ -1712,71 +2168,216 @@ function sortTasks(tasks) {
 }
 
 const TEAM = [
-  // idx: 0=Mar31  1=1Abr  2=2  3=3  4=4  5=5  6=6  7=7  8=8  9=9  10=10 11=11 12=12 13=13 14=14 15=15 16=16 17=17 18=18 19=19 20=20 21=21 22=22 23=23 24=24 25=25 26=26 27=27 28=28 29=29 30=30
-  // PDF: 2595 JOAO CABETE
-  {id:'2595', name:'João Cabete', isManager:false,
-   sch:['100','V','V','150','FO','100QA','150','150','V','140','FC','FO','120SA','150','150','V','150','FC','FO','110RA','150','150','V','150','FC','FO','100QA','150','150','V','150']},
-  // PDF: 9457 CATARINA CARREIRA
-  {id:'9457', name:'Catarina Carreira', isManager:false,
-   sch:['080PA','090','FO','110RA','090PA','120SA','130TA','FC','FO','090PA','090PA','080NA','090PA','FC','090PA','090PA','090PA','070MA','090PA','FO','Fe','Fe','Fe','Fe','Fe','FC','FO','090','110','090','FC']},
-  // PDF: 9704 FRANCISCO BARRELA
-  {id:'9704', name:'Francisco Barrela', isManager:false,
-   sch:['V','200','FC','FO','150VA','120SA','V','V','130','FC','FO','150VA','130TA','V','130','V','FC','FO','150VA','120SA','V','130','V','FC','FO','150VA','120SA','V','V','130','FC']},
-  // PDF: 11449 MARIA MORAIS
-  {id:'11449',name:'Maria Morais', isManager:false,
-   sch:['FC','FO','090','090','200','200','FC','090','090','180','130','200','FO','130','160','180','160','140','FC','FO','090','090','090','FC','FO','200','170','190','FC','FO','090']},
-  // PDF: 11550 MARIA LOPES
-  {id:'11550',name:'Maria Lopes', isManager:false,
-   sch:['FC','FO','200','200','170','160','FC','200','150','140','170','200','FO','150VA','150VA','150VA','150VA','150VA','FC','FO','200','190','200','FC','FO','160','190','200','FC','FO','200']},
-  // PDF: 11821 LEANDRO GUEDES
-  {id:'11821',name:'Leandro Guedes', isManager:false,
-   sch:['FC','100','100','160','100','FO','200','190','200','200','200','FC','FO','200','200','200','FC','FO','200','140','200','FC','FO','180','170','200','130','FC','180','200','200']},
-  // PDF: 12238 DIOGO REBELO
-  {id:'12238',name:'Diogo Rebelo', isManager:false,
-   sch:['110RA','160','170','200','130','FO','110RA','130TA','100QA','110RA','100QA','FC','FO','090PA','100QA','100QA','FC','FO','130TA','150VA','120SA','FC','FO','090PA','090PA','090PA','090PA','FC','090PA','110RA','110RA']},
-  // PDF: 12339 PEDRO SILVA (manager)
-  {id:'12339',name:'Pedro Silva', isManager:true, passwordHash:'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3',
-   sch:['150VA','150VA','150VA','150VA','FC','FO','070MA','100QA','120SA','FC','FO','110RA','110RA','100QA','FC','120SA','FO','120SA','150VA','150VA','FC','100QA','100QA','100QA','100QA','100QA','FO','100QA','100QA','120SA','120SA']},
-  // PDF: 13777 JOSE PEREIRA
-  {id:'13777',name:'José Pereira', isManager:false,
-   sch:['V','FC','FO','170','150VA','150VA','V','V','FC','FO','200','130TA','150VA','V','V','180','FC','FO','100QA','100QA','FC','V','200','200','FO','V','150VA','V','V','FC','FO']},
-  // PDF: 13778 TIAGO BENTO
-  {id:'13778',name:'Tiago Bento', isManager:false,
-   sch:['200','FO','130','100','130','110','FC','100','200','160','160','160','FO','100','110','100QA','100','100','FC','FO','160','170','190','FC','200','160','FO','130','FC','FO','130']},
-  // PDF: 13779 TOMAS PACIFICO
-  {id:'13779',name:'Tomás Pacífico', isManager:false,
-   sch:['180','130','100','100','FC','FO','100','170','170','FC','FO','100','100','180','FC','FO','100','100','100','100','FC','200','160','190','170','190','FO','190','200','190','170']},
-  // PDF: 13782 BERNARDO ROCHA
-  {id:'13782',name:'Bernardo Rocha', isManager:false,
-   sch:['120','110','FC','FO','110','100','180','FC','FO','100','100','140','140','FC','170','200','140','180','140','FO','100','130','100','100','100','FC','FO','150','200','200','FC']},
-  // PDF: 13783 CLAUDIA MORCELA
-  {id:'13783',name:'Cláudia Morcela', isManager:false,
-   sch:['140','150','140','130','FC','FO','160','140','100','FC','FO','100','100','150VA','FC','130TA','150VA','150VA','FO','150VA','FC','100','140','140','130','100','FO','100','120','100','100']},
-  // PDF: 13784 MICAEL DOMINGUES
-  {id:'13784',name:'Micael Domingues', isManager:false,
-   sch:['FO','V','200','V','100QA','090PA','FC','FO','200','V','V','150VA','150VA','V','FC','120SA','190','FO','120SA','100QA','FC','FO','V','V','200','120SA','150VA','FC','FO','V','140']},
-  // PDF: 13808 DIOGO COSTA
-  {id:'13808',name:'Diogo Costa', isManager:false,
-   sch:['160','V','FC','FO','150VA','150VA','V','FC','V','FO','200','150VA','150VA','V','FC','V','FO','200','150VA','150VA','130','V','V','FC','FO','100QA','100QA','V','160','V','FC']},
-  // PDF: 13818 FRANCISCO SANTOS
-  {id:'13818',name:'Francisco Santos', isManager:false,
-   sch:['180','190','FC','200','170','FO','200','200','FC','200','FO','170','180','200','200','FC','200','FO','140','110','200','200','FC','200','FO','200','200','200','200','FC','200']},
-  // PDF: 14058 FILIPA MENDES (nova)
-  {id:'14058',name:'Filipa Mendes', isManager:false,
-   sch:['200','160','100','FO','110','160','160','160','140','FC','FO','150','200','200','FC','160','160','160','140','FC','FO','150','200','200','100','FC','FO','110','160','160','160']},
-  // PDF: 900017031 BIANCA XAVIER (nova)
-  {id:'900017031',name:'Bianca Xavier', isManager:false,
-   sch:['200','FO','180','180','160','FC','FO','200','160','140','140','FC','160','170','100','FC','FO','180','180','160','FC','FO','200','160','140','140','FC','160','170','100','FC']},
-  // PDF: 14045 MARIA BUGALHO (nova)
-  {id:'14045',name:'Maria Bugalho', isManager:false,
-   sch:['200','FO','120SA','120SA','V','V','FC','FO','200','120SA','120SA','V','V','FC','FO','200','120SA','120SA','V','V','FC','FO','200','120SA','120SA','V','V','FC','FO','200','120SA']},
+  // ════════════════════════════════════════════════════════
+  // EQUIPA DIRETIVA
+  // ════════════════════════════════════════════════════════
+  // STORE MANAGER
+  {id:'309', name:'Hugo Franco', isManager:false, team:'management',
+   sch:['FC','FO','090PA','090PA','090PA','120SA','FC','090PA','090PA','090PA','090PA','090PA','FO','090PA','090PA','090PA','090PA','090PA','FC','FO','110RA','090PA','090PA','090PA','FO','090PA','120SA','090PA','FC','FO','090PA'],
+   schMay:['090PA','FC','FO','150VA','120SA','090PA','080NA','090PA','FC','FC','FO','090PA','090PA','090PA','090PA','090PA','FC','FO','150VA','150VA','150VA','FC','FO','090PA','070MA','090PA','FC','FO','090PA','090PA','090PA','070MA']},
+  // ASSISTANT MANAGER
+  {id:'329', name:'Silvana Duarte', isManager:false, team:'management',
+   sch:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'],
+   schMay:['150VA','120SA','120SA','FC','110RA','080NA','FC','FO','070MA','070MA','070MA','FC','FO','150VA','150VA','150VA','150VA','Fe','Fe','Fe','Fe','Fe','Fe','Fe','090PA','090PA','090PA','090PA','090PA','FC','FO','V']},
+  // FLOOR MANAGER
+  {id:'10', name:'Monica Pedrosa', isManager:false, team:'management',
+   sch:['074ND','090PA8h','090PA','090PA','FC','FO','150VA','150VA','150VA','FC','FO','070MA','120SA','FC','090PA','090PA8h','090PA8h','FO','070MA','070MA','FC','150VA','150VA','150VA','150VA','150VA','FO','150VA','150VA','150VA','150VA'],
+   schMay:['Fe','Fe','Fe','090PA8h','150VA','150VA8h','120SA','090PA','FC','FO','150VA','150VA','150VA','FC','FO','070MA','070MA','080NA','FC','FO','080NA','080NA','070MA','120SA','FC','090PA','090PA','090PA','090PA','090PA','FO','V']},
+  // SUPERVISORS
+  {id:'2623', name:'Wendy Matias', isManager:false, team:'supervisor',
+   sch:['180YA','150VA','FC','FO','070MA','070MA','090PA','FC','FO','150VA','150VA','150VA','150VA','FC','100QA','100QA','150VA','120SA','150VA','FO','150VA','150VA8h','150VA8h','150VA8h','150VA','FC','FO','120SA','090PA','090PA','FC'],
+   schMay:['FO','060LA','070MA','070MA','FC','FC','070MA','150VA','120SA4h','090PA','FO','090PA8h','090PA8h','090PA8h','090PA8h','090PA8h','FC8h','FO','090PA8h','090PA8h','090PA8h','090PA8h','090PA8h','FC','FO','FC','150VA','150VA','FO','120SA4h','150VA','150VA']},
+  {id:'3678', name:'Marco Lopes', isManager:false, team:'supervisor',
+   sch:['FC','FO','150VA','150VA','150VA','150VA','FC','090PA','090PA','090PA','090PA','120SA','FO','150VA','150VA','150VA','120SA','FC','120SA','FO','120SA','120SA','120SA','FC','FO','150VA','150VA','Fe','Fe','Fe','Fe'],
+   schMay:['Fe','Fe','Fe','Fe','FC','150VA','150VA','150VA','150VA','150VA','FO','120SA','150VA','150VA','150VA','150VA','FC','FO','120SA','120SA','120SA','FC','FO','120SA','150VA','150VA','FC','FO','120SA','090PA','070MA','120SA']},
+  {id:'10941', name:'Beatriz Areia', isManager:false, team:'supervisor',
+   sch:['120SA','120SA','150VA','150VA','120SA','FO','090PA','080NA','080NA','080NA','080NA','FO','070MA','080NA','080NA','070MA','080NA','FC','FO','120SA','090PA','080NA','080NA','080NA','FC','080NA','FO','FC','080NA','080NA','080NA'],
+   schMay:['080NA','060LA','FC','FO','080NA','070MA','070MA','080NA','080NA','FC','FO','080NA','080NA','080NA','080NA','080NA','FC','FO','080NA','080NA','080NA','080NA','080NA','FC','FO','080NA','080NA','080NA','080NA','080NA','FC','FO']},
+  // STOCK ROOM SUPERVISOR
+  {id:'5', name:'Teresa Palma', isManager:false, team:'supervisor',
+   sch:['070NA','070MA','070MA','070MA','FC','FO','070MA','070MA','070MA','070MA','070MA','FC','FO','070MA','070MA','070MA','070MA','070MA','FC','FO','070MA','070MA','070MA','070MA','070MA','FC','FO','070MA','070MA','070MA','070MA'],
+   schMay:['070MA','070MA','FC','FO','070MA','070MA','070MA','070MA','070MA','FC','FO','070MA','070MA','070MA','070MA','070MA','FC','FO','070MA','070MA','070MA','070MA','070MA','FC','FO','070MA','070MA','070MA','070MA','070MA','FC','FO']},
+
+  // ════════════════════════════════════════════════════════
+  // EQUIPA CAIXA
+  // ════════════════════════════════════════════════════════
+  {id:'112', name:'Lídia Clérigo', isManager:false, team:'caixa',
+   sch:['100QB','100PA','100PA','100PA','100PA','FO','100PA','100PA','100PA','100PA','100PA','FC','FO','100PA','100PA','080MA','FC','FO','080MA','100PA','100PA','FC','FO','100PA','100PA','100PA','100PA','FC','100PA','100PA','100PA'],
+   schMay:['100PA','100RA','100QA','FO','100QA','100QA','100QA','100QA','100QA','FC','FO','100QA','100QA','100QA','FC','FO','100QA','100QA','100QA','FC','FO','100QA','100QA','100QA','100QA','FC','100QA','100QA','100QA','100QA','100QA','FO']},
+  {id:'315', name:'Paula Santos', isManager:false, team:'caixa',
+   sch:['110RA','110RA','V','V','V','FC','FO','110RA','110RA','V','V','V','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','FC','V','V','V','V'],
+   schMay:['FC','FO','110RA','100QA','V','V','V','FC','FO','100QA','100QA','V','V','V','FC','FO','120SA','110RA','V','V','V','FC','FO','120SA','110RA','V','V','V','FC','FO','110RA','100QA']},
+  {id:'3142', name:'Alexandra Lemos', isManager:false, team:'caixa',
+   sch:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'],
+   schMay:['FO','180','150VB','150VA','V','V','200','FC','FO','120SA','110RA','V','V','200','FC','FO','110RA','150VA','V','V','200','FC','FO','110RA','130TA','Fe','Fe','Fe','Fe','Fe','Fe','Fe']},
+  {id:'11454', name:'Daniela Augusto', isManager:false, team:'caixa',
+   sch:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'],
+   schMay:['FO','200','130TA','110RA','V','V','FC','FO','200','150VA','150VA','V','V','FC','FO','170','150WA','150VA','V','V','FC','FO','180','150WA','150VA','V','V','FC','FO','200','130TA','150VA']},
+  {id:'12032', name:'Vera Gomes', isManager:false, team:'caixa',
+   sch:['130TA','FC','FO','150VA','150VA','120SA','150VA','FC','FO','150VA','150VA','120SA','120SA','FC','150VA','140UA','130TA','130TA','150VA','FO','150VA','120SA','120SA','150VA','150VA','FC','FO','100PA','140UA','150VA','FC'],
+   schMay:['FC','160','FC','FO','150VA','150VA','120SA','110RA','110RA','FO','120SA','150VA','130TA','FC','100QA','100QA','FC','FO','120SA','120SA','110RA','120SA','110RA','FC','FO','120SA','120SA','120SA','120SA','FO','120SA','120SA']},
+  {id:'13781', name:'Carolina Soares', isManager:false, team:'caixa',
+   sch:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'],
+   schMay:['160','110','FC','FO','110','110','140','FC','FO','100','110','110','FC','FO','110','110','200','140','FC','100','100','140','140','170','FO','100','110','110','140','160','FC','FO']},
+  {id:'13807', name:'David Andrade', isManager:false, team:'caixa',
+   sch:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'],
+   schMay:['FC','FO','140','140','180','FC','FO','170','190','140','200','FC','200','180','200','200','160','FO','200','200','190','200','200','FC','FO','200','200','200','FC','FO','100','110']},
+  {id:'13811', name:'Cristina Rodrigues', isManager:false, team:'caixa',
+   sch:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'],
+   schMay:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','200','200','200']},
+  {id:'14046', name:'Daniela Sousa', isManager:false, team:'caixa',
+   sch:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'],
+   schMay:['120','144','160','180','FC','200','190','200','160','200','FO','170','110','140','170','160','FC','FO','160','170','150','FC','FO','200','200','160','FC','FO','200','170','200','190']},
+
+  // ════════════════════════════════════════════════════════
+  // EQUIPA CALÇADO
+  // ════════════════════════════════════════════════════════
+  {id:'2595', name:'João Cabete', isManager:false, team:'calcado',
+   sch:['100','FO','FC','070MA','070MA','070MA','070MA','FO','100QA','110RA','070MA','070MA','070MA','FC','070MA','FO','100QA','110RA','110RA','110RA','FC','FO','100QA','100QA','110RA','110RA','110RA','FC','FO','100QA','100QA'],
+   schMay:['150','FC','FO','100QA','150','150','V','150','FC','FO','100QA','150','150','V','150','FC','FO','100QA','150','150','V','150','FC','FO','100QA','150','150','V','150','FC','FO','100QA']},
+  {id:'9457', name:'Catarina Carreira', isManager:false, team:'calcado',
+   sch:['FO','090PA','100QA','120SA','110RA','110RA','FC','FO','090PA','090PA','100QA','110RA','110RA','FC','FO','090PA','090PA','090PA','100QA','110RA','FC','FO','090PA','090PA','090PA','100QA','110RA','FC','FO','090PA','100QA'],
+   schMay:['FO','110RA','100QA','090PA','V','V','200','FC','FC','FO','090PA','V','200','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','V']},
+  {id:'9704', name:'Francisco Barrela', isManager:false, team:'calcado',
+   sch:['FO','100QA','100QA','100QA','120SA','120SA','FC','FO','100QA','100QA','100QA','120SA','120SA','FC','FO','100QA','100QA','100QA','120SA','120SA','FC','FO','100QA','100QA','100QA','120SA','120SA','FC','FO','100QA','100QA'],
+   schMay:['FC','FO','150VA','120SA','100','V','V','FC','FO','100QA','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe']},
+  {id:'11449', name:'Maria Morais', isManager:false, team:'calcado',
+   sch:['110RA','110RA','110RA','FC','FO','110RA','110RA','110RA','110RA','110RA','FC','FO','110RA','110RA','110RA','110RA','110RA','FC','FO','110RA','110RA','110RA','110RA','110RA','FC','FO','110RA','110RA','110RA','110RA','110RA'],
+   schMay:['090','100','100','110','FC','100','090','090','100','100','FO','090','100','100','200','180','FC','FO','100','090','090','160','FC','FO','160','090','FC','FO','Fe','Fe','Fe','130']},
+  {id:'11550', name:'Maria Lopes', isManager:false, team:'calcado',
+   sch:['FC','FO','100QA','100QA','100QA','100QA','100QA','FC','FO','100QA','100QA','100QA','100QA','100QA','FC','FO','100QA','100QA','100QA','100QA','100QA','FC','FO','100QA','100QA','100QA','100QA','100QA','FC','FO','100QA'],
+   schMay:['200','Fe','Fe','Fe','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V']},
+  {id:'11821', name:'Leandro Guedes', isManager:false, team:'calcado',
+   sch:['200','200','200','FC','FO','200','200','200','200','200','FC','FO','200','200','200','200','200','FC','FO','200','200','200','200','200','FC','FO','200','200','200','200','200'],
+   schMay:['200','150','200','FO','200','200','180','200','180','FC','FO','200','200','200','FC','FO','200','200','180','170','FO','110','160','200','200','FC','100','180','180','160','200','FO']},
+  {id:'12238', name:'Diogo Rebelo', isManager:false, team:'calcado',
+   sch:['090PA','090PA','FC','FO','090PA','090PA','090PA','090PA','090PA','FC','FO','090PA','090PA','090PA','090PA','090PA','FC','FO','090PA','090PA','090PA','090PA','090PA','FC','FO','090PA','090PA','090PA','090PA','090PA','FC'],
+   schMay:['110RA','090PA','090PA','FO','110RA','090PA','110RA','110RA','110RA','FC','FO','110RA','090PA','090PA','140UA','FC','FO','090PA','090PA','FC','110RA','FO','090PA','090PA','090PA','FC','090PA','090PA','090PA','090PA','090PA','FO']},
+  {id:'12339', name:'Pedro Silva', isManager:true, team:'supervisor', baseSection:'calcado', passwordHash:'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3',
+   sch:['150VA','150VA','150VA','150VA','FC','FO','070MA','100QA','120SA','FC','FO','110RA','110RA','100QA','FC','120SA','FO','120SA','150VA','150VA','FC','100QA','100QA','100QA','100QA','100QA','FO','100QA','100QA','120SA','120SA'],
+   schMay:['120SA','120SA','FC','FO','070MA','070MA','070MA','FC','FO','150VA','150VA','120SA','090PA8h','FC','FC','070MA','FO','120SA','FC','150VA','150VA','150VA','150VA','150VA','FO','120SA','120SA8h','120SA8h','150VA','150VA','FC','FO']},
+  {id:'13777', name:'José Pereira', isManager:false, team:'calcado',
+   sch:['200','200','200','FC','FO','200','200','200','200','200','FC','FO','200','200','200','200','200','FC','FO','200','200','200','200','200','FC','FO','200','200','200','200','200'],
+   schMay:['FO','200','150VA','150VA','V','V','FC','FO','200','120SA','120SA','V','V','FC','FO','200','150VA','150VA','200','200','FC','FO','200','150VA','150VA','V','V','FC','FO','200','150VA','150VA']},
+  {id:'13778', name:'Tiago Bento', isManager:false, team:'calcado',
+   sch:['100','100','100','FC','FO','100','100','100','100','100','FC','FO','100','100','100','100','100','FC','FO','100','100','100','100','100','FC','FO','100','100','100','100','100'],
+   schMay:['130','100','120','120','FC','180','140','180','150','200','FO','140','110','110','100','100','FC','FO','200','130','200','FC','110','180','FO','110','140','FC','FO','110','160','170']},
+  {id:'13779', name:'Tomás Pacífico', isManager:false, team:'calcado',
+   sch:['160','160','160','FC','FO','160','160','160','160','160','FC','FO','160','160','160','160','160','FC','FO','160','160','160','160','160','FC','FO','160','160','160','160','160'],
+   schMay:['170','120','FC','FO','100','110','100','FC','FO','160','200','200','FC','FO','110','110','160','160','FC','100','160','100','160','150','FO','100','110','110','100','100','FC','FO']},
+  {id:'13783', name:'Cláudia Morcela', isManager:false, team:'calcado',
+   sch:['160','160','160','FC','FO','160','160','160','160','160','FC','FO','160','160','160','160','160','FC','FO','160','160','160','160','160','FC','FO','160','160','160','160','160'],
+   schMay:['100','160','FC','FO','160','160','FC','130','100','FO','160','160','FC','180','100','FO','110','110','FC','100','100','100','100','110','FO','170','180','200','200','160','FC','FO']},
+  {id:'13784', name:'Micael Domingues', isManager:false, team:'calcado',
+   sch:['V','100QA','100QA','100QA','FC','FO','V','100QA','100QA','100QA','100QA','FC','FO','V','100QA','100QA','100QA','100QA','FC','FO','V','100QA','100QA','100QA','100QA','FC','FO','V','100QA','100QA','100QA'],
+   schMay:['140','V','123SC','150VA','FC','FO','V','140','V','V','100QA','FC','FO','V','160','V','090PA','100QA','FC','FO','V','200','V','100QA','100QA','160','FC','100','V','V','FO','100QA']},
+  {id:'13808', name:'Diogo Costa', isManager:false, team:'calcado',
+   sch:['100QA','100QA','100QA','FC','FO','100QA','100QA','100QA','100QA','100QA','FC','FO','100QA','100QA','100QA','100QA','100QA','FC','FO','100QA','100QA','100QA','100QA','100QA','FC','FO','100QA','100QA','100QA','100QA','100QA'],
+   schMay:['FC','FO','150VA','150VA','V','FC','200','V','FO','150VA','150VA','V','V','FC','FO','170','150VA','150VA','V','180','V','FC','FO','100QA','110RA','V','180','V','FC','FO','100QA','110RA']},
+  {id:'13816', name:'Cristiano Santos', isManager:false, team:'calcado',
+   sch:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'],
+   schMay:['160','100QA','100QA','V','V','FC','FO','190','110RA','110RA','V','V','FC','FO','100','100QA','100QA','V','V','FC','FO','160','150VA','150VA','200','V','V','FC','FO','100QA','120SA','V']},
+  {id:'13818', name:'Francisco Santos', isManager:false, team:'calcado',
+   sch:['200','200','200','FC','FO','200','200','200','200','200','FC','FO','200','200','200','200','200','FC','FO','200','200','200','200','200','FC','FO','200','200','200','200','200'],
+   schMay:['200','200','FC','FO','200','200','FC','200','FO','180','200','FC','FO','200','200','150','200','200','FC','200','200','200','200','200','FO','200','200','200','200','200','FC','FO']},
+  {id:'14045', name:'Maria Bugalho', isManager:false, team:'calcado',
+   sch:['200','200','200','FC','FO','200','200','200','200','200','FC','FO','200','200','200','200','200','FC','FO','200','200','200','200','200','FC','FO','200','200','200','200','200'],
+   schMay:['FO','200','150VA','150VA','V','V','FC','FO','200','150VA','150VA','V','V','FC','FO','200','150VA','150VA','V','V','FC','FO','200','120SA','130TA','V','V','FC','FO','200','150VA','150VA']},
+  {id:'14057', name:'Bianca Xavier', isManager:false, team:'calcado',
+   sch:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'],
+   schMay:['100','160','160','FO','180','140','130','200','140','FC','FO','100','160','160','FC','FO','160','160','160','FC','FO','180','150','160','190','FC','160','160','160','140','180','FO']},
+  {id:'14058', name:'Filipa Mendes', isManager:false, team:'calcado',
+   sch:['160','160','160','FC','FO','160','160','160','160','160','FC','FO','160','160','160','160','160','FC','FO','160','160','160','160','160','FC','FO','160','160','160','160','160'],
+   schMay:['FC','FO','160','160','140','FC','160','100','FO','140','160','FC','160','150','160','150','110','FO','110','140','140','140','FC','FO','160','140','FC','150','110','FO','120','200']},
+
+  // ════════════════════════════════════════════════════════
+  // EQUIPA TÊXTIL
+  // ════════════════════════════════════════════════════════
+  {id:'6030', name:'Isabela Pena', isManager:false, team:'textil',
+   sch:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'],
+   schMay:['Bx','Bx','Bx','Bx','Bx','Bx','Bx','120','120','FC','FO','120','120','120','120','120','FC','FO','120','120','120','120','120','FC','FO','120','120','120','120','120','FC','FO']},
+  {id:'8575', name:'Maria Rodrigues', isManager:false, team:'textil',
+   sch:['V','FC','FO','100QA','100QA','150VA','V','V','150VA','150VA','V','FC','FO','V','160','150VA','FC','200','FO','150VA','V','V','200','FC','FO','150VA','150VA','V','V','FC','FO'],
+   schMay:['FO','160','100QA','100RA','V','V','FC','FO','200','150VA','150VA','V','V','FC','FO','200','150WA','150VA','V','V','FC','FO','200','150WA','150WA','V','V','FC','FO','200','150WA','150VA']},
+  {id:'10930', name:'Catarina Costa', isManager:false, team:'textil',
+   sch:['100QB','200','FC','FO','200','120','200','FC','FO','100','190','200','200','FC','100QA','090PA','110RA','150VA','150VA','FO','200','140','100','100','100','FC','FO','173','140','140','FC'],
+   schMay:['FO','100PA','160VA','150VA','110QA','070LA','FO','100PA','100PA','120SA','120RA','FC','110QA','120SA','100PA','100PA','110QA','FO','110QA','100PA','100QA','110RA','110QA','FC','FO','100PA','100QA','100QA','FC','FO','110RA','140UA']},
+  {id:'10942', name:'Bruna Francisco', isManager:false, team:'textil',
+   sch:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'],
+   schMay:['200','200','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe']},
+  {id:'11555', name:'Beatriz Vale', isManager:false, team:'textil',
+   sch:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'],
+   schMay:['FC','FO','200','200','120','FC','FO','110','120','100','100','FC','100','100','120','120','100','FO','100','110','110','180','140','FC','FO','130','180','110','FC','FO','180','100']},
+  {id:'12363', name:'Beatriz Teodoro', isManager:false, team:'textil',
+   sch:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'],
+   schMay:['100','120','110','FC','200','160','180','180','180','FO','120','200','200','160','160','FC','FO','180','200','200','FC','FO','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe','Fe']},
+  {id:'12682', name:'Catarina Pereira', isManager:false, team:'textil',
+   sch:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'],
+   schMay:['100','FC','FO','150VA','200','140','V','200','FC','FO','140UA','200','200','V','200','FC','FO','110RA','200','200','V','200','FC','FO','120TA','200','200','V','200','FC','FO','150WA']},
+  {id:'13798', name:'Alice Belga', isManager:false, team:'textil',
+   sch:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'],
+   schMay:['200','200','FC','FO','160','160','100','FC','FO','200','200','200','FC','FO','180','200','160','100','FC','180','180','140','180','140','FO','180','140','200','140','180','FC','FO']},
+  {id:'13806', name:'Emily Ribeiro', isManager:false, team:'textil',
+   sch:['160','120','160','200','FC','FO','140','140','140','FC','FO','200','200','200','200','120SA','FC','FO','200','200','FC','200','200','200','200','200','FO','140','200','200','160'],
+   schMay:['160','200','FC','FO','200','200','200','FC','FO','200','200','200','FC','FO','200','200','200','200','FC','200','200','200','200','200','FO','200','200','200','200','200','FC','FO']},
+  {id:'13817', name:'Francisca Teodósio', isManager:false, team:'textil',
+   sch:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'],
+   schMay:['200','200','140','FO','100','100','130','150','160','FC','FO','100','180','160','FC','FO','200','180','200','FC','FO','100','100','100','100','FC','110','180','100','100','100','FO']},
+  {id:'14044', name:'Beatriz Maia', isManager:false, team:'textil',
+   sch:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'],
+   schMay:['140','140','200','FO','200','200','200','200','200','FC','FO','160','140','200','FC','FO','190','200','140','FC','FO','200','200','200','200','FC','200','200','180','140','200','FO']},
+  {id:'14055', name:'Beatriz Alves', isManager:false, team:'textil',
+   sch:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'],
+   schMay:['160','160','160','200','FC','FC','200','200','200','140','FO','160','200','200','200','180','FC','FO','200','160','200','FC','FO','180','200','200','FC','FO','200','200','200','200']},
+
+  // ════════════════════════════════════════════════════════
+  // EQUIPA TÉCNICO
+  // ════════════════════════════════════════════════════════
+  {id:'12365', name:'Jan Bata', isManager:false, team:'tecnico',
+   sch:['120SA','150','150VA','150VA','150VA','FO','120SA','120SA','120SA','120SA','120SA','FC','FO','090PA','090PA','070MA','FC','FO','090','090','090','FC','FO','150','150','200','200','FC','150','150','200'],
+   schMay:['150VA','120SA','120SA','FO','200','200','200','200','200','FC','FO','200','200','200','FC','FO','090','090','200','FC','FO','200','200','200','200','FC','200','200','200','200','200','FO']},
+  {id:'13803', name:'Tiago Fernandes', isManager:false, team:'tecnico',
+   sch:['080','090','090','090','FC','FO','090','090','090','FC','FO','200','200','150VA','FO','120SA','090','090','150','200','FC','090','090','090','090','090','FO','090','090','090','090'],
+   schMay:['090','200','FC','FO','090','090','090','FC','FO','200','200','120','FC','FO','090','090','200','200','FC','090','090','090','090','090','FO','090','090','090','090','090','FC','FO']},
+
+  // ════════════════════════════════════════════════════════
+  // EQUIPA LOGÍSTICA
+  // ════════════════════════════════════════════════════════
+  {id:'3351', name:'Daniela Pereira', isManager:false, team:'logistica',
+   sch:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'],
+   schMay:['070','070','FC','FO','070','070','070','070','070','FC','FO','070','070','070','070','070','FC','FO','070','070','070','070','070','FC','FO','070','070','070','070','070','FC','FO']},
+  {id:'4927', name:'Nuno Vieira', isManager:false, team:'logistica',
+   sch:['080NA','080NA','080NA','FC','FO','080NA','080NA','080NA','080NA','080NA','FC','FO','080NA','080NA','080NA','080NA','080NA','FC','FO','080NA','080NA','080NA','080NA','080NA','FC','FO','080NA','080NA','080NA','080NA'],
+   schMay:['080NA','070MA','FC','FO','070MA','070MA','070MA','070MA','070MA','FC','FO','070MA','070MA','070MA','070MA','070MA','FC','FO','070MA','070MA','070MA','070MA','070MA','FC','FO','070MA','070MA','070MA','070MA','070MA','FC','FO']},
+  {id:'4930', name:'Helena Cotovio', isManager:false, team:'logistica',
+   sch:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'],
+   schMay:['080NA','080MA','FC','FO','080MA','080MA','080MA','080MA','080MA','FC','FO','080MA','080MA','080MA','080MA','080MA','FC','FO','080MA','080MA','080MA','080MA','080MA','FC','FO','080MA','080MA','080MA','080MA','080MA','FC','FO']},
+  {id:'7109', name:'Rodrigo Francisco', isManager:true, team:'supervisor', baseSection:'logistica', passwordHash:'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3',
+   sch:['090PA','080NA','080NA','080NA','FC','FO','150VA','150VA','150VA','150VA','150VA','FC','FO','150VA','150VA','150VA','FC','150VA','FO','150VA','150VA','FC','FO','120SA','090PA','070MA','070MA','FC','150VA','150VA','120SA'],
+   schMay:['120SA','100QA','150VA','FO','150VA','150VA','FC','FO','150VA','BH-','120SA','FC','090PA8h','120SA','100QA','100QA','120SA','FO','150VA','120SA','120SA','120SA','120SA','FC','FO','120SA','120SA8h','120SA8h','FC','FC','120SA','FO']},
+  {id:'9102', name:'Andreia Vieira', isManager:false, team:'logistica',
+   sch:['110RA','110RA','110RA','110RA','FC','FO','110RA','110RA','FO','110RA','100QA','070MA','070MA','110RA','FC','100PC','110RA','110RA','FC','FO','150','150','150','150','150','FC','FO','150','150','150','150'],
+   schMay:['110RA','150','FC','FO','150','150','150','150','150','FC','FO','150','150','150','150','150','FC','FO','150','150','150','150','150','FC','FO','150','150','150','150','150','FC','FO']},
+  {id:'13780', name:'João Cardoso', isManager:false, team:'logistica',
+   sch:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'],
+   schMay:['FC','130','150','FO','140','130','140','140','130','FC','FO','140','130','140','140','130','FC','FO','140','130','140','140','130','FC','FO','140','130','140','140','130','FC','FO']},
+  {id:'13795', name:'Kessy Gomes', isManager:false, team:'logistica',
+   sch:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'],
+   schMay:['090','090','070MA','070MA','V','V','FC','FO','090','070MA','070MA','V','V','FC','FO','090','070MA','070MA','V','V','FC','FO','090','070MA','070MA','V','V','FC','FO','090','070MA','070MA']},
+  {id:'13801', name:'Ruben Santana', isManager:false, team:'logistica',
+   sch:['V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'],
+   schMay:['100','100','FC','FO','100','100','100','100','100','FC','FO','100','100','100','100','100','FC','FO','100','100','100','100','100','FC','FO','100','100','100','100','100','FC','FO']},
 ];
 
 let currentUser = null;
 let selectedDay = 1;
 let pendingUser = null;
 let initialized = false;
-let currentMonth = 0;
+let currentMonth = 1; // 0=Abril, 1=Maio (DEFAULT: Maio)
+let currentTeamFilter = ['calcado']; // Array of selected teams
+// Filtro DEDICADO da cobertura por hora — independente do filtro global.
+// Valores possíveis: 'all', 'management', 'calcado', 'caixa', 'textil', 'tecnico', 'logistica'
+let coverageFilter = 'all';
 let modalType = null;
 let modalDay = null;
 let modalMonth = 0;
@@ -1786,7 +2387,11 @@ let editDayIdx = null;
 const isOff = c => OFF.includes(c);
 const getS = c => SH[c] || null;
 const ini = n => n.split(' ').filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase();
-const countW = idx => TEAM.filter(m => !isOff(m.sch[idx])).length;
+// countW respeita o mês ativo via getEffectiveCode (que usa currentMonth + overrides)
+const countW = idx => {
+  const active = getActiveMembers(currentMonth);
+  return active.filter(m => !isOff(getEffectiveCode(m.id, idx))).length;
+};
 
 // working(c, h, userId, day) — inclui pausa manual de almoço se existir
 // userId e day são opcionais; sem eles comporta-se como antes
@@ -1809,6 +2414,136 @@ function working(c, h, userId, day) {
   return true;
 }
 
+// ── Filtragem por mês ativo ──
+// activeFrom: mês a partir do qual está ativo (ex: 1 = só existe a partir de Maio)
+// inactiveFrom: mês a partir do qual está inativo (ex: 1 = deixa de existir em Maio)
+function getActiveMembers(month) {
+  return TEAM.filter(m => {
+    if (m.activeFrom !== undefined && month < m.activeFrom) return false;
+    if (m.inactiveFrom !== undefined && month >= m.inactiveFrom) return false;
+    return true;
+  });
+}
+
+// ── Filtragem por equipa ──
+function getFilteredTeam(month) {
+  const active = getActiveMembers(month);
+  if (currentTeamFilter.length === 0) return active; // If nothing selected, show all
+  return active.filter(m => {
+    if (!m.team) return false; // Skip members without team
+    return currentTeamFilter.includes(m.team);
+  });
+}
+
+// ── Filtragem dedicada da COBERTURA POR HORA ──
+// Independente do filtro global. Valor 'all' = todos os colaboradores ativos.
+// 'management' = direção (management + supervisor), restantes valores = team direto.
+function getCoverageTeam(month) {
+  const active = getActiveMembers(month);
+  if (coverageFilter === 'all') return active;
+  if (coverageFilter === 'management') {
+    return active.filter(m => m.team === 'management' || m.team === 'supervisor');
+  }
+  return active.filter(m => m.team === coverageFilter);
+}
+
+function setCoverageFilter(section) {
+  coverageFilter = section;
+  // Re-render apenas o detalhe do dia (cobertura é parte de pick)
+  if (selectedDay > 0) pick(selectedDay);
+}
+
+function updateTeamFilter() {
+  // Get all checked checkboxes
+  const checkboxes = document.querySelectorAll('.filter-checkbox input[type="checkbox"]:checked');
+  currentTeamFilter = Array.from(checkboxes).map(cb => cb.value);
+  // Re-render
+  if (currentMonth === 0) renderCal(); else renderMayCal();
+  if (selectedDay > 0) pick(selectedDay);
+}
+
+function clearAllFilters() {
+  // Uncheck all
+  document.querySelectorAll('.filter-checkbox input[type="checkbox"]').forEach(cb => {
+    cb.checked = false;
+  });
+  currentTeamFilter = [];
+  // Re-render
+  if (currentMonth === 0) renderCal(); else renderMayCal();
+  if (selectedDay > 0) pick(selectedDay);
+}
+
+// ── Hour Details Modal ──
+// Mapa de nomes amigáveis para cada team
+const TEAM_LABELS = {
+  management: 'Direção',
+  supervisor: 'Direção',
+  calcado: 'Calçado',
+  caixa: 'Caixa',
+  textil: 'Têxtil',
+  tecnico: 'Técnico',
+  logistica: 'Logística'
+};
+
+function showHourDetails(hour, day) {
+  const modal = document.getElementById('hour-details-modal');
+  const title = document.getElementById('hour-modal-title');
+  const body = document.getElementById('hour-modal-body');
+  
+  // Buscar membros do estado global (preenchido por pick())
+  const cov = window._lastCoverage;
+  if (!cov || !cov[hour]) {
+    body.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Sem dados disponíveis</div>';
+    modal.classList.remove('hidden');
+    return;
+  }
+  const workers = cov[hour].members || [];
+  
+  // Definir título com a hora
+  const nextHour = hour === 23 ? '00:00' : `${hour + 1}h`;
+  title.textContent = `${hour}h - ${nextHour} · ${workers.length} ${workers.length === 1 ? 'colaborador' : 'colaboradores'}`;
+  
+  // Construir lista (ordenada por secção, depois por nome)
+  if (workers.length === 0) {
+    body.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Ninguém a trabalhar nesta hora</div>';
+  } else {
+    const sortedWorkers = [...workers].sort((a, b) => {
+      const ta = TEAM_LABELS[a.team] || 'Z';
+      const tb = TEAM_LABELS[b.team] || 'Z';
+      if (ta !== tb) return ta.localeCompare(tb);
+      return a.name.localeCompare(b.name);
+    });
+    
+    let html = '';
+    sortedWorkers.forEach(m => {
+      const teamLabel = TEAM_LABELS[m.team] || 'N/A';
+      html += `
+        <div class="hour-worker-item">
+          <div class="hour-worker-av">${ini(m.name)}</div>
+          <div class="hour-worker-info">
+            <div class="hour-worker-name">${m.name}</div>
+            <div class="hour-worker-team">${teamLabel}</div>
+          </div>
+        </div>`;
+    });
+    body.innerHTML = html;
+  }
+  
+  // Mostrar modal
+  modal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden'; // Prevent background scroll
+}
+
+function closeHourDetails(event) {
+  // Only close if clicking backdrop or close button
+  if (event && event.target.closest('.hour-modal-content') && !event.target.classList.contains('hour-modal-close')) {
+    return;
+  }
+  const modal = document.getElementById('hour-details-modal');
+  modal.classList.add('hidden');
+  document.body.style.overflow = ''; // Restore scroll
+}
+
 function getUserDayInfo(user, idx) {
   const c = getEffectiveCode(user.id, idx);
   if (isOff(c)) return { code: c, off: true };
@@ -1825,20 +2560,33 @@ function getManualOverrides() { return pgGet('shiftManualOvr') || {}; }
 function saveSwapOverrides(o)   { pgSet('shiftSwapOvr',   o); }
 function saveManualOverrides(o) { pgSet('shiftManualOvr', o); }
 
-function ovrKey(userId, idx) { return `${userId}_${idx}`; }
+// ovrKey inclui o mês para isolar Abril e Maio.
+// Sem isto, o dia 5 de Abril e o dia 5 de Maio partilhariam a mesma chave.
+function ovrKey(userId, idx, month) {
+  // Compatibilidade: se month não for passado, usa o currentMonth.
+  const m = (month === undefined) ? currentMonth : month;
+  return `${userId}_M${m}_D${idx}`;
+}
 
-function getEffectiveCode(userId, idx) {
-  const key = ovrKey(userId, idx);
+// getEffectiveCode aceita opcionalmente um mês explícito.
+// Se month não for passado, usa currentMonth (compatibilidade com chamadas existentes).
+function getEffectiveCode(userId, idx, month) {
+  const m = (month === undefined) ? currentMonth : month;
+  const key = ovrKey(userId, idx, m);
   const manual = getManualOverrides();
   if (manual[key]) return manual[key];
   const swaps = getSwapOverrides();
   if (swaps[key]) return swaps[key];
-  const m = TEAM.find(x => x.id === userId);
-  return m ? m.sch[idx] : 'V';
+  const member = TEAM.find(x => x.id === userId);
+  if (!member) return 'V';
+  // Maio usa schMay; Abril usa sch
+  if (m === 1 && member.schMay) return member.schMay[idx];
+  return member.sch[idx] || 'V';
 }
 
-function getOvrType(userId, idx) {
-  const key = ovrKey(userId, idx);
+function getOvrType(userId, idx, month) {
+  const m = (month === undefined) ? currentMonth : month;
+  const key = ovrKey(userId, idx, m);
   if (getManualOverrides()[key]) return 'manual';
   if (getSwapOverrides()[key])   return 'swap';
   return null;
@@ -1851,9 +2599,12 @@ function openEditModal(userId, dayIdx) {
   editUserId = userId;
   editDayIdx = dayIdx;
   const member = TEAM.find(m => m.id === userId);
-  const dow = DOW[(APR1_DOW + dayIdx - 1) % 7];
+  // Usar o mês ativo para calcular dia da semana e legenda
+  const dowOffset = currentMonth === 0 ? APR1_DOW : MAY1_DOW;
+  const monthName = currentMonth === 0 ? 'Abril' : 'Maio';
+  const dow = DOW[(dowOffset + dayIdx - 1) % 7];
   document.getElementById('edit-modal-title').textContent = `✏️ ${member?.name.split(' ')[0] || userId}`;
-  document.getElementById('edit-modal-sub').textContent = `${dow}, ${dayIdx} de Abril 2026`;
+  document.getElementById('edit-modal-sub').textContent = `${dow}, ${dayIdx} de ${monthName} 2026`;
   const current = getEffectiveCode(userId, dayIdx);
   const allCodes = Object.keys(SH).concat(Object.keys(OFF_LABEL));
   const sel = document.getElementById('edit-shift-select');
@@ -1874,7 +2625,7 @@ function saveManualEdit() {
   ovr[ovrKey(editUserId, day)] = sel.value;
   saveManualOverrides(ovr);
   closeEditModal();
-  renderCal();
+  if (currentMonth === 0) renderCal(); else renderMayCal();
   pick(day);
 }
 
@@ -1886,22 +2637,28 @@ function clearManualEdit() {
   delete ovr[key];
   saveManualOverrides(ovr);
   closeEditModal();
-  renderCal();
+  if (currentMonth === 0) renderCal(); else renderMayCal();
   pick(day);
 }
 
 
 // ════════════════════════════════════════════════════════
 // PAUSA DE ALMOÇO — Supabase (via cache)
+// Chave inclui mês para isolar Abril e Maio
 // ════════════════════════════════════════════════════════
+function lunchKey(userId, day, month) {
+  const m = (month === undefined) ? currentMonth : month;
+  return `${userId}_M${m}_D${day}`;
+}
+
 function getLunch(userId, day) {
   const obj = pgGet('lunch') || {};
-  const v = obj[`${userId}_${day}`];
+  const v = obj[lunchKey(userId, day, currentMonth)];
   return v !== undefined ? v : null;
 }
 function setLunch(userId, day, val) {
   const obj = pgGet('lunch') || {};
-  const k = `${userId}_${day}`;
+  const k = lunchKey(userId, day, currentMonth);
   if (val === null || val === '') delete obj[k];
   else obj[k] = val;
   pgSet('lunch', obj);
@@ -1939,11 +2696,14 @@ function openLunchModal(userId, day, shiftCode) {
   lunchShiftCode = shiftCode;
   const s = getS(shiftCode);
   const member = TEAM.find(m => m.id === userId);
-  const dow = DOW[(APR1_DOW + day - 1) % 7];
+  // Usar o mês ativo para calcular dia da semana e legenda
+  const dowOffset = currentMonth === 0 ? APR1_DOW : MAY1_DOW;
+  const monthName = currentMonth === 0 ? 'Abril' : 'Maio';
+  const dow = DOW[(dowOffset + day - 1) % 7];
   document.getElementById('lunch-modal-title').textContent =
     `🍽 Pausa — ${member?.name.split(' ')[0] || userId}`;
   document.getElementById('lunch-modal-sub').textContent =
-    `${dow}, ${day} de Abril 2026 · Turno ${shiftCode}`;
+    `${dow}, ${day} de ${monthName} 2026 · Turno ${shiftCode}`;
   const saved = getLunch(userId, day);
   // Gerar opções: slots de 30min dentro do turno, excluindo 1ª e última hora
   const opts = ['<option value="">— Sem pausa registada —</option>'];
@@ -1966,7 +2726,7 @@ function saveLunchModal() {
   setLunch(lunchUserId, lunchDayIdx, val === '' ? null : parseFloat(val));
   const savedDay = lunchDayIdx;
   closeLunchModal();
-  renderCal();
+  if (currentMonth === 0) renderCal(); else renderMayCal();
   pick(savedDay);
 }
 
@@ -1975,28 +2735,57 @@ function clearLunchModal() {
   setLunch(lunchUserId, lunchDayIdx, null);
   const savedDay = lunchDayIdx;
   closeLunchModal();
-  renderCal();
+  if (currentMonth === 0) renderCal(); else renderMayCal();
   pick(savedDay);
 }
 
-async function init() {
-  if (initialized) return;
-  initialized = true;
+// ══════════════════════════════════════════════════════════
+// SECTION SELECTION
+// ══════════════════════════════════════════════════════════
+let currentSection = null;
 
-  // ── Mostrar overlay de carregamento ──
-  const loadOv = document.getElementById('loading-overlay');
-  if (loadOv) loadOv.classList.remove('hidden');
+function selectSection(section) {
+  currentSection = section;
+  document.getElementById('section-selector').classList.add('hidden');
+  document.getElementById('profile-selector').classList.remove('hidden');
+  
+  const sectionNames = {
+    'management': 'Direção',
+    'calcado': 'Calçado',
+    'caixa': 'Caixa',
+    'textil': 'Têxtil',
+    'tecnico': 'Técnico',
+    'logistica': 'Logística',
+    'all': 'Toda a Loja'
+  };
+  
+  document.getElementById('section-title').textContent = sectionNames[section] || 'Seleciona o teu perfil';
+  document.getElementById('section-subtitle').textContent = section === 'all' ? 'Todos os colaboradores' : `Equipa de ${sectionNames[section]}`;
+  
+  showProfilesForSection(section);
+}
 
-  await _supaLoad();
+function backToSections() {
+  currentSection = null;
+  document.getElementById('section-selector').classList.remove('hidden');
+  document.getElementById('profile-selector').classList.add('hidden');
+}
 
-  if (loadOv) loadOv.classList.add('hidden');
-
+function showProfilesForSection(section) {
   const list = document.getElementById('profile-list');
   if (!list) return;
   
   list.innerHTML = '';
   
-  TEAM.slice().sort((a, b) => {
+  let filteredTeam = TEAM;
+  if (section !== 'all') {
+    filteredTeam = TEAM.filter(m => {
+      if (section === 'management') return m.team === 'management' || m.team === 'supervisor';
+      return m.team === section;
+    });
+  }
+  
+  filteredTeam.slice().sort((a, b) => {
     if (a.isManager && !b.isManager) return -1;
     if (!a.isManager && b.isManager) return 1;
     return a.name.localeCompare(b.name);
@@ -2010,6 +2799,21 @@ async function init() {
     btn.onclick = () => selectProfile(u);
     list.appendChild(btn);
   });
+}
+
+async function init() {
+  if (initialized) return;
+  initialized = true;
+
+  // ── Mostrar overlay de carregamento ──
+  const loadOv = document.getElementById('loading-overlay');
+  if (loadOv) loadOv.classList.remove('hidden');
+
+  await _supaLoad();
+
+  if (loadOv) loadOv.classList.add('hidden');
+  
+  // Profiles will be populated when user selects a section
 }
 
 function selectProfile(user) {
@@ -2051,7 +2855,7 @@ function cancelPassword() {
 
 function authenticateUser(user) {
   currentUser = user;
-  currentMonth = 0;
+  currentMonth = 1; // START IN MAY
   document.getElementById('profile-overlay').classList.add('hidden');
   document.getElementById('main-app').classList.remove('hidden');
   const displayName = TEAM.filter(x => x.name.split(' ')[0] === user.name.split(' ')[0]).length > 1 
@@ -2064,18 +2868,60 @@ function authenticateUser(user) {
   // show/hide tab bar for manager
   const tabBar = document.getElementById('mgr-tab-bar');
   if (tabBar) tabBar.classList.toggle('hidden', !user.isManager);
+  
+  // show/hide team filters for manager
+  const teamFilters = document.getElementById('team-filters');
+  if (teamFilters) teamFilters.classList.toggle('hidden', !user.isManager);
+  
   activeTab = 'day';
   showTab('day');
 
-  // reset month nav
-  document.getElementById('month-title').textContent = MONTH_LABELS[0];
-  document.getElementById('btn-prev-month').disabled = true;
-  document.getElementById('btn-next-month').disabled = false;
+  // reset month nav - start in May
+  document.getElementById('month-title').textContent = MONTH_LABELS[1];
+  document.getElementById('btn-prev-month').disabled = false;
+  document.getElementById('btn-next-month').disabled = true;
 
-  renderCal();
+  // pick(day) chama renderMayCal/renderCal internamente.
+  // Não é necessário (e na verdade causa duplicação) chamar render antes.
   const now = new Date();
-  const todayDay = (now.getFullYear() === 2026 && now.getMonth() === 3) ? now.getDate() : 1;
-  pick(Math.min(Math.max(todayDay, 1), 30));
+  const todayDay = (now.getFullYear() === 2026 && now.getMonth() === 4) ? now.getDate() : 1;
+  pick(Math.min(Math.max(todayDay, 1), 31));
+  
+  // Initialize mobile view to calendar
+  initMobileView();
+}
+
+// ══════════════════════════════════════════════════════════
+// MOBILE VIEW SWITCHING
+// ══════════════════════════════════════════════════════════
+function switchMobileView(view) {
+  const body = document.body;
+  const btnCal = document.getElementById('mobile-nav-cal');
+  const btnMgmt = document.getElementById('mobile-nav-mgmt');
+  
+  if (view === 'cal') {
+    body.classList.remove('mobile-view-mgmt');
+    body.classList.add('mobile-view-cal');
+    btnCal.classList.add('active');
+    btnMgmt.classList.remove('active');
+  } else {
+    body.classList.remove('mobile-view-cal');
+    body.classList.add('mobile-view-mgmt');
+    btnMgmt.classList.add('active');
+    btnCal.classList.remove('active');
+  }
+  // Scroll to top when switching
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function initMobileView() {
+  // Default: show calendar on mobile
+  document.body.classList.add('mobile-view-cal');
+  document.body.classList.remove('mobile-view-mgmt');
+  const btnCal = document.getElementById('mobile-nav-cal');
+  const btnMgmt = document.getElementById('mobile-nav-mgmt');
+  if (btnCal) btnCal.classList.add('active');
+  if (btnMgmt) btnMgmt.classList.remove('active');
 }
 
 function logout() {
@@ -2083,10 +2929,19 @@ function logout() {
   pendingUser = null;
   selectedDay = 1;
   currentMonth = 0;
+  coverageFilter = 'all'; // Reset filtro de cobertura
   document.getElementById('user-av').classList.remove('av-me');
   document.getElementById('profile-overlay').classList.remove('hidden');
   document.getElementById('main-app').classList.add('hidden');
   document.getElementById('password-overlay').classList.add('hidden');
+  // Limpar classes mobile view
+  document.body.classList.remove('mobile-view-cal', 'mobile-view-mgmt');
+  // Voltar ao menu de secções
+  const secSel = document.getElementById('section-selector');
+  const profSel = document.getElementById('profile-selector');
+  if (secSel) secSel.classList.remove('hidden');
+  if (profSel) profSel.classList.add('hidden');
+  currentSection = null;
 }
 
 // ════════════════════════════════════════════════════════
@@ -2101,37 +2956,84 @@ function navMonth(dir) {
   document.getElementById('month-title').textContent = MONTH_LABELS[currentMonth];
   document.getElementById('btn-prev-month').disabled = currentMonth === 0;
   document.getElementById('btn-next-month').disabled = currentMonth === 1;
+  // Renderizar calendário do mês ativo
   if (currentMonth === 0) {
     renderCal();
-    pick(selectedDay);
   } else {
     renderMayCal();
   }
+  // Garantir que o dia selecionado é válido para este mês
+  const maxDay = currentMonth === 0 ? 30 : 31;
+  if (selectedDay > maxDay) selectedDay = maxDay;
+  // Recalcular o detalhe do dia com a nova lógica de mês
+  pick(selectedDay);
 }
 
 function renderMayCal() {
-  // May has no shift data — show a day-off request calendar
-  const saved = getDayOffRequests().filter(r => r.month === 1);
-  const reqDays = new Set(saved.map(r => r.day));
+  const now = new Date();
+  const todayMay = (now.getFullYear() === 2026 && now.getMonth() === 4) ? now.getDate() : null;
+
   let h = '';
   DOW.forEach(d => { h += `<div class="dow">${d}</div>`; });
   for (let i = 0; i < MAY1_DOW; i++) h += '<div></div>';
   for (let d = 1; d <= MAY_DAYS; d++) {
-    const hasReq = reqDays.has(d);
-    const dowLabel = DOW[(MAY1_DOW + d - 1) % 7];
-    h += `<div class="may-cal-day${hasReq ? ' req-marked' : ''}" onclick="mayDayClick(${d})" title="${hasReq ? 'Pedido enviado' : 'Clica para pedir folga'}">
-      <div class="d-num">${d}</div>
-      <div class="d-icon">${hasReq ? '🌙' : '+'}</div>
-      <div class="d-lbl">${hasReq ? 'pedido' : dowLabel}</div>
+    const c = getEffectiveCode(currentUser.id, d);
+    const off = isOff(c), vac = c === 'Fe';
+    const activeTeam = getFilteredTeam(1); // month 1 = May
+    const cnt = activeTeam.filter(m => !isOff(getEffectiveCode(m.id, d))).length;
+    let bc = off ? (vac ? 'vac' : 'off') : '';
+
+    const isPast = todayMay !== null && d < todayMay;
+    const isToday = todayMay !== null && d === todayMay;
+
+    const dateStr = `2026-05-${String(d).padStart(2,'0')}`;
+    const tasks = clLoad(dateStr);
+    const taskBadge = tasks.length > 0
+      ? `<div class="task-dot">${tasks.filter(t=>!t.done).length > 0 ? '●' : '✓'}</div>` : '';
+
+    const myOvrType = getOvrType(currentUser.id, d);
+    const dayHasOvr = currentUser.isManager && activeTeam.some(m => getOvrType(m.id, d));
+    const ovrDot = myOvrType === 'swap'   ? `<div class="swap-dot"   title="Troca aprovada">⇄</div>`
+                 : myOvrType === 'manual' ? `<div class="manual-dot" title="Alterado manualmente">✏</div>`
+                 : dayHasOvr             ? `<div class="swap-dot"   title="Existem alterações neste dia">⇄</div>`
+                 : '';
+
+    const cellInner = currentUser.isManager
+      ? `<div class="d-count">${cnt}</div>
+         <div class="d-lbl">eq</div>
+         <span class="d-badge ${bc}">${c}</span>`
+      : `<div class="d-count" style="font-size:13px;margin-top:4px">${off ? '—' : c}</div>
+         <div class="d-lbl">${off ? (OFF_LABEL[c] || c).split(' ')[0] : 'turno'}</div>`;
+
+    const hasSwapDay   = currentUser.isManager && activeTeam.some(m => getOvrType(m.id, d) === 'swap');
+    const hasManualDay = currentUser.isManager && activeTeam.some(m => getOvrType(m.id, d) === 'manual');
+    const extraClass = isPast ? ' past' : isToday ? ' today-marker' : '';
+    const ovrClass = hasSwapDay ? ' has-swap' : hasManualDay ? ' has-manual' : '';
+
+    h += `<div class="cal-day${selectedDay===d?' selected':''}${extraClass}${ovrClass}" onclick="pick(${d})">
+      <div class="d-num">${d}${taskBadge}${ovrDot}</div>
+      ${cellInner}
     </div>`;
   }
   document.getElementById('cal').innerHTML = h;
-  document.getElementById('detail-label').textContent = 'Maio 2026 — Pedidos de folga';
-  document.getElementById('detail').innerHTML = `
-    <div style="padding:20px;text-align:center;color:var(--muted);font-size:13px;">
-      Seleciona um dia de Maio para pedir folga.<br>
-      <span style="font-size:11px;color:var(--faint)">Dias com 🌙 já têm pedido enviado.</span>
-    </div>`;
+  // NOTA: NÃO chamar pick(selectedDay) aqui — provoca recursão infinita
+  // pick() já chama renderMayCal() no início, e queremos evitar o loop:
+  // pick → renderMayCal → pick → renderMayCal → stack overflow
+  
+  // Atualizar stats row para Maio (31 dias)
+  const statsRow = document.getElementById('stats');
+  if (statsRow) {
+    if (currentUser.isManager) {
+      statsRow.classList.add('hidden');
+    } else {
+      statsRow.classList.remove('hidden');
+      let wd = 0;
+      for (let d = 1; d <= MAY_DAYS; d++) { if (!getUserDayInfo(currentUser, d).off) wd++; }
+      statsRow.innerHTML = `
+        <div class="stat"><div class="sv">${wd}</div><div class="sl">Dias de trabalho</div></div>
+        <div class="stat"><div class="sv">${wd * 8}h</div><div class="sl">Total de horas</div></div>`;
+    }
+  }
 }
 
 function mayDayClick(d) {
@@ -2207,25 +3109,20 @@ function saveDayOffRequests(arr) {
 // 12H REST VALIDATION
 // ════════════════════════════════════════════════════════
 function validate12hRest(userId, day, month) {
-  // Check end time of previous day shift against start time of this day's shift
-  if (month === 1) {
-    // May — no schedule data, skip validation
-    return { ok: true };
-  }
-  // For April swap: check the day before (using current schedule of the target user)
+  // Verifica intervalo de descanso entre o turno do dia anterior e o do próprio dia
+  // Funciona tanto para Abril como para Maio.
   const user = TEAM.find(m => m.id === userId);
   if (!user) return { ok: true };
-  const prevIdx = day - 1; // idx 0 = Mar31, idx 1 = Apr1...
-  if (prevIdx < 0) return { ok: true };
-  const prevCode = user.sch[prevIdx];
+  const prevIdx = day - 1;
+  if (prevIdx < 1) return { ok: true }; // Sem dia anterior dentro do mês
+  const prevCode = getEffectiveCode(userId, prevIdx, month);
   const prevShift = getS(prevCode);
   if (!prevShift) return { ok: true };
-  const prevEnd = prevShift.e; // e.g. 24 = midnight
-  const targetCode = user.sch[day];
+  const prevEnd = prevShift.e; // ex: 24 = meia-noite
+  const targetCode = getEffectiveCode(userId, day, month);
   const targetShift = getS(targetCode);
   if (!targetShift) return { ok: true };
   const targetStart = targetShift.s;
-  // Hours between prevEnd of previous day and targetStart of this day
   const gap = (24 - prevEnd) + targetStart;
   if (gap < 12) {
     return {
@@ -2253,10 +3150,11 @@ function openModal(type, day, month) {
   if (type === 'swap') {
     document.getElementById('modal-title').textContent = '🔄 Pedir troca de horário';
     document.getElementById('modal-sub').textContent = `${dow}, ${day} de ${monthLabel} 2026`;
-    const colleagues = TEAM.filter(m => m.id !== currentUser.id && !m.isManager && !isOff(m.sch[day]));
+    // Usar getEffectiveCode (respeita currentMonth + overrides) em vez de m.sch[day]
+    const colleagues = TEAM.filter(m => m.id !== currentUser.id && !m.isManager && !isOff(getEffectiveCode(m.id, day)));
     const opts = colleagues.length === 0
       ? '<option value="">Nenhum colega disponível</option>'
-      : colleagues.map(m => `<option value="${m.id}">${m.name.split(' ')[0]} (${m.sch[day]})</option>`).join('');
+      : colleagues.map(m => `<option value="${m.id}">${m.name.split(' ')[0]} (${getEffectiveCode(m.id, day)})</option>`).join('');
     document.getElementById('modal-body').innerHTML = `
       <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:4px">Trocar com:</label>
       <select id="modal-select">${opts}</select>`;
@@ -2354,17 +3252,23 @@ function updateSwapStatus(id, status) {
   r.status = status;
   saveSwapRequests(reqs);
 
-  // When approved: swap the effective shifts of both parties for that day
-  if (status === 'approved' && r.month === 0) {
-    const idx = r.day; // April idx 1–30
-    const codeFrom = getEffectiveCode(r.fromId, idx);
-    const codeTo   = getEffectiveCode(r.toId,   idx);
+  // Quando aprovado: trocar os códigos efetivos de ambas as partes naquele dia
+  // Funciona para Abril E Maio (usa r.month explicitamente)
+  if (status === 'approved') {
+    const idx = r.day;
+    const reqMonth = r.month; // 0 = Abril, 1 = Maio
+    const codeFrom = getEffectiveCode(r.fromId, idx, reqMonth);
+    const codeTo   = getEffectiveCode(r.toId,   idx, reqMonth);
     const swaps = getSwapOverrides();
-    swaps[ovrKey(r.fromId, idx)] = codeTo;
-    swaps[ovrKey(r.toId,   idx)] = codeFrom;
+    swaps[ovrKey(r.fromId, idx, reqMonth)] = codeTo;
+    swaps[ovrKey(r.toId,   idx, reqMonth)] = codeFrom;
     saveSwapOverrides(swaps);
-    // Refresh current view
-    if (currentUser?.isManager) { renderCal(); if (selectedDay === idx) pick(idx); }
+    // Refresh apenas se o mês ativo for o mesmo do pedido
+    if (currentUser?.isManager && currentMonth === reqMonth) { 
+      if (currentMonth === 0) renderCal(); 
+      else renderMayCal();
+      if (selectedDay === idx) pick(idx); 
+    }
   }
   renderSwapsPanel();
 }
@@ -2445,7 +3349,8 @@ function renderCal() {
   for (let d = 1; d <= 30; d++) {
     const c = getEffectiveCode(currentUser.id, d);  // use effective (swap/manual) code
     const off = isOff(c), vac = c === 'Fe';
-    const cnt = TEAM.filter(m => !isOff(getEffectiveCode(m.id, d))).length;
+    const activeTeam = getFilteredTeam(0); // month 0 = April
+    const cnt = activeTeam.filter(m => !isOff(getEffectiveCode(m.id, d))).length;
     let bc = off ? (vac ? 'vac' : 'off') : '';
 
     // past / today markers
@@ -2466,7 +3371,7 @@ function renderCal() {
 
     // override dots
     const myOvrType = getOvrType(currentUser.id, d);
-    const dayHasOvr = currentUser.isManager && TEAM.some(m => getOvrType(m.id, d));
+    const dayHasOvr = currentUser.isManager && activeTeam.some(m => getOvrType(m.id, d));
     const ovrDot = myOvrType === 'swap'   ? `<div class="swap-dot"   title="Troca aprovada">⇄</div>`
                  : myOvrType === 'manual' ? `<div class="manual-dot" title="Alterado manualmente">✏</div>`
                  : dayHasOvr             ? `<div class="swap-dot"   title="Existem alterações neste dia">⇄</div>`
@@ -2479,8 +3384,8 @@ function renderCal() {
       : `<div class="d-count" style="font-size:13px;margin-top:4px">${off ? '—' : c}</div>
          <div class="d-lbl">${off ? (OFF_LABEL[c] || c).split(' ')[0] : 'turno'}</div>`;
 
-    const hasSwapDay   = currentUser.isManager && TEAM.some(m => getOvrType(m.id, d) === 'swap');
-    const hasManualDay = currentUser.isManager && TEAM.some(m => getOvrType(m.id, d) === 'manual');
+    const hasSwapDay   = currentUser.isManager && activeTeam.some(m => getOvrType(m.id, d) === 'swap');
+    const hasManualDay = currentUser.isManager && activeTeam.some(m => getOvrType(m.id, d) === 'manual');
     const extraClass = isPast ? ' past' : isToday ? ' today-marker' : '';
     const ovrClass = hasSwapDay ? ' has-swap' : hasManualDay ? ' has-manual' : '';
 
@@ -2506,31 +3411,43 @@ function renderCal() {
 
 function pick(day) {
   selectedDay = day;
-  renderCal();
+  if (currentMonth === 0) renderCal(); else renderMayCal();
 
   const p = getUserDayInfo(currentUser, day);
-  const dow = DOW[(APR1_DOW + day - 1) % 7];
+  const dow = currentMonth === 0 
+    ? DOW[(APR1_DOW + day - 1) % 7]
+    : DOW[(MAY1_DOW + day - 1) % 7];
   const cnt = countW(day);
   const firstName = currentUser.name.split(' ')[0];
 
-  // ── cobertura (sempre calculada, usada pelo manager e pela lógica de pausa) ──
+  // ── cobertura por hora (usa filtro DEDICADO `coverageFilter`, independente) ──
+  // Importante: este filtro afeta APENAS o gráfico de cobertura.
+  // A lista de colaboradores (workers grid) continua a usar getFilteredTeam.
   const HOURS = [];
   for (let h = 9; h <= 23; h++) HOURS.push(h);
   const cov = {};
-  HOURS.forEach(h => { cov[h] = { t: 0, me: false, workers: [] }; });
-  TEAM.forEach(m => {
+  HOURS.forEach(h => { cov[h] = { t: 0, me: false, workers: [], members: [] }; });
+  const coverageTeam = getCoverageTeam(currentMonth); // ← filtro próprio da cobertura
+  const activeTeam = getFilteredTeam(currentMonth);   // ← filtro global (workers grid, etc.)
+  coverageTeam.forEach(m => {
     const c = getEffectiveCode(m.id, day);  // use effective shift
     HOURS.forEach(h => {
       if (working(c, h, m.id, day)) {  // passa userId+day para incluir pausa manual
         cov[h].t++;
         if (m.id === currentUser.id) cov[h].me = true;
-        const dn = TEAM.filter(x => x.name.split(' ')[0] === m.name.split(' ')[0]).length > 1
+        const dn = coverageTeam.filter(x => x.name.split(' ')[0] === m.name.split(' ')[0]).length > 1
           ? m.name.split(' ')[0] + ' ' + m.name.split(' ')[1][0] + '.'
           : m.name.split(' ')[0];
         cov[h].workers.push(dn);
+        cov[h].members.push(m); // Store full member object for modal
       }
     });
   });
+  
+  // Expor cov globalmente para o modal "Ver detalhes" — os atributos onclick
+  // são avaliados no escopo global e não conseguem aceder a variáveis locais.
+  window._lastCoverage = cov;
+  window._lastCoverageDay = day;
 
   // ════════════════════════════════════════════════════
   // COLABORADOR — vista simplificada (só o próprio turno)
@@ -2555,19 +3472,20 @@ function pick(day) {
       </div>`;
     }
 
-    document.getElementById('detail-label').textContent = `${dow}, ${day} de Abril 2026`;
+    const monthName = currentMonth === 0 ? 'Abril' : 'Maio';
+    document.getElementById('detail-label').textContent = `${dow}, ${day} de ${monthName} 2026`;
     document.getElementById('detail').innerHTML = `
       <div class="day-header">
         <div>
-          <h2>${dow}, ${day} de Abril</h2>
+          <h2>${dow}, ${day} de ${monthName}</h2>
           <div class="meta">O teu turno</div>
         </div>
       </div>
       <div class="panel-section">
         ${shiftHTML}
         ${!p.off ? `<div class="req-trigger-row">
-          <button class="req-trigger-btn" onclick="openModal('swap',${day},0)">🔄 Pedir troca de horário</button>
-          <button class="req-trigger-btn" onclick="openModal('dayoff',${day},0)">🌙 Pedir folga</button>
+          <button class="req-trigger-btn" onclick="openModal('swap',${day},${currentMonth})">🔄 Pedir troca de horário</button>
+          <button class="req-trigger-btn" onclick="openModal('dayoff',${day},${currentMonth})">🌙 Pedir folga</button>
         </div>` : ''}
       </div>`;
     return;
@@ -2576,7 +3494,7 @@ function pick(day) {
   // ════════════════════════════════════════════════════
   // MANAGER — vista completa
   // ════════════════════════════════════════════════════
-  const sorted = [...TEAM].sort((a, b) => {
+  const sorted = [...activeTeam].sort((a, b) => {
     if (a.id === currentUser.id) return -1; if (b.id === currentUser.id) return 1;
     const ao = isOff(getEffectiveCode(a.id, day)), bo = isOff(getEffectiveCode(b.id, day));
     return ao === bo ? 0 : ao ? 1 : -1;
@@ -2591,7 +3509,7 @@ function pick(day) {
     else if (ovrType === 'swap')   cl += ' swap-w';
     else if (ovrType === 'manual') cl += ' manual-w';
     const hasChange = CHANGES[m.id] && CHANGES[m.id].has(day);
-    const dn = TEAM.filter(x => x.name.split(' ')[0] === m.name.split(' ')[0]).length > 1
+    const dn = activeTeam.filter(x => x.name.split(' ')[0] === m.name.split(' ')[0]).length > 1
       ? m.name.split(' ')[0] + ' ' + m.name.split(' ')[1]
       : m.name.split(' ')[0];
     const ovrBadge = ovrType === 'swap'   ? `<span class="ovr-badge swap">⇄ troca</span>`
@@ -2614,7 +3532,8 @@ function pick(day) {
   const maxC = Math.max(...openHours.map(h => cov[h].t), 1);
   // Calcular hora atual UMA VEZ, fora do loop
   const _nowH = new Date();
-  const _isToday = _nowH.getFullYear() === 2026 && _nowH.getMonth() === 3 && _nowH.getDate() === day;
+  const _monthCheck = currentMonth === 0 ? 3 : 4; // Apr=3, May=4
+  const _isToday = _nowH.getFullYear() === 2026 && _nowH.getMonth() === _monthCheck && _nowH.getDate() === day;
   const _currentHour = _isToday ? _nowH.getHours() : -1;
 
   let chartRows = '';
@@ -2630,8 +3549,25 @@ function pick(day) {
       if (v.me) { col = '#3b82f6'; tag = `<span class="bar-tag" style="color:#3b82f6">TU</span>`; }
       else { col = '#10b981'; }
     }
-    const namesHtml = v.workers.length > 0
-      ? `<div class="hour-names">${v.workers.join(', ')}</div>` : '';
+    
+    // Show worker names or "See details" button
+    let namesHtml = '';
+    if (v.workers.length > 0) {
+      if (v.workers.length > 5) {
+        // Demasiados colaboradores — botão para abrir modal.
+        // NOTA: usamos showHourDetails(h, day) sem passar cov diretamente,
+        // porque o atributo onclick é avaliado no escopo global onde `cov`
+        // não existe. A função busca os dados via window._lastCoverage.
+        namesHtml = `<div class="hour-names hour-names-compact" onclick="showHourDetails(${h}, ${day})">
+          <span class="hour-count-label">${v.workers.length} colaboradores</span>
+          <span class="hour-details-btn">Ver detalhes</span>
+        </div>`;
+      } else {
+        // Few workers - show names directly
+        namesHtml = `<div class="hour-names">${v.workers.join(', ')}</div>`;
+      }
+    }
+    
     const isPastH = _isToday && h < _currentHour;
     const isCurrentH = _isToday && h === _currentHour;
     chartRows += `<div class="h-row${isPastH ? ' past-hour' : isCurrentH ? ' current-hour' : ''}">
@@ -2648,15 +3584,17 @@ function pick(day) {
     }
   });
 
-  const workingNow = TEAM.filter(m => !isOff(getEffectiveCode(m.id, day))).length;
-  const offNow = TEAM.length - workingNow;
-  const dateStr = `2026-04-${String(day).padStart(2,'0')}`;
+  const workingNow = activeTeam.filter(m => !isOff(getEffectiveCode(m.id, day))).length;
+  const offNow = activeTeam.length - workingNow;
+  const monthName = currentMonth === 0 ? 'Abril' : 'Maio';
+  const monthPad = currentMonth === 0 ? '04' : '05';
+  const dateStr = `2026-${monthPad}-${String(day).padStart(2,'0')}`;
 
-  document.getElementById('detail-label').textContent = `${dow}, ${day} de Abril 2026`;
+  document.getElementById('detail-label').textContent = `${dow}, ${day} de ${monthName} 2026`;
   document.getElementById('detail').innerHTML = `
     <div class="day-header">
       <div>
-        <h2>${dow}, ${day} de Abril</h2>
+        <h2>${dow}, ${day} de ${monthName}</h2>
         <div class="meta">${cnt} elemento${cnt !== 1 ? 's' : ''} da equipa de calçado a trabalhar</div>
       </div>
       <div class="day-num-badge">
@@ -2687,6 +3625,45 @@ function pick(day) {
     <div class="panel-section">
       <div class="sec-title">Cobertura por hora</div>
       <div class="store-banner">Loja aberta das 10h às 23h</div>
+      
+      <!-- ════════════════════════════════════════════
+           FILTRO DEDICADO DA COBERTURA POR HORA
+           Independente do filtro global. Mobile-first.
+           ════════════════════════════════════════════ -->
+      <div class="cov-filter-wrap">
+        <div class="cov-filter-label">Mostrar cobertura de:</div>
+        <div class="cov-filter-scroll">
+          <button class="cov-filter-btn ${coverageFilter==='all'?'active':''}" onclick="setCoverageFilter('all')">
+            <span class="cov-icon">🏪</span><span>Todos</span>
+          </button>
+          <button class="cov-filter-btn ${coverageFilter==='management'?'active':''}" onclick="setCoverageFilter('management')">
+            <span class="cov-icon">👔</span><span>Direção</span>
+          </button>
+          <button class="cov-filter-btn ${coverageFilter==='calcado'?'active':''}" onclick="setCoverageFilter('calcado')">
+            <span class="cov-icon">👟</span><span>Calçado</span>
+          </button>
+          <button class="cov-filter-btn ${coverageFilter==='caixa'?'active':''}" onclick="setCoverageFilter('caixa')">
+            <span class="cov-icon">💳</span><span>Caixa</span>
+          </button>
+          <button class="cov-filter-btn ${coverageFilter==='textil'?'active':''}" onclick="setCoverageFilter('textil')">
+            <span class="cov-icon">👕</span><span>Têxtil</span>
+          </button>
+          <button class="cov-filter-btn ${coverageFilter==='tecnico'?'active':''}" onclick="setCoverageFilter('tecnico')">
+            <span class="cov-icon">⚽</span><span>Técnico</span>
+          </button>
+          <button class="cov-filter-btn ${coverageFilter==='logistica'?'active':''}" onclick="setCoverageFilter('logistica')">
+            <span class="cov-icon">📦</span><span>Logística</span>
+          </button>
+        </div>
+        <div class="cov-filter-summary">
+          ${(() => {
+            const labels = {all:'Toda a loja', management:'Direção', calcado:'Calçado', caixa:'Caixa', textil:'Têxtil', tecnico:'Técnico', logistica:'Logística'};
+            const total = coverageTeam.length;
+            return `<strong>${labels[coverageFilter]}</strong> · ${total} ${total === 1 ? 'colaborador' : 'colaboradores'} no total`;
+          })()}
+        </div>
+      </div>
+      
       <div class="chart-legend">
         <div class="leg"><div class="leg-dot" style="background:#3b82f6"></div>Tu</div>
         <div class="leg"><div class="leg-dot" style="background:#10b981"></div>Equipa (loja aberta)</div>
@@ -2718,9 +3695,8 @@ function pick(day) {
 
   renderChecklist(dateStr);
 
-  if (window.innerWidth < 700) {
-    document.getElementById('detail').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+  // NÃO redirecionar automaticamente para a Gestão — o utilizador permanece
+  // onde estiver. Só recalcula os dados.
 }
 
 // ── CHECKLIST FUNCTIONS ───────────────────────────────
@@ -2763,7 +3739,7 @@ function clAdd(dateStr) {
   clSave(dateStr, tasks);
   textEl.value = '';
   renderChecklist(dateStr);
-  renderCal(); // refresh task badge in calendar
+  if (currentMonth === 0) renderCal(); else renderMayCal(); // refresh task badge in calendar
 }
 
 function clToggle(dateStr, rawIdx) {
@@ -2776,7 +3752,7 @@ function clToggle(dateStr, rawIdx) {
   if (match) match.done = !match.done;
   clSave(dateStr, all);
   renderChecklist(dateStr);
-  renderCal();
+  if (currentMonth === 0) renderCal(); else renderMayCal();
 }
 
 function clDelete(dateStr, rawIdx) {
@@ -2788,7 +3764,7 @@ function clDelete(dateStr, rawIdx) {
   if (idx !== -1) all.splice(idx, 1);
   clSave(dateStr, all);
   renderChecklist(dateStr);
-  renderCal();
+  if (currentMonth === 0) renderCal(); else renderMayCal();
 }
 
 // enter key in checklist input
@@ -2895,14 +3871,26 @@ async function _supaLoad() {
   }
 }
 
-// ── nomes COMPLETOS da equipa (excluindo gestor) ──
+// ── nomes COMPLETOS da equipa (sem gestores). Usado em selecionadores
+// gerais como Trocas, onde queremos todos os colaboradores.
 function memberNames() {
   return TEAM.filter(m => !m.isManager).map(m => ({ id: m.id, name: m.name }));
 }
 
-// ── membros a trabalhar num dia específico ──
+// ── membros a trabalhar num dia específico (todos, sem gestores) ──
 function workingMembersOnDay(day) {
   return TEAM.filter(m => !m.isManager && !isOff(getEffectiveCode(m.id, day)));
+}
+
+// ── HELPERS DEDICADOS À EQUIPA DE CALÇADO ──
+// Usados pela Energia da Equipa, Destaques, alertas, médias e resumos
+// semanais — o utilizador apenas avalia a sua equipa direta.
+function calcadoMembers() {
+  return TEAM.filter(m => !m.isManager && m.team === 'calcado').map(m => ({ id: m.id, name: m.name }));
+}
+
+function calcadoWorkingOnDay(day) {
+  return TEAM.filter(m => !m.isManager && m.team === 'calcado' && !isOff(getEffectiveCode(m.id, day)));
 }
 
 // ── RENDER PAINEL ──
@@ -2919,6 +3907,7 @@ function renderPainel() {
     <div style="padding:4px 0 12px;font-size:11px;font-weight:700;color:var(--muted);
       text-transform:uppercase;letter-spacing:.08em">📊 Painel de Gestão</div>
 
+    <!-- 1. Performance por secção -->
     <div class="pg-section" id="pg-perf">
       <div class="pg-section-title"><span>📈</span> Performance por Secção
         <div class="pg-week-nav" style="margin-left:auto;display:flex;gap:6px;align-items:center">
@@ -2936,6 +3925,7 @@ function renderPainel() {
       </button>
     </div>
 
+    <!-- 2. Ranking de Eficiência -->
     <div class="pg-section" id="pg-eff">
       <div class="pg-section-title"><span>🎯</span> Ranking de Eficiência</div>
       <div class="eff-grid" id="eff-grid"></div>
@@ -2950,6 +3940,7 @@ function renderPainel() {
       </div>
     </div>
 
+    <!-- 3. Destaques Positivos -->
     <div class="pg-section" id="pg-hl">
       <div class="pg-section-title"><span>⭐</span> Destaques Positivos</div>
       <div class="pg-sub-tabs" id="hl-tabs">
@@ -2959,7 +3950,7 @@ function renderPainel() {
       <div id="hl-form-panel">
         <select class="pg-select" id="hl-member">
           <option value="">— Seleciona colaborador —</option>
-          ${memberNames().map(m=>`<option value="${m.id}">${m.name}</option>`).join('')}
+          ${calcadoMembers().map(m=>`<option value="${m.id}">${m.name}</option>`).join('')}
         </select>
         <input class="hl-input" id="hl-text" placeholder="Destaque positivo do dia…" style="width:100%;margin-bottom:8px">
         <button onclick="saveHl()" class="pg-save-btn">⭐ Guardar destaque</button>
@@ -2970,10 +3961,11 @@ function renderPainel() {
       </div>
     </div>
 
+    <!-- 4. Energia da Equipa (apenas Calçado) -->
     <div class="pg-section" id="pg-energy">
-      <div class="pg-section-title"><span>⚡</span> Energia da Equipa
+      <div class="pg-section-title"><span>⚡</span> Energia da Equipa de Calçado
         <span style="margin-left:6px;font-size:10px;font-weight:400;color:var(--muted)">
-          (${DOW[(APR1_DOW + selectedDay - 1) % 7]}, ${selectedDay} Abr)
+          (${DOW[((currentMonth === 0 ? APR1_DOW : MAY1_DOW) + selectedDay - 1) % 7]}, ${selectedDay} ${currentMonth === 0 ? 'Abr' : 'Mai'})
         </span>
       </div>
       <div class="pg-sub-tabs">
@@ -2996,6 +3988,7 @@ function renderPainel() {
       </div>
     </div>
 
+    <!-- 5. Best of the Week -->
     <div class="pg-section" id="pg-botw">
       <div class="pg-section-title"><span>🏆</span> Best of the Week</div>
       ${isSaturday ? '<div class="botw-summary-badge">📅 Sábado — Resumo automático da semana</div>' : ''}
@@ -3004,6 +3997,7 @@ function renderPainel() {
       <div class="botw-log" id="botw-log"></div>
     </div>
 
+    <!-- 6. Registo de Trocas -->
     <div class="pg-section" id="pg-swaps-simple">
       <div class="pg-section-title"><span>🔄</span> Registo de Trocas</div>
       <div class="swap-add-row" style="flex-direction:column;gap:8px">
@@ -3035,6 +4029,7 @@ function renderPainel() {
             </select>
           </div>
         </div>
+        <!-- fallback: seleção manual de hora quando não há turno reconhecido -->
         <div id="swap-manual-row" style="display:none">
           <div style="font-size:10px;color:var(--amber);margin-bottom:4px">⚠ Turno não identificado — seleciona manualmente:</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
@@ -3318,8 +4313,8 @@ function setStars(userId, val) {
 function saveEnergy() {
   const dateStr = todayKey();
   const obj = loadEnergy(dateStr);
-  // only save rows that exist in the DOM (working members today)
-  workingMembersOnDay(selectedDay).forEach(m => {
+  // Apenas guarda as linhas existentes no DOM (membros do Calçado a trabalhar hoje)
+  calcadoWorkingOnDay(selectedDay).forEach(m => {
     const row = document.getElementById('energy-row-' + m.id);
     if (row && row.dataset.pending) obj[m.id] = parseInt(row.dataset.pending);
   });
@@ -3337,8 +4332,8 @@ function renderEnergyRows() {
   const dateStr = todayKey();
   const saved = loadEnergy(dateStr);
 
-  // only show members working on selectedDay
-  const working = workingMembersOnDay(selectedDay);
+  // Apenas membros do CALÇADO a trabalhar no dia selecionado
+  const working = calcadoWorkingOnDay(selectedDay);
   if (countEl) countEl.textContent = working.length;
 
   if (working.length === 0) {
@@ -3385,9 +4380,9 @@ function renderEnergyAvg(dateStr) {
 }
 
 function getEnergyAlertIds() {
-  // Alert: colaborador com 2+ avaliações ≤2 nos últimos 7 dias
+  // Alerta: colaborador (do Calçado) com 2+ avaliações ≤2 nos últimos 7 dias
   const alertSet = new Set();
-  memberNames().forEach(m => {
+  calcadoMembers().forEach(m => {
     let lowCount = 0;
     for (let i = 0; i < 7; i++) {
       const d = new Date(); d.setDate(d.getDate() - i);
@@ -3404,13 +4399,14 @@ function checkEnergyAlerts() {
   const box = document.getElementById('energy-alerts');
   if (!box) return;
   const alertIds = getEnergyAlertIds();
-  const alertNames = memberNames().filter(m => alertIds.has(m.id)).map(m => m.name.split(' ')[0]);
+  // Apenas mostra alertas para colaboradores do Calçado
+  const alertNames = calcadoMembers().filter(m => alertIds.has(m.id)).map(m => m.name.split(' ')[0]);
   box.innerHTML = alertNames.length
     ? `<div class="energy-alert">⚠ Atenção: ${alertNames.join(', ')} com energia baixa (2+ dias com ≤ 2/5)</div>`
     : '';
 }
 
-// ── Vista de média semanal por colaborador ──
+// ── Vista de média semanal por colaborador (apenas Calçado) ──
 function renderEnergyWeekTable() {
   const panel = document.getElementById('energy-week-table');
   if (!panel) return;
@@ -3424,7 +4420,7 @@ function renderEnergyWeekTable() {
   }
 
   const alertIds = getEnergyAlertIds();
-  const members = memberNames();
+  const members = calcadoMembers(); // Apenas Calçado
   const rows = members.map(m => {
     const scores = days.map(d => {
       const obj = loadEnergy(d.k);
@@ -3704,26 +4700,18 @@ if (document.readyState === 'loading') {
   }
 }
 </script>
+  <!-- MODAL: Hour Details -->
+  <div id="hour-details-modal" class="hour-modal hidden" onclick="closeHourDetails(event)">
+    <div class="hour-modal-content" onclick="event.stopPropagation()">
+      <div class="hour-modal-header">
+        <h3 id="hour-modal-title">14h - 15h</h3>
+        <button class="hour-modal-close" onclick="closeHourDetails()">✕</button>
+      </div>
+      <div class="hour-modal-body" id="hour-modal-body">
+        <!-- Worker list will be populated here -->
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
-"""
-
-html_content = html_content.replace(
-    "'200','160','100','FO','110','160','160','160','140','FC','FO','150','200','200','FC','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'",
-    "'200','160','100','FO','110','160','160','160','140','FC','FO','150','200','200','FC','160','160','160','140','FC','FO','150','200','200','100','FC','FO','110','160','160','160'"
-)
-
-html_content = html_content.replace(
-    "'200','FO','180','180','160','FC','FO','200','160','140','140','FC','160','170','100','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'",
-    "'200','FO','180','180','160','FC','FO','200','160','140','140','FC','160','170','100','FC','FO','180','180','160','FC','FO','200','160','140','140','FC','160','170','100','FC'"
-)
-
-html_content = html_content.replace(
-    "'200','FO','120SA','120SA','V','V','FC','FO','200','120SA','120SA','V','V','FC','FO','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V','V'",
-    "'200','FO','120SA','120SA','V','V','FC','FO','200','120SA','120SA','V','V','FC','FO','200','120SA','120SA','V','V','FC','FO','200','120SA','120SA','V','V','FC','FO','200','120SA'"
-)
-
-with open('calcado_v29.html', 'w', encoding='utf-8') as f:
-    f.write(html_content)
-
-print("File generated")
